@@ -1,0 +1,184 @@
+"use client";
+import React, { useEffect, useRef, useState } from 'react'
+import { Loader } from "@googlemaps/js-api-loader"
+import { createClient } from '@/utils/supabase/client';
+import { htmlIconMatcher } from '@/utils/supabase/iconMatcher';
+import { Database } from '@/supabase';
+import CreateAPin from './CreateAPin';
+import Overlay from './Overlay';
+require('dotenv').config()
+
+
+type Pin = Database['public']['Tables']['pins']['Row']
+
+/*
+Main map that displays on the home page
+Calls Maps API and uses the AdvancedMarkers API to map fetched pins on the map
+*/
+const InteractiveMap = ({apiKey} : {apiKey: string}) => {
+
+    const [pins, setPins] = useState<Pin[]>([])
+    const [ clickPosition, setClickPosition ] = useState<{lat: number, lng: number}>({lat: 0, lng: 0})
+    const [ toggle, setToggle ] = useState<boolean>(false)
+    const mapRef = useRef<HTMLDivElement>(null)
+
+    const supabase = createClient(); 
+
+    const defaultProps = {
+        center: {
+          lat: 33.776080,
+          lng: -84.398295
+        },
+        zoom: 16
+    };
+
+    useEffect(() => {
+
+        const fetchPins = async () => {
+            const { data } = await supabase
+                .from('pins')
+                .select('*')
+
+            setPins(data? data : [])
+        }
+
+        fetchPins()
+
+    }, [])
+
+    useEffect(() => {
+
+        const channel = supabase
+            .channel('realtime-pins')
+            .on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'pins'}, (payload) =>
+                setPins((pins) => [...pins, payload.new as Database['public']['Tables']['pins']['Row']])
+            )
+            .subscribe()
+
+        return () => {
+            supabase.removeChannel(channel)
+        }
+        
+    }, [supabase, setPins, pins])
+
+    useEffect(() => {
+
+        const parser = new DOMParser()
+
+        //hashmap that maps the item to its icon
+        const initMap = async () => {
+            
+            const loader = new Loader({
+                apiKey: apiKey,
+                version: "weekly",
+            })
+
+            const { Map, InfoWindow } = await loader.importLibrary('maps')
+            const { AdvancedMarkerElement } = await loader.importLibrary('marker')
+
+            const mapOptions: google.maps.MapOptions = {
+                center: defaultProps.center,
+                zoom: defaultProps.zoom,
+                disableDefaultUI: true,
+                mapId: '33ef6ba1cc80f774',
+                draggableCursor: 'default',
+            }
+
+            const map = new Map(mapRef.current as HTMLDivElement, mapOptions)
+
+            const pinSvg = parser.parseFromString(`
+            <svg width="50px" height="50px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24,1.32c-9.92,0-18,7.8-18,17.38A16.83,16.83,0,0,0,9.57,29.09l12.84,16.8a2,2,0,0,0,3.18,0l12.84-16.8A16.84,16.84,0,0,0,42,18.7C42,9.12,33.92,1.32,24,1.32Z" fill="#FFFFFF"/>
+                <path d="M25.37,12.13a7,7,0,1,0,5.5,5.5A7,7,0,0,0,25.37,12.13Z" fill="#FFFFFF"/>
+            </svg>`, 'image/svg+xml').documentElement
+
+            map.addListener('click', (click: google.maps.MapMouseEvent) => {
+                setClickPosition({lat: click.latLng?.lat() as number, lng: click.latLng?.lng() as number})
+                setToggle(true)
+            })
+
+            const infoWindow = new InfoWindow()
+            
+            const hoverElement = document.createElement('div')
+            hoverElement.className = 'flex items-center justify-center border-[1px] border-white w-10 h-10 bg-blue-800 rounded-full'
+
+            for (const pin of pins) {
+
+                const parentWrapper = document.createElement('div')
+                parentWrapper.className = 'flex absolute items-center justify-center'
+
+                const pinWrapper = document.createElement('div')
+                pinWrapper.className = 'flex absolute items-center justify-center'
+                const pinElement = pinSvg.cloneNode(true)
+            
+                const svgWrapper = document.createElement('div')
+                svgWrapper.className = 'flex mb-2 absolute items-center justify-center'
+
+                const icon = pin.item as string
+                const svg = parser.parseFromString(htmlIconMatcher[icon], 'image/svg+xml').documentElement.cloneNode(true)
+
+                pinWrapper.appendChild(pinElement)
+                svgWrapper.appendChild(svg)
+                pinWrapper.appendChild(svgWrapper)
+
+                parentWrapper.appendChild(pinWrapper)
+
+                
+                const marker = new AdvancedMarkerElement({
+                    position: new google.maps.LatLng(pin.x_coordinate as number, pin.y_coordinate as number),
+                    map: map,
+                    content: parentWrapper,
+                    
+                })
+
+                const infoElement = document.createElement('div')
+                infoElement.className = 'flex flex-col animate-in self-center text-black w-44 h-36 rounded-lg'
+
+                const item = document.createElement('h1')
+                item.textContent = pin.item
+                item.className = 'text-lg text-gtGold font-semibold'
+
+                const creator = document.createElement('h2')
+                creator.textContent = `Found by: ${pin.user_name}`
+                creator.className = 'text-sm font-semibold text-gtBlue'
+
+                const description = document.createElement('p')
+                description.textContent = pin.description
+                description.className = 'text-sm w-full overflow-scroll-y text-gtBlue'
+
+                infoElement.appendChild(item)
+                infoElement.appendChild(creator)
+                infoElement.appendChild(description)
+
+                marker.addListener('click', ({domEvent, latLng}: google.maps.MapMouseEvent) => {
+                    const { target } = domEvent
+                    infoWindow.close()
+                    infoWindow.setContent(infoElement)
+                    infoWindow.open(marker.map, marker)
+
+                });
+
+                
+            }
+                
+        }
+
+        initMap()
+    }, [pins])
+
+    return ( 
+        <div className='flex items-center h-full w-full z-0'>
+            <div id='map' ref={mapRef} className='h-full w-full z-0'/>
+            {toggle?
+                <div className='h-full w-full fixed'>
+                    <CreateAPin apiKey={apiKey} toggle={setToggle} lat={clickPosition.lat} lng={clickPosition.lng} />
+                    <Overlay on={toggle} zIndex='z-20'/>
+                </div>
+
+                : null
+            }   
+        </div>
+    )
+}
+
+export default InteractiveMap
