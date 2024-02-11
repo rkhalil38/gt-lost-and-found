@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       pins: {
         Row: {
+          claim_requests: number | null
           created_at: string
           creator_id: string
           description: string | null
@@ -23,17 +24,19 @@ export type Database = {
           item_description_username: string | null
         }
         Insert: {
+          claim_requests?: number | null
           created_at?: string
           creator_id: string
           description?: string | null
           fts?: unknown | null
           item?: string | null
-          item_id: string
+          item_id?: string
           user_name?: string | null
           x_coordinate?: number | null
           y_coordinate?: number | null
         }
         Update: {
+          claim_requests?: number | null
           created_at?: string
           creator_id?: string
           description?: string | null

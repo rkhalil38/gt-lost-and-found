@@ -26,6 +26,7 @@ interface CreateAPinProps {
     lat?: number,
     lng?: number
 }
+
 const CreateAPin = ({apiKey, toggle, lat, lng} : CreateAPinProps) => {
 
     const supabase = createClient();

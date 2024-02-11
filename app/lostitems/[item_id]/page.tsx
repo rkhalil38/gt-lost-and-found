@@ -7,9 +7,9 @@ const page = () => {
     const apiKey = process.env.GOOGLE_MAPS_KEY? process.env.GOOGLE_MAPS_KEY : "";
 
     return (
-        <div className='flex flex-col justify-center w-screen h-screen bg-mainTheme'>
+        <div className='flex flex-col items-center justify-center w-screen h-screen bg-mainTheme'>
             <UnivHeader apiKey={apiKey}/>
-            <LostItemDisplay />
+            <LostItemDisplay apiKey={apiKey}/>
         </div>
     )
 }
