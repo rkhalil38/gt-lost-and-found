@@ -40,3 +40,7 @@
     transform: translateY(0);
   }
 }
+
+.gm-style iframe + div{
+  border: none!important;
+}

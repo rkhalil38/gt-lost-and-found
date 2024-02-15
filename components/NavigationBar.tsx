@@ -13,16 +13,7 @@ import { IoMdClose } from "react-icons/io";
 import CreateAPin from './CreateAPin';
 import Overlay from './Overlay';
 import router, { useRouter } from 'next/navigation'
-
-type User = {
-    id: string | undefined;
-    email: string | undefined;
-    role: string | undefined;
-    user_name: string | undefined;
-    created_at: string | undefined;
-    updated_at: string | undefined;
-
-}
+import { User } from '@supabase/supabase-js';
 
 /*
 Side navigation bar that users can interact with
@@ -30,8 +21,7 @@ Allows users to call CreateAPin component, navigate to other pages
 */
 const NavigationBar = ({apiKey, toggle, toggled} : {apiKey: string, toggle: Function, toggled: boolean}) => {
 
-    const [activeUser, setUser] = useState<User>()
-    const [ currentURL, setCurrentURL ] = useState<string>('')
+    const [activeUser, setUser] = useState<User | null>()
     const [ creatingPin, setCreatingPin ] = useState<boolean>(false)
     const [ user_name, setUserName ] = useState<string>('')
     const router = useRouter()
@@ -42,27 +32,14 @@ const NavigationBar = ({apiKey, toggle, toggled} : {apiKey: string, toggle: Func
         const fetchUser = async () => {
             const user = await supabase.auth.getUser()
             const placeholder = user.data.user
+            setUser(placeholder)
             
             const user_name = placeholder? placeholder.identities![0].identity_data!.full_name! : ''
             setUserName(user_name)
-            
-            
-            setUser({
-                id: placeholder?.id,
-                email: placeholder?.email,
-                role: placeholder?.role,
-                user_name: user_name,
-                created_at: placeholder?.created_at,
-                updated_at: placeholder?.updated_at
-            })
-      
+                  
         }
 
         fetchUser()
-    }, [])
-
-    useEffect(() => {
-        setCurrentURL(window.location.pathname)
     }, [])
 
     const handleSignOut = async () => {
@@ -71,8 +48,12 @@ const NavigationBar = ({apiKey, toggle, toggled} : {apiKey: string, toggle: Func
         const { error } = await supabase.auth.signOut()
         if (error) {
             console.log('Error signing out')
-        } else {
+        } 
+        else if (location.pathname !== '/'){
             router.push('/')
+        }
+        else {
+            location.reload()
         }
     }
 
@@ -80,7 +61,7 @@ const NavigationBar = ({apiKey, toggle, toggled} : {apiKey: string, toggle: Func
         {name: 'Home', icon: <AiFillHome className='ml-2'/>, link: '/', active: true, onClick: () => {}},
         {name: 'Create a Found Item', icon: <FaMapMarkerAlt className='ml-2'/>, link: '', active: activeUser?.id? true : false, onClick: () => setCreatingPin(true)},
         {name: 'Browse Lost Items', icon: <CgScrollV className='ml-2'/>, link: '/lostitems', active: true, onClick: () => {}},
-        {name: 'My Pins', icon: <FaBookmark className='ml-2'/>, link: currentURL.includes('/mypins')? '' : `${user_name}/mypins`, active: activeUser?.id? true : false, onClick: () => {}},
+        {name: 'My Pins', icon: <FaBookmark className='ml-2'/>, link: `/${user_name.replace(' ', '').toLowerCase()}/mypins`, active: activeUser?.id? true : false, onClick: () => {}},
         {name: 'Sign In', icon: <FaSignInAlt className='ml-2'/>, link: '/login', active: activeUser?.id?  false : true, onClick: () => {}},
         {name: 'My Account', icon: <MdOutlineAccountCircle className='ml-2'/>, link: '', active: activeUser?.id? true : false, onClick: () => {}},
 
@@ -102,7 +83,7 @@ const NavigationBar = ({apiKey, toggle, toggled} : {apiKey: string, toggle: Func
                     </Link>
                 ))}
             </ol>
-            {activeUser?.id?
+            {activeUser?
                 <button className='px-4' onClick={handleSignOut}>
                     <div className={`flex flex-row text-red-500 rounded-lg items-center duration-300 gap-1 hover:bg-mainHover text-base`}>
                         <PiSignOutBold className='ml-2'/>
@@ -113,7 +94,7 @@ const NavigationBar = ({apiKey, toggle, toggled} : {apiKey: string, toggle: Func
                 : null
             }
 
-            {activeUser?.id? <p className='text-white text-xs mt-4 ml-4'>Signed in as {activeUser.user_name}</p> : null}
+            {activeUser?.id? <p className='text-white text-xs mt-4 ml-4'>Signed in as {user_name}</p> : null}
 
             {creatingPin?
             

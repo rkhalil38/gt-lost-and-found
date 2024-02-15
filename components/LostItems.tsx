@@ -61,7 +61,7 @@ const LostItems = () => {
                             {reactIconMatcher[pin.item? pin.item : 'miscellaneous']}
                             <h1 className='font-semibold mt-4 text-white'>{pin.item}</h1>
                         </div>
-                        <div className='flex flex-col justify-center items-center rounded-lg w-full h-[40%]'>
+                        <div className='flex flex-col overflow-x-scroll justify-center items-center rounded-lg w-full h-[40%]'>
                             <p className='text-gtGold'>{pin.description}</p>
                         </div>
                         <p className='text-gray-500 text-xs'>Found by {pin.user_name} on {pin.created_at.slice(0, 10)}</p>

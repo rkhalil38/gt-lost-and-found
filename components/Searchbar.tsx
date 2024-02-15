@@ -29,6 +29,7 @@ const Searchbar = () => {
     creator_id: '',
     item_id: '',
     item_description_username: '',
+    claim_requests: 0,
     fts: ''
   }
 

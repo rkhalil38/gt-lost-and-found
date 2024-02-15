@@ -132,7 +132,7 @@ const InteractiveMap = ({apiKey} : {apiKey: string}) => {
                 })
 
                 const infoElement = document.createElement('div')
-                infoElement.className = 'flex flex-col animate-in self-center text-black w-44 h-36 rounded-lg'
+                infoElement.className = 'flex flex-col gap-2 animate-in self-center text-black w-44 rounded-lg'
 
                 const item = document.createElement('h1')
                 item.textContent = pin.item
@@ -146,9 +146,26 @@ const InteractiveMap = ({apiKey} : {apiKey: string}) => {
                 description.textContent = pin.description
                 description.className = 'text-sm w-full overflow-scroll-y text-gtBlue'
 
+                const buttonDiv = document.createElement('div')
+                buttonDiv.className = 'flex flex-row gap-2 items-center justify-center'
+
+                const claimButton = document.createElement('a')
+                claimButton.className = 'flex bg-white border-gtGold hover:bg-gtGold hover:text-white duration-300 items-center text-gtGold justify-center w-20 h-10 border-[1px] rounded-lg'
+                claimButton.textContent = 'Claim'
+                claimButton.href = `/lostitems/${pin.item_id}?claim=true`
+
+                const viewButton = document.createElement('a')
+                viewButton.className = 'flex bg-white border-gtBlue hover:bg-gtBlue hover:text-white duration-300 items-center text-gtBlue justify-center w-20 h-10 border-[1px] rounded-lg'
+                viewButton.textContent = 'View'
+                viewButton.href = `/lostitems/${pin.item_id}`
+
+                buttonDiv.appendChild(claimButton)
+                buttonDiv.appendChild(viewButton)
+
                 infoElement.appendChild(item)
                 infoElement.appendChild(creator)
                 infoElement.appendChild(description)
+                infoElement.appendChild(buttonDiv)
 
                 marker.addListener('click', ({domEvent, latLng}: google.maps.MapMouseEvent) => {
                     const { target } = domEvent

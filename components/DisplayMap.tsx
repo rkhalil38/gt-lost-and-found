@@ -78,7 +78,7 @@ const DisplayMap = ({apiKey, lat, lng, item} : {apiKey: string, lat: number, lng
 
 
     return (
-        <div ref={mapRef} className='flex w-full h-full'>
+        <div ref={mapRef} className='flex rounded-lg w-full h-full'>
             
         </div>
     )
