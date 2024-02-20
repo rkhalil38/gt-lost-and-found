@@ -37,14 +37,14 @@ const Searchbar = () => {
 
     let searchString = queryingPins.trim()
     searchString = searchString.split(' ').join(' | ')
-    console.log(searchString)
+    
 
     const { data, error } = await supabase
       .from('pins')
       .select()
       .textSearch('fts', searchString)
 
-    setPins(data? data : [])
+    setPins(data? data.slice(0, 15) : [])
   }
 
   useEffect(() => {
@@ -56,7 +56,6 @@ const Searchbar = () => {
   }
 
   const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-    console.log(e.relatedTarget instanceof HTMLAnchorElement)
     e.relatedTarget instanceof HTMLAnchorElement? null : setPinItemsVisible(false)
   }
 

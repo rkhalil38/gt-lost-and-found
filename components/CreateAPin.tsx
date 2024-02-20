@@ -124,7 +124,7 @@ const CreateAPin = ({apiKey, toggle, lat, lng} : CreateAPinProps) => {
                                         ))}
                                     </div>
                                     <label htmlFor='description' className='text-white px-4 pb-2 pt-4 text-xl'>Description</label>
-                                    <textarea onChange={handleChange} maxLength={100} rows={3} cols={50} id='description' className='text-white text-sm focus:border-gtGold focus:outline-none duration-300 resize-none mx-4 px-4 py-2 bg-mainTheme border-[1px] border-gray-600 rounded-lg' placeholder='Enter a description of the item' />
+                                    <textarea onChange={handleChange} maxLength={100} rows={3} cols={50} id='description' className='text-white text-sm focus:border-gtGold focus:outline-none duration-300 resize-none mx-4 px-4 py-2 bg-mainTheme border-[1px] border-gray-600 rounded-lg' placeholder='Describe the item' />
                                     <div className='flex flex-row justify-end px-4'>
                                         <p className='justify-self-end text-gray-400 text-xs'>{characterCount}/{100}</p>
                                     </div>

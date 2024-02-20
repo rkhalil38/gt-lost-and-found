@@ -47,7 +47,15 @@ export type Database = {
           x_coordinate?: number | null
           y_coordinate?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_user_id"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       profiles: {
         Row: {
@@ -69,6 +77,38 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
+          }
+        ]
+      }
+      requests: {
+        Row: {
+          created_at: string
+          creator_id: string | null
+          description: string | null
+          item_id: string | null
+          request_id: string
+        }
+        Insert: {
+          created_at?: string
+          creator_id?: string | null
+          description?: string | null
+          item_id?: string | null
+          request_id: string
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string | null
+          description?: string | null
+          item_id?: string | null
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_requests_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "pins"
+            referencedColumns: ["item_id"]
           }
         ]
       }

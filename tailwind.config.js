@@ -18,6 +18,7 @@ module.exports = {
         'gtBlue': '#003057',
         'mainHover': '#212733',
         'gtGoldHover': '#A1800A',
+        'gtBlueHover': '#013D6E',
       },
     },
     transitionDuration: {

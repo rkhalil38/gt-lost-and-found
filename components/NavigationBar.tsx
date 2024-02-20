@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { AiFillHome } from "react-icons/ai";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
+import { PiBackpackLight } from "react-icons/pi";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { createClient } from "@/utils/supabase/client"
 import { PiSignOutBold } from "react-icons/pi";
@@ -12,8 +13,9 @@ import Link from 'next/link';
 import { IoMdClose } from "react-icons/io";
 import CreateAPin from './CreateAPin';
 import Overlay from './Overlay';
-import router, { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { User } from '@supabase/supabase-js';
+
 
 /*
 Side navigation bar that users can interact with
@@ -62,6 +64,7 @@ const NavigationBar = ({apiKey, toggle, toggled} : {apiKey: string, toggle: Func
         {name: 'Create a Found Item', icon: <FaMapMarkerAlt className='ml-2'/>, link: '', active: activeUser?.id? true : false, onClick: () => setCreatingPin(true)},
         {name: 'Browse Lost Items', icon: <CgScrollV className='ml-2'/>, link: '/lostitems', active: true, onClick: () => {}},
         {name: 'My Pins', icon: <FaBookmark className='ml-2'/>, link: `/${user_name.replace(' ', '').toLowerCase()}/mypins`, active: activeUser?.id? true : false, onClick: () => {}},
+        {name: 'My Requests', icon: <PiBackpackLight className='ml-2'/>, link: `/${user_name.replace(' ', '').toLowerCase()}/myrequests`, active: activeUser?.id? true : false, onClick: () => {}},
         {name: 'Sign In', icon: <FaSignInAlt className='ml-2'/>, link: '/login', active: activeUser?.id?  false : true, onClick: () => {}},
         {name: 'My Account', icon: <MdOutlineAccountCircle className='ml-2'/>, link: '', active: activeUser?.id? true : false, onClick: () => {}},
 

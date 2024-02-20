@@ -205,7 +205,7 @@ export const reactIconMatcher: reactIconMatcher = {
     </svg>,
 
     'android phone': 
-    <svg fill="#B3A369" width="100px" height="100px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" version="1.1" id="smart-phone-3"  enable-background="new 0 0 32 32">
+    <svg fill="#B3A369" width="100px" height="100px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" version="1.1" id="smart-phone-3"  enableBackground="new 0 0 32 32">
         <rect x="15" y="23" width="2" height="2"/>
         <path d="M8 4v24h16V4H8zM22 26H10v-4h12V26zM22 20H10V10h12V20zM22 8H10V6h12V8z"/>
     </svg>,

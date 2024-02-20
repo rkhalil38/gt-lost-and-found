@@ -139,7 +139,7 @@ const InteractiveMap = ({apiKey} : {apiKey: string}) => {
                 item.className = 'text-lg text-gtGold font-semibold'
 
                 const creator = document.createElement('h2')
-                creator.textContent = `Found by: ${pin.user_name}`
+                creator.textContent = `Possessed By: ${pin.user_name}`
                 creator.className = 'text-sm font-semibold text-gtBlue'
 
                 const description = document.createElement('p')
