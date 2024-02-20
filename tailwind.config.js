@@ -17,6 +17,7 @@ module.exports = {
         'gtGold': '#C29B0C',
         'gtBlue': '#003057',
         'mainHover': '#212733',
+        'mainHover2': '#2B3342',
         'gtGoldHover': '#A1800A',
         'gtBlueHover': '#013D6E',
       },

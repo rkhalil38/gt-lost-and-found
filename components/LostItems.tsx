@@ -36,7 +36,7 @@ const LostItems = () => {
     }, [])
 
     return (
-        <div className='flex flex-wrap justify-center mt-[10%] gap-6 w-full h-full'>
+        <div className='flex flex-wrap justify-center mt-16 p-10 gap-6 w-full h-full'>
 
             
             {loading?

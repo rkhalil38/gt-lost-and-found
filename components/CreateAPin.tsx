@@ -117,18 +117,18 @@ const CreateAPin = ({apiKey, toggle, lat, lng} : CreateAPinProps) => {
                             <div className='flex w-full h-full'>
                                 <div className={`${pickLocation ? 'hidden' : 'flex'} flex-col w-full h-full`}>
                                     <button onClick={() => toggle(false)} className='flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-white text-xl'><IoMdClose/></button>
-                                    <h1 className='text-white pt-4 pb-2 px-4 text-xl'>Found Item</h1>
+                                    <h1 className='text-white pt-4 pb-2 px-4 text-lg'>Found Item</h1>
                                     <div className='flex flex-row px-4 gap-2'>
                                         {itemOptions.map((item, index) => (
                                             <button key={index} onClick={() => setFoundItem(item)} className={`flex text-xs p-2 justify-center items-center rounded-lg border-[1px] border-gray-600 duration-300 hover:text-gtGold hover:border-gtGold ${foundItem === item ? 'border-gtGold text-gtGold' : 'text-gray-400'}`}>{item}</button>
                                         ))}
                                     </div>
-                                    <label htmlFor='description' className='text-white px-4 pb-2 pt-4 text-xl'>Description</label>
+                                    <label htmlFor='description' className='text-white px-4 pb-2 pt-4 text-lg'>Description</label>
                                     <textarea onChange={handleChange} maxLength={100} rows={3} cols={50} id='description' className='text-white text-sm focus:border-gtGold focus:outline-none duration-300 resize-none mx-4 px-4 py-2 bg-mainTheme border-[1px] border-gray-600 rounded-lg' placeholder='Describe the item' />
                                     <div className='flex flex-row justify-end px-4'>
                                         <p className='justify-self-end text-gray-400 text-xs'>{characterCount}/{100}</p>
                                     </div>
-                                    <label htmlFor='location' className='text-white px-4 pb-2 pt-4 text-xl'>Location</label>
+                                    <label htmlFor='location' className='text-white px-4 pb-2 pt-4 text-lg'>Location</label>
                                     {location.lat !== 0 && location.lng !== 0 ?
                                         <p className='text-sm text-gtGold mx-4 mb-2'>Location: {location.lat}, {location.lng}</p>
                                         : null

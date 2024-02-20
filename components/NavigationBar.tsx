@@ -63,7 +63,7 @@ const NavigationBar = ({apiKey, toggle, toggled} : {apiKey: string, toggle: Func
         {name: 'Home', icon: <AiFillHome className='ml-2'/>, link: '/', active: true, onClick: () => {}},
         {name: 'Create a Found Item', icon: <FaMapMarkerAlt className='ml-2'/>, link: '', active: activeUser?.id? true : false, onClick: () => setCreatingPin(true)},
         {name: 'Browse Lost Items', icon: <CgScrollV className='ml-2'/>, link: '/lostitems', active: true, onClick: () => {}},
-        {name: 'My Pins', icon: <FaBookmark className='ml-2'/>, link: `/${user_name.replace(' ', '').toLowerCase()}/mypins`, active: activeUser?.id? true : false, onClick: () => {}},
+        {name: 'My Found Items', icon: <FaBookmark className='ml-2'/>, link: `/${user_name.replace(' ', '').toLowerCase()}/myitems`, active: activeUser?.id? true : false, onClick: () => {}},
         {name: 'My Requests', icon: <PiBackpackLight className='ml-2'/>, link: `/${user_name.replace(' ', '').toLowerCase()}/myrequests`, active: activeUser?.id? true : false, onClick: () => {}},
         {name: 'Sign In', icon: <FaSignInAlt className='ml-2'/>, link: '/login', active: activeUser?.id?  false : true, onClick: () => {}},
         {name: 'My Account', icon: <MdOutlineAccountCircle className='ml-2'/>, link: '', active: activeUser?.id? true : false, onClick: () => {}},

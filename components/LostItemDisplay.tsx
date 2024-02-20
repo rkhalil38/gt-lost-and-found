@@ -13,7 +13,6 @@ import { useRouter, usePathname} from 'next/navigation';
 import { FaCheck } from "react-icons/fa";
 import Link from 'next/link';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { RingLoader } from 'react-spinners';
 
 
 type Pin = Database['public']['Tables']['pins']['Row']
