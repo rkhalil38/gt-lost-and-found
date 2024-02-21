@@ -1,3 +1,4 @@
+import MyItemDisplay from '@/components/MyItemDisplay';
 import UnivHeader from '@/components/UnivHeader';
 import { Metadata, ResolvingMetadata } from 'next';
 import React from 'react'
@@ -31,7 +32,7 @@ const page = () => {
     return (
         <div className='flex flex-col bg-mainTheme items-center w-screen min-h-screen'>
             <UnivHeader apiKey={apiKey}/>
-
+            <MyItemDisplay apiKey={apiKey}/>
         </div>
     )
 }

@@ -49,11 +49,11 @@ const MyItems = () => {
 
                 <div className='flex flex-row gap-4'>
                     <div 
-                    className='flex flex-col bg-mainHover border-[1px] border-gray-600 items-center justify-center w-96 h-48 shadow-lg rounded-lg'>
+                    className='flex flex-col bg-mainTheme border-[1px] border-gray-600 items-center justify-center w-96 h-48 shadow-lg rounded-lg'>
                         <div className='w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse'/>
                     </div>
                     <div 
-                    className='flex flex-col bg-mainHover border-[1px] border-gray-600 items-center justify-center w-96 h-48 shadow-lg rounded-lg'>
+                    className='flex flex-col bg-mainTheme border-[1px] border-gray-600 items-center justify-center w-96 h-48 shadow-lg rounded-lg'>
                         <div className='w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse'/>
                     </div>
                 </div>
@@ -63,7 +63,7 @@ const MyItems = () => {
                 (user?
 
                     (pins.map((pin) => (
-                        <Link href={`${pathname}/${pin.item_id}`} key={pin.created_at} 
+                        <Link href={`${pathname}/${pin.item_id}`} key={pin.item_id} 
                         className='flex flex-col group duration-500 cursor-pointer bg-mainHover hover:bg-mainHover2 border-[1px] border-gray-600 gap-4 p-2 items-center w-96 h-48 shadow-lg rounded-lg'>
                             <div className='flex flex-col h-full w-full p-3 overflow-clip justify-between'>
                                 <div className='flex flex-row w-full'>
@@ -78,7 +78,7 @@ const MyItems = () => {
                                         <h1>{pin.claim_requests}</h1>
                                         <p>Claim Requests</p>
                                     </div>
-                                    <p className='text-gray-500'>{pin.created_at.substring(0, 9)}</p>
+                                    <p className='text-gray-500'>{pin.created_at.substring(0, 10)}</p>
                                 </div>
                             </div>
                         </Link>

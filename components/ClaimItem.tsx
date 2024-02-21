@@ -1,7 +1,7 @@
 "use client";
 import { createClient } from '@/utils/supabase/client'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { FaCheck } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io'
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -18,6 +18,11 @@ const ClaimItem = (
 
   const supabase = createClient()
   const [ reasoning, setReasoning ] = useState<string>('')
+  const [ characterCount, setCharacterCount ] = useState<number>(0)
+
+  useEffect(() => {
+    setCharacterCount(reasoning.length)
+  }, [reasoning])
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReasoning(e.target.value)
@@ -34,7 +39,11 @@ const ClaimItem = (
     const { data, error } = await supabase
     .from('requests')
     .insert([
-      { description: reasoning, item_id: itemID, request_id: username.toUpperCase().replace(' ', '') + itemID},
+      { description: reasoning, 
+        item_id: itemID, 
+        request_id: username.toUpperCase().replace(' ', '') + itemID,
+        creator_name: username,
+      },
     ])
     .select()
 
@@ -50,7 +59,8 @@ const ClaimItem = (
         <a className='text-white'> {username}</a>
       </h1>
       <label htmlFor='reasoning' className='text-white'>Please provide valid reasoning that this is your item.</label>
-      <textarea onChange={handleChange} name='reasoning' className='w-full h-[70%] resize-none border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg p-4'></textarea>
+      <textarea maxLength={250} onChange={handleChange} name='reasoning' className='w-full h-[70%] resize-none border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg p-4'></textarea>
+      <p className='text-white text-xs'>{characterCount}/250</p>
       <button disabled={!completedForm()} onClick={claimItem} className={`flex disabled:bg-gray-700 disabled:text-gray-400 w-36 h-10 absolute bottom-4 right-4 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover`}>
         Submit Request
       </button>

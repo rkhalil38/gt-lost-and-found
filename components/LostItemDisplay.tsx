@@ -13,6 +13,7 @@ import { useRouter, usePathname} from 'next/navigation';
 import { FaCheck } from "react-icons/fa";
 import Link from 'next/link';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { notFound } from 'next/navigation';
 
 
 type Pin = Database['public']['Tables']['pins']['Row']
@@ -62,7 +63,7 @@ const LostItemDisplay = ({apiKey} : {apiKey: string}) => {
                 setFetchClaims(true)
             }
             else {
-                router.push('/lostitems')
+                notFound()
             }
 
         }

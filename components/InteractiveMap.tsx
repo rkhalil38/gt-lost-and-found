@@ -65,7 +65,6 @@ const InteractiveMap = ({apiKey} : {apiKey: string}) => {
 
         const parser = new DOMParser()
 
-        //hashmap that maps the item to its icon
         const initMap = async () => {
             
             const loader = new Loader({
@@ -157,7 +156,7 @@ const InteractiveMap = ({apiKey} : {apiKey: string}) => {
                 const viewButton = document.createElement('a')
                 viewButton.className = 'flex bg-white border-gtBlue hover:bg-gtBlue hover:text-white duration-300 items-center text-gtBlue justify-center w-20 h-10 border-[1px] rounded-lg'
                 viewButton.textContent = 'View'
-                viewButton.href = `/lostitems/${pin.item_id}`
+                viewButton.href = `/lostitems/${pin.item_id}?claim=false`
 
                 buttonDiv.appendChild(claimButton)
                 buttonDiv.appendChild(viewButton)
@@ -181,6 +180,7 @@ const InteractiveMap = ({apiKey} : {apiKey: string}) => {
         }
 
         initMap()
+
     }, [pins])
 
     return ( 

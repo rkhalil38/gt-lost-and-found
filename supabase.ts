@@ -84,6 +84,7 @@ export type Database = {
         Row: {
           created_at: string
           creator_id: string | null
+          creator_name: string | null
           description: string | null
           item_id: string | null
           request_id: string
@@ -91,6 +92,7 @@ export type Database = {
         Insert: {
           created_at?: string
           creator_id?: string | null
+          creator_name?: string | null
           description?: string | null
           item_id?: string | null
           request_id: string
@@ -98,6 +100,7 @@ export type Database = {
         Update: {
           created_at?: string
           creator_id?: string | null
+          creator_name?: string | null
           description?: string | null
           item_id?: string | null
           request_id?: string
