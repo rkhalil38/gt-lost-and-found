@@ -27,13 +27,13 @@ const LostItemDisplay = ({apiKey} : {apiKey: string}) => {
     const [ loadMap, setLoadMap ] = useState<boolean>(false)
     const [ user, setUser ] = useState<User | null>()
     const [ username, setUsername ] = useState<string>('')
-    const [ claimState, setClaimState ] = useState<string>('')
+    const [ claimState, setClaimState ] = useState<string>('loading')
     const [ fetchClaims, setFetchClaims ] = useState<boolean>(false)
 
     const claimStates = {
         notSignedIn: 'Sign In to Claim',
         claimed: 'Request Submitted',
-        notClaimed: 'Claim Item'
+        notClaimed: 'Claim Item',
     }
 
     const search = useSearchParams()
@@ -98,10 +98,10 @@ const LostItemDisplay = ({apiKey} : {apiKey: string}) => {
 
             const requests: Request[] = await fetchClaims(user_name)
                         
-            if ( requests.length > 0 && user ) {
+            if ( requests.length > 0 && data.user ) {
                 setClaimState(claimStates.claimed)
             }
-            else if ( user ) {
+            else if ( data.user ) {
                 setClaimState(claimStates.notClaimed)
             }
             else {
@@ -119,7 +119,14 @@ const LostItemDisplay = ({apiKey} : {apiKey: string}) => {
                 {claim?
 
                     <div className='flex z-30 items-center justify-center w-full h-full fixed'>
-                        <ClaimItem path={pathname} itemID={itemID} username={username} claimStatus={claimState}/>
+                        <ClaimItem 
+                        path={pathname} 
+                        itemID={itemID} 
+                        username={username} 
+                        claimStatus={claimState}
+                        setClaimStatus={setClaimState}
+                        user={user? true : false}
+                        />
                         <Overlay on={claim} zIndex='z-30'/>
                     </div>
 
@@ -150,10 +157,13 @@ const LostItemDisplay = ({apiKey} : {apiKey: string}) => {
                             {item?.description? item?.description : <Skeleton height={20} width={120} baseColor='#B3A369'/>}
                         </p>
 
-                        <Link href={claimState === 'Request Submitted'? '' : (user? pathname + '?claim=true' : '/login')} 
-                        className={`flex gap-2 text-white items-center justify-center text-sm ${claimState === 'Request Submitted'? 'cursor-default bg-green-500 border-green-600' : 'hover:opacity-80 border-gtGold bg-gtGoldHover'} w-full h-10 border-[1px] rounded-lg duration-300`}>
-                            {claimState === 'Request Submitted'? <FaCheck/> : null}
-                            {claimState || <ClipLoader color='#B3A369'/>}
+                        <Link href={claimState === 'Request Submitted' || claimState === 'Fresh Request Submitted'? '' : (user? pathname + '?claim=true' : '/login')} 
+                        className={`flex gap-2 text-white items-center justify-center text-sm ${claimState === 'Request Submitted' || claimState === 'Fresh Request Submitted'? 'cursor-default bg-green-500 border-green-600' : 'hover:opacity-80 border-gtGold bg-gtGoldHover'} w-full h-10 border-[1px] rounded-lg duration-300`}>
+                            {claimState === 'Request Submitted' || claimState === 'Fresh Request Submitted'? <FaCheck/> : null}
+                            {claimState === 'Request Submitted' || claimState === 'Fresh Request Submitted'? <p>Request Submitted</p> : null}
+                            {claimState === 'Claim Item'? 'Claim Item' : null}
+                            {claimState === 'Sign In to Claim'? 'Sign In to Claim' : null}
+                            {claimState === 'loading'? <ClipLoader color='#B3A369'/> : null}
                         </Link>
 
                     </div>

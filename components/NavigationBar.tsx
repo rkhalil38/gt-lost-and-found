@@ -74,7 +74,7 @@ const NavigationBar = ({apiKey, toggle, toggled} : {apiKey: string, toggle: Func
         <div className={`flex flex-col text-white duration-300 w-[300px] h-full rounded-r-lg border-b-[1px] border-t-[1px] border-r-[1px] border-gray-600 fixed top-0 ${toggled? 'left-0' : 'left-[-300px]'} bg-mainTheme z-20 shadow-xl`}>
             <div className='flex flex-row my-3 items-center w-full'>
                 <h1 className='bg-gradient-to-b from-gtGold to-white text-transparent bg-clip-text text-xl font-semibold pl-6'>GT Lost and Found</h1>
-                <button onClick={(toggled) => toggle(!toggled)} className='flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-white text-xl'><IoMdClose/></button>
+                <button onClick={(toggled) => toggle(!toggled)} className='flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl'><IoMdClose/></button>
             </div>
             <ol className='flex flex-col px-4 pt-4'>
                 {navbarItems.map((item) => (

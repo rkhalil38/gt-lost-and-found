@@ -1,12 +1,24 @@
 import UnivHeader from '@/components/UnivHeader'
 import React from 'react'
-import { Metadata } from 'next'
+import { Metadata, ResolvingMetadata } from 'next'
 import MyItems from '@/components/MyItems'
 
-export const metadata: Metadata = {
-    title: 'My Found Items',
-    description: 'My Found Items Page',
+type Props = {
+    params: {
+        username: string
+    }
 
+}
+
+export async function generateMetadata(
+    { params }: Props, parent: ResolvingMetadata
+): Promise<Metadata> {
+
+    const username = params.username
+
+    return {
+        title: `${username} | My Items`,
+    }
 }
 
 const page = () => {

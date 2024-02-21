@@ -116,7 +116,7 @@ const CreateAPin = ({apiKey, toggle, lat, lng} : CreateAPinProps) => {
                         (
                             <div className='flex w-full h-full'>
                                 <div className={`${pickLocation ? 'hidden' : 'flex'} flex-col w-full h-full`}>
-                                    <button onClick={() => toggle(false)} className='flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-white text-xl'><IoMdClose/></button>
+                                    <button onClick={() => toggle(false)} className='flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl'><IoMdClose/></button>
                                     <h1 className='text-white pt-4 pb-2 px-4 text-lg'>Found Item</h1>
                                     <div className='flex flex-row px-4 gap-2'>
                                         {itemOptions.map((item, index) => (
