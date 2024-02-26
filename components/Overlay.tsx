@@ -13,7 +13,7 @@ const Overlay = ({ on, zIndex }: { on: boolean; zIndex: string }) => {
       ref={overlay}
       className={`flex ${
         on ? "fixed" : "hidden"
-      } top-0 bg-gray-800 w-full h-full opacity-50 ${zIndex}`}
+      } left-0 top-0 bg-gray-800 w-full h-full opacity-50 ${zIndex}`}
       onClick={handleClick}
     />
   );

@@ -5,6 +5,7 @@ import React, { use, useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import ClipLoader from "react-spinners/ClipLoader";
+var validator = require("validator");
 
 type componentMap = {
   [key: string]: JSX.Element;
@@ -30,6 +31,7 @@ const ClaimItem = ({
   const [characterCount, setCharacterCount] = useState<number>(0);
   const [contactMethod, setContactMethod] = useState<string>("email");
   const [contactInfo, setContactInfo] = useState<string>("");
+  const [fieldError, setFieldError] = useState<boolean>(false);
 
   useEffect(() => {
     setCharacterCount(reasoning.length);
@@ -39,8 +41,37 @@ const ClaimItem = ({
     setReasoning(e.target.value);
   };
 
+  const handleContactInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    switch (contactMethod) {
+      case "email":
+        if (validator.isEmail(e.target.value)) {
+          setFieldError(false);
+          setContactInfo(e.target.value);
+          console.log("valid email");
+        } else {
+          console.log("invalid email");
+          setFieldError(true);
+        }
+        break;
+      case "phone":
+        if (validator.isMobilePhone(e.target.value)) {
+          setFieldError(false);
+          setContactInfo(e.target.value);
+          console.log("valid phone")
+        } else {
+          console.log("invalid phone");
+          setFieldError(true);
+        }
+        break;
+    }
+  };
+
   const completedForm = () => {
-    return reasoning.length > 0 && contactInfo.length > 0;
+    return (
+      reasoning.length > 0 &&
+      contactInfo.length > 0 &&
+      (validator.isEmail(contactInfo) || validator.isMobilePhone(contactInfo))
+    );
   };
 
   const claimItem = async () => {
@@ -84,16 +115,20 @@ const ClaimItem = ({
           {contactMethod === "email" ? (
             <input
               type="email"
-              className="w-96 h-10 p-2 border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg"
+              className={`w-96 h-10 p-2 border-[1px] ${
+                fieldError ? "border-red-400" : "focus:border-gtGold"
+              } focus:outline-none bg-mainTheme text-white rounded-lg`}
               placeholder="Enter your preferred email"
-              onChange={(e) => setContactInfo(e.target.value)}
+              onChange={handleContactInfo}
             />
           ) : (
             <input
               type="tel"
-              className="w-96 h-10 p-2 border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg"
+              className={`w-96 h-10 p-2 border-[1px] ${
+                fieldError ? "border-red-400" : "focus:border-gtGold"
+              } focus:outline-none bg-mainTheme text-white rounded-lg`}
               placeholder="Enter your phone number"
-              onChange={(e) => setContactInfo(e.target.value)}
+              onChange={handleContactInfo}
             />
           )}
         </div>
