@@ -1,7 +1,7 @@
 "use client";
 import { Database } from "@/supabase";
 import { createClient } from "@/utils/supabase/client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { reactIconMatcher } from "@/utils/supabase/iconMatcher";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
@@ -30,7 +30,7 @@ const LostItems = () => {
   }, []);
 
   return (
-    <div className="flex flex-wrap justify-start py-28 px-10 gap-6 w-screen h-screen">
+    <div className="flex flex-wrap justify-start py-28 px-10 gap-6 w-screen min-h-screen">
       {loading ? (
         <div className="flex flex-col border-[1px] border-gray-600 cursor-pointer duration-500 gap-4 p-2 items-center w-72 h-96 bg-gradient-to-b from-gtGold to-gtBlue shadow-lg rounded-lg">
           <div className="flex flex-col items-center rounded-lg bg-mainHover shadow-lg justify-center w-full h-1/2">

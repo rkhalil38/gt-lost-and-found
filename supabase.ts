@@ -82,28 +82,34 @@ export type Database = {
       }
       requests: {
         Row: {
+          contact: string | null
           created_at: string
           creator_id: string | null
           creator_name: string | null
           description: string | null
           item_id: string | null
           request_id: string
+          status: string | null
         }
         Insert: {
+          contact?: string | null
           created_at?: string
           creator_id?: string | null
           creator_name?: string | null
           description?: string | null
           item_id?: string | null
           request_id: string
+          status?: string | null
         }
         Update: {
+          contact?: string | null
           created_at?: string
           creator_id?: string | null
           creator_name?: string | null
           description?: string | null
           item_id?: string | null
           request_id?: string
+          status?: string | null
         }
         Relationships: [
           {

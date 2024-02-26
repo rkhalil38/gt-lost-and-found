@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import NavigationBar from "./NavigationBar";
 import { IoIosMenu } from "react-icons/io";
 import Overlay from "./Overlay";
@@ -19,7 +19,12 @@ const UnivHeader = ({ apiKey }: { apiKey: string }) => {
     <div className="flex flex-row bg-mainTheme z-10 w-screen items-center h-16 fixed top-0 border-b-[1px] border-gray-700 shadow-lg">
       <button
         className="flex items-center justify-center rounded-lg border-[1px] text-2xl ml-4 text-gray-700 w-8 h-8 hover:border-gtGold hover:text-gtGold duration-200"
-        onClick={() => setToggled(true)}
+        onClick={() => {
+          setToggled(true);
+        }}
+        onBlur={() => {
+          setToggled(false);
+        }}
       >
         <IoIosMenu />
       </button>

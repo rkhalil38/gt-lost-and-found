@@ -28,6 +28,8 @@ const ClaimItem = ({
   const supabase = createClient();
   const [reasoning, setReasoning] = useState<string>("");
   const [characterCount, setCharacterCount] = useState<number>(0);
+  const [contactMethod, setContactMethod] = useState<string>("email");
+  const [contactInfo, setContactInfo] = useState<string>("");
 
   useEffect(() => {
     setCharacterCount(reasoning.length);
@@ -38,7 +40,7 @@ const ClaimItem = ({
   };
 
   const completedForm = () => {
-    return reasoning.length > 0;
+    return reasoning.length > 0 && contactInfo.length > 0;
   };
 
   const claimItem = async () => {
@@ -52,6 +54,7 @@ const ClaimItem = ({
           item_id: itemID,
           request_id: username.toUpperCase().replace(" ", "") + itemID,
           creator_name: username,
+          contact: contactInfo,
         },
       ])
       .select();
@@ -66,6 +69,34 @@ const ClaimItem = ({
           You are claiming this item as
           <a className="text-white"> {username}</a>
         </h1>
+        <label htmlFor="contact" className="text-white">
+          Select your preferred contact method.
+        </label>
+        <div className="flex flex-row gap-4">
+          <select
+            className="w-44 h-10 p-2 border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg"
+            name="contact"
+            onChange={(e) => setContactMethod(e.target.value)}
+          >
+            <option value="email">Email</option>
+            <option value="phone">Phone</option>
+          </select>
+          {contactMethod === "email" ? (
+            <input
+              type="email"
+              className="w-96 h-10 p-2 border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg"
+              placeholder="Enter your preferred email"
+              onChange={(e) => setContactInfo(e.target.value)}
+            />
+          ) : (
+            <input
+              type="tel"
+              className="w-96 h-10 p-2 border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg"
+              placeholder="Enter your phone number"
+              onChange={(e) => setContactInfo(e.target.value)}
+            />
+          )}
+        </div>
         <label htmlFor="reasoning" className="text-white">
           Please provide valid reasoning that this is your item.
         </label>
@@ -73,7 +104,7 @@ const ClaimItem = ({
           maxLength={250}
           onChange={handleChange}
           name="reasoning"
-          className="w-full h-[70%] resize-none border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg p-4"
+          className="w-full h-64 resize-none border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg p-4"
         ></textarea>
         <p className="text-white text-xs">{characterCount}/250</p>
         <button
@@ -121,7 +152,7 @@ const ClaimItem = ({
   };
 
   return (
-    <div className="flex flex-col p-4 animate-in fixed gap-4 border-[1px] border-gray-600 w-1/2 h-[60%] rounded-lg bg-mainTheme shaodw-lg z-40">
+    <div className="flex flex-col p-4 animate-in fixed gap-4 border-[1px] border-gray-600 w-1/2 h-[70%] rounded-lg bg-mainTheme shaodw-lg z-40">
       {claimStatus !== "loading" ? (
         <div className="flex w-full h-full">
           <Link

@@ -102,6 +102,28 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
     fetchUserAndClaims();
   }, [fetchClaims]);
 
+  useEffect(() => {
+    const channel = supabase
+      .channel("realtime-pins")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "pins",
+          filter: `item_id=eq.${itemID}`,
+        },
+        (payload) => {
+          setItem(payload.new as Database["public"]["Tables"]["pins"]["Row"]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, item, setItem]);
+
   return (
     <div className="flex flex-row w-full h-full justify-center items-center gap-4 text-white">
       {claim ? (

@@ -13,7 +13,6 @@ export default async function Index() {
 
   return (
     <div className="flex flex-col bg-mainTheme w-screen h-screen gap-20 items-center justify-center">
-      <Header apiKey={apiKey} />
       <InteractiveMap apiKey={apiKey} />
     </div>
   );

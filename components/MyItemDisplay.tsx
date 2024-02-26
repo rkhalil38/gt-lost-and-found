@@ -5,36 +5,114 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowBack, IoMdClose } from "react-icons/io";
+import Overlay from "./Overlay";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
 type PinRequest = Database["public"]["Tables"]["requests"]["Row"];
+const supabase = createClient();
+
+const AreYouSure = ({
+  setAreYouSure,
+  action,
+}: {
+  setAreYouSure: Function;
+  action: string;
+}) => {
+  const acceptClaim = async (): Promise<void> => {};
+
+  const rejectClaim = async (): Promise<void> => {};
+
+  return (
+    <div className="flex items-center justify-between p-4 flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[450px] h-64 bg-mainTheme">
+      <button
+        onClick={() => setAreYouSure(false)}
+        className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+      >
+        <IoMdClose />
+      </button>
+      <div className="w-full h-6" />
+      {action === "accept" ? (
+        <h1 className="text-base text-center">
+          Are you sure you would like to {action} this claim? All other claims
+          will be rejected.
+        </h1>
+      ) : (
+        <h1 className="text-base text-center">
+          Are you sure you would like to {action} this claim?
+        </h1>
+      )}
+      <div className="flex flex-row gap-4 w-full">
+        <button className="flex w-1/2 duration-300 items-center justify-center gap-2 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400">
+          {action.toUpperCase().slice(0, 1) + action.slice(1)} Claim
+        </button>
+        <button
+          onClick={() => setAreYouSure(false)}
+          className="flex w-1/2 duration-300 items-center justify-center gap-1 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+};
 
 const CurrentRequestDock = ({
   creator,
   description,
   date,
+  contact,
 }: {
   creator: string | null;
   description: string | null;
   date: string | null;
+  contact: string | null;
 }) => {
+  const [areYouSure, setAreYouSure] = useState<boolean>(false);
+  const [action, setAction] = useState<string>("");
+
+  const handleAcceptButton = () => {
+    setAreYouSure(true);
+    setAction("accept");
+  };
+
+  const handleRejectButton = () => {
+    setAreYouSure(true);
+    setAction("reject");
+  };
+
   return (
     <div className="flex flex-col justify-between w-1/4 h-3/4 rounded-lg bg-mainHover border-[1px] border-gray-500">
+      {areYouSure ? (
+        <div className="flex fixed items-center justify-center z-30 top-0 left-0 w-screen h-screen">
+          <AreYouSure setAreYouSure={setAreYouSure} action={action} />
+          <Overlay on={areYouSure} zIndex="z-30" />
+        </div>
+      ) : null}
+
       {creator ? (
         <div className="flex flex-col gap-4 m-4">
-          <h1 className="text-2xl font-semibold">{creator}</h1>
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-semibold">{creator}</h1>
+            <p className="text-xs text-gray-400">{contact}</p>
+          </div>
           <p className="text-base text-white">{description}</p>
         </div>
       ) : null}
 
       {creator ? (
         <div className="flex flex-row w-full">
-          <button className="flex w-1/2 items-center justify-center gap-2 rounded-bl-lg duration-300 hover:bg-green-400 hover:text-white text-sm p-4 border-t-[1px] border-r-[1px] border-gray-400">
+          <button
+            onClick={handleAcceptButton}
+            className="flex w-1/2 items-center justify-center gap-2 rounded-bl-lg duration-300 hover:bg-green-400 hover:text-white text-sm p-4 border-t-[1px] border-r-[1px] border-gray-400"
+          >
             <FaCheck />
             Accept Claim
           </button>
-          <button className="flex w-1/2 items-center justify-center gap-1 rounded-br-lg duration-300 hover:bg-red-400 hover:text-white text-sm p-4 border-t-[1px] border-gray-400">
+          <button
+            onClick={handleRejectButton}
+            className="flex w-1/2 items-center justify-center gap-1 rounded-br-lg duration-300 hover:bg-red-400 hover:text-white text-sm p-4 border-t-[1px] border-gray-400"
+          >
             <IoClose className="text-lg" />
             Reject Claim
           </button>
@@ -49,8 +127,6 @@ const CurrentRequestDock = ({
 };
 
 const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
-  const supabase = createClient();
-
   const [myItem, setMyItem] = useState<Pin>();
   const [requests, setRequests] = useState<PinRequest[]>();
   const [itemID, setItemID] = useState<string>("");
@@ -124,6 +200,7 @@ const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
         creator={currentRequest ? currentRequest.creator_name : ""}
         description={currentRequest ? currentRequest.description : ""}
         date={currentRequest ? currentRequest.created_at.substring(1, 9) : ""}
+        contact={currentRequest ? currentRequest.contact : ""}
       />
     </div>
   );

@@ -17,11 +17,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const page = () => {
-  const apiKey = process.env.GOOGLE_MAPS_KEY ? process.env.GOOGLE_MAPS_KEY : "";
-
   return (
     <div className="flex flex-col bg-mainTheme items-center w-screen min-h-screen">
-      <UnivHeader apiKey={apiKey} />
+      
     </div>
   );
 };
