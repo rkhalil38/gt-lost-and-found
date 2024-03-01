@@ -1,16 +1,15 @@
 "use client";
 import { Database } from "@/supabase";
-import { createClient } from "@/utils/supabase/client";
 import React, { useEffect, useState } from "react";
 import { reactIconMatcher } from "@/utils/supabase/iconMatcher";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { fetchPins } from "@/db/database";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
 
 const LostItems = () => {
-  const supabase = createClient();
   const [loading, setLoading] = useState<boolean>(true);
   let parser;
 
@@ -19,14 +18,18 @@ const LostItems = () => {
   useEffect(() => {
     parser = new DOMParser();
 
-    const fetchPins = async () => {
-      const { data } = await supabase.from("pins").select("*");
+    const fetchAllPins = async () => {
+      const data = await fetchPins();
 
-      setPins(data ? data : []);
+      if ("message" in data) {
+        return;
+      }
+
+      setPins(data);
       setLoading(false);
     };
 
-    fetchPins();
+    fetchAllPins();
   }, []);
 
   return (

@@ -1,20 +1,22 @@
 "use client";
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import ChooseLocation from "./ChooseLocation";
 import { FaCheck } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
-import { createClient } from "@/utils/supabase/client";
-import { ClipLoader, RingLoader, RiseLoader } from "react-spinners";
-import { User } from "@supabase/supabase-js";
+import { ClipLoader } from "react-spinners";
+import { AuthApiError, AuthError, User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { createPin, fetchUser, getUserName } from "@/db/database";
+import { Pin } from "@/db/database";
 
 type Location = {
   lat: number;
   lng: number;
 };
+
 /*
 Create a pin component that allows the users to create a pin on the map
 User selects item, gives description, and chooses the location via ChooseLocation component when 
@@ -29,9 +31,7 @@ interface CreateAPinProps {
 }
 
 const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
-  const supabase = createClient();
-
-  const [user, setUser] = useState<User | null>();
+  const [user, setUser] = useState<User>();
   const [pickLocation, setPickLocation] = useState<boolean>(false);
   const [overlay, setOverlay] = useState<boolean>(false);
   const [foundItem, setFoundItem] = useState<string>("");
@@ -60,13 +60,18 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data.user);
+    const fetchActiveUser = async () => {
+      const data = await fetchUser();
+
+      if (data instanceof AuthError || data instanceof AuthApiError) {
+        return;
+      }
+
+      setUser(data);
       setFetchingUser(false);
     };
 
-    fetchUser();
+    fetchActiveUser();
   }, []);
 
   useEffect(() => {
@@ -81,34 +86,39 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
     };
   }, []);
 
-  const createPin = async () => {
-    const user = await supabase.auth.getUser();
-    const uuid = user.data.user?.id;
-    const placeholder = user.data.user;
-    const user_name = placeholder
-      ? placeholder.identities![0].identity_data!.full_name!
-      : "";
+  const createNewPin = async () => {
+    if (user instanceof AuthError) {
+      return;
+    }
+
+    const uuid = user?.id ? user?.id : "";
+    const user_name = await getUserName(
+      user ? user : new AuthError("User not found")
+    );
     setPinCreationStatus("loading");
 
-    const { data, error } = await supabase
-      .from("pins")
-      .insert([
-        {
-          creator_id: uuid,
-          user_name: user_name,
-          x_coordinate: location.lat,
-          y_coordinate: location.lng,
-          item: foundItem,
-          description: description,
-        },
-      ])
-      .select();
+    const pin: Pin = {
+      creator_id: uuid,
+      user_name: user_name,
+      x_coordinate: location.lat,
+      y_coordinate: location.lng,
+      item: foundItem,
+      description: description,
+      claim_requests: null,
+      created_at: "",
+      item_id: "",
+      fts: undefined,
+      item_description_username: null,
+      resolved: false,
+    };
 
-    if (error) {
-      console.log(error);
-      setPinCreationStatus(
-        "There was an error creating the pin. Please try again later."
-      );
+    const data = await createPin(
+      pin,
+      user ? user : new AuthError("User not found")
+    );
+
+    if ("message" in data) {
+      setPinCreationStatus("Error creating pin");
     } else {
       setPinCreationStatus("Pin created successfully!");
     }
@@ -140,7 +150,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
               >
                 <button
                   onClick={() => toggle(false)}
-                  className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+                  className="flex absolute rounded-lg duration-200 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
                 >
                   <IoMdClose />
                 </button>
@@ -212,7 +222,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
               ) : null}
               <button
                 disabled={!completedForm()}
-                onClick={createPin}
+                onClick={createNewPin}
                 className={`${
                   pickLocation ? "hidden" : "flex"
                 } disabled:bg-gray-700 disabled:text-gray-400 w-36 h-10 absolute bottom-4 right-4 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover`}

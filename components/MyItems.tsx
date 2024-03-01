@@ -1,33 +1,37 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
-import { User } from "@supabase/supabase-js";
+import { AuthApiError, AuthError, User } from "@supabase/supabase-js";
 import React, { useEffect, useState } from "react";
 import { Database } from "@/supabase";
 import { IoIosArrowBack } from "react-icons/io";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "react-loading-skeleton/dist/skeleton.css";
+import { fetchUser, fetchUserItems } from "@/db/database";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
 
 const MyItems = () => {
-  const supabase = createClient();
-
-  const [user, setUser] = useState<User | null>();
+  const [user, setUser] = useState<User>();
   const [pins, setPins] = useState<Pin[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const pathname = usePathname();
 
   useEffect(() => {
     const fetchUserAndPins = async () => {
-      const { data } = await supabase.auth.getUser();
-      const temp_id = data.user?.id;
-      setUser(data.user);
+      const data = await fetchUser();
 
-      let { data: pins, error } = await supabase
-        .from("pins")
-        .select("*")
-        .eq("creator_id", temp_id);
+      if (data instanceof AuthError || "message" in data) {
+        return;
+      }
+
+      setUser(data);
+
+      const pins = await fetchUserItems(data);
+
+      if ("message" in pins) {
+        return;
+      }
 
       setPins(pins ? pins : []);
       setLoading(false);

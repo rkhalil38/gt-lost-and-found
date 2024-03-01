@@ -14,11 +14,14 @@ import { IoMdClose } from "react-icons/io";
 import CreateAPin from "./CreateAPin";
 import Overlay from "./Overlay";
 import { useRouter } from "next/navigation";
-import { User } from "@supabase/supabase-js";
+import { AuthError, User } from "@supabase/supabase-js";
+import { fetchUser, getUserName, signOut } from "@/db/database";
 
 /*
 Side navigation bar that users can interact with
 Allows users to call CreateAPin component, navigate to other pages
+
+pending warning fix
 */
 const NavigationBar = ({
   apiKey,
@@ -29,33 +32,32 @@ const NavigationBar = ({
   toggle: Function;
   toggled: boolean;
 }) => {
-  const [activeUser, setUser] = useState<User | null>();
+  const [activeUser, setUser] = useState<User>();
   const [creatingPin, setCreatingPin] = useState<boolean>(false);
   const [user_name, setUserName] = useState<string>("");
   const router = useRouter();
 
-  const supabase = createClient();
-
   useEffect(() => {
-    const fetchUser = async () => {
-      const user = await supabase.auth.getUser();
-      const placeholder = user.data.user;
-      setUser(placeholder);
+    const fetcThisUser = async () => {
+      const user = await fetchUser();
+      console.log(user);
 
-      const user_name = placeholder
-        ? placeholder.identities![0].identity_data!.full_name!
-        : "";
+      if (user instanceof AuthError || "message" in user) {
+        return;
+      }
+
+      setUser(user);
+      const user_name = await getUserName(user);
       setUserName(user_name);
-      
     };
 
-    fetchUser();
+    fetcThisUser();
   }, []);
 
-  
   const handleSignOut = async () => {
     console.log("Signing out");
-    const { error } = await supabase.auth.signOut();
+    const error = await signOut();
+
     if (error) {
       console.log("Error signing out");
     } else if (location.pathname !== "/") {
@@ -77,7 +79,7 @@ const NavigationBar = ({
       name: "Create a Found Item",
       icon: <FaMapMarkerAlt className="ml-2" />,
       link: "",
-      active: activeUser?.id ? true : false,
+      active: activeUser ? true : false,
       onClick: () => setCreatingPin(true),
     },
     {
@@ -91,28 +93,28 @@ const NavigationBar = ({
       name: "My Found Items",
       icon: <FaBookmark className="ml-2" />,
       link: `/${user_name.replace(" ", "").toLowerCase()}/myitems`,
-      active: activeUser?.id ? true : false,
+      active: activeUser ? true : false,
       onClick: () => {},
     },
     {
       name: "My Requests",
       icon: <PiBackpackLight className="ml-2" />,
       link: `/${user_name.replace(" ", "").toLowerCase()}/myrequests`,
-      active: activeUser?.id ? true : false,
+      active: activeUser ? true : false,
       onClick: () => {},
     },
     {
       name: "Sign In",
       icon: <FaSignInAlt className="ml-2" />,
       link: "/login",
-      active: activeUser?.id ? false : true,
+      active: activeUser ? false : true,
       onClick: () => {},
     },
     {
       name: "My Account",
       icon: <MdOutlineAccountCircle className="ml-2" />,
       link: "",
-      active: activeUser?.id ? true : false,
+      active: activeUser ? true : false,
       onClick: () => {},
     },
   ];
@@ -122,7 +124,6 @@ const NavigationBar = ({
       className={`flex flex-col text-white duration-300 w-[300px] h-full rounded-r-lg border-b-[1px] border-t-[1px] border-r-[1px] border-gray-600 fixed top-0 ${
         toggled ? "left-0" : "left-[-300px]"
       } bg-mainTheme z-20 shadow-xl`}
-      
     >
       <div className="flex flex-row my-3 items-center w-full">
         <h1 className="bg-gradient-to-b from-gtGold to-white text-transparent bg-clip-text text-xl font-semibold pl-6">
@@ -130,7 +131,7 @@ const NavigationBar = ({
         </h1>
         <button
           onClick={() => toggle(false)}
-          className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+          className="flex absolute rounded-lg duration-200 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
         >
           <IoMdClose />
         </button>
@@ -139,7 +140,7 @@ const NavigationBar = ({
         {navbarItems.map((item) => (
           <Link href={item.link} key={item.name} onClick={item.onClick}>
             <div
-              className={`flex flex-row rounded-lg items-center duration-300 gap-1 hover:bg-mainHover ${
+              className={`flex flex-row rounded-lg items-center duration-[50ms] gap-1 hover:bg-mainHover ${
                 item.active ? "block" : "hidden"
               } text-base`}
             >
@@ -152,7 +153,7 @@ const NavigationBar = ({
       {activeUser ? (
         <button className="px-4" onClick={handleSignOut}>
           <div
-            className={`flex flex-row text-red-500 rounded-lg items-center duration-300 gap-1 hover:bg-mainHover text-base`}
+            className={`flex flex-row text-red-500 rounded-lg items-center duration-[50ms] gap-1 hover:bg-mainHover text-base`}
           >
             <PiSignOutBold className="ml-2" />
             <p className="py-2">Sign Out</p>
@@ -160,7 +161,7 @@ const NavigationBar = ({
         </button>
       ) : null}
 
-      {activeUser?.id ? (
+      {activeUser ? (
         <p className="text-white text-xs mt-4 ml-4">Signed in as {user_name}</p>
       ) : null}
 

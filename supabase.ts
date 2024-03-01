@@ -18,6 +18,7 @@ export type Database = {
           fts: unknown | null
           item: string | null
           item_id: string
+          resolved: boolean
           user_name: string | null
           x_coordinate: number | null
           y_coordinate: number | null
@@ -31,6 +32,7 @@ export type Database = {
           fts?: unknown | null
           item?: string | null
           item_id?: string
+          resolved?: boolean
           user_name?: string | null
           x_coordinate?: number | null
           y_coordinate?: number | null
@@ -43,6 +45,7 @@ export type Database = {
           fts?: unknown | null
           item?: string | null
           item_id?: string
+          resolved?: boolean
           user_name?: string | null
           x_coordinate?: number | null
           y_coordinate?: number | null
@@ -88,6 +91,7 @@ export type Database = {
           creator_name: string | null
           description: string | null
           item_id: string | null
+          pin_creator_id: string
           request_id: string
           status: string | null
         }
@@ -98,6 +102,7 @@ export type Database = {
           creator_name?: string | null
           description?: string | null
           item_id?: string | null
+          pin_creator_id: string
           request_id: string
           status?: string | null
         }
@@ -108,6 +113,7 @@ export type Database = {
           creator_name?: string | null
           description?: string | null
           item_id?: string | null
+          pin_creator_id?: string
           request_id?: string
           status?: string | null
         }

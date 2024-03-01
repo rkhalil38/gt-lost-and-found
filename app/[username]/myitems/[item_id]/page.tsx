@@ -28,7 +28,7 @@ const page = () => {
   return (
     <div className="flex flex-col bg-mainTheme items-center w-screen min-h-screen">
       <UnivHeader apiKey={apiKey} />
-      <MyItemDisplay apiKey={apiKey} />
+      <MyItemDisplay />
     </div>
   );
 };

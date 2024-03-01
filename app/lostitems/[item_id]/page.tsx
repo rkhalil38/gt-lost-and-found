@@ -1,5 +1,4 @@
 import LostItemDisplay from "@/components/LostItemDisplay";
-import UnivHeader from "@/components/UnivHeader";
 import { Metadata, ResolvingMetadata } from "next";
 import React from "react";
 
@@ -25,8 +24,7 @@ const page = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen bg-mainTheme">
-      <UnivHeader apiKey={apiKey} />
-      <LostItemDisplay apiKey={apiKey} />
+      <LostItemDisplay apiKey={apiKey}/>
     </div>
   );
 };

@@ -6,6 +6,8 @@ import { htmlIconMatcher } from "@/utils/supabase/iconMatcher";
 import { Database } from "@/supabase";
 import CreateAPin from "./CreateAPin";
 import Overlay from "./Overlay";
+import { fetchPins } from "@/db/database";
+import { PostgrestError } from "@supabase/supabase-js";
 require("dotenv").config();
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
@@ -34,13 +36,12 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
   };
 
   useEffect(() => {
-    const fetchPins = async () => {
-      const { data } = await supabase.from("pins").select("*");
-
-      setPins(data ? data : []);
+    const getPins = async () => {
+      const data = await fetchPins();
+      setPins(data as Pin[]);
     };
 
-    fetchPins();
+    getPins();
   }, []);
 
   useEffect(() => {

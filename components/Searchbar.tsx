@@ -30,6 +30,7 @@ const Searchbar = () => {
     item_description_username: "",
     claim_requests: 0,
     fts: "",
+    resolved: false,
   };
 
   const search = async (queryingPins: string) => {

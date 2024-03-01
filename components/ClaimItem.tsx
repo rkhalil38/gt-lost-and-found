@@ -1,5 +1,8 @@
 "use client";
+import { claimItem, fetchUser } from "@/db/database";
+import { Database } from "@/supabase";
 import { createClient } from "@/utils/supabase/client";
+import { AuthApiError, AuthError, User } from "@supabase/supabase-js";
 import Link from "next/link";
 import React, { use, useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
@@ -11,27 +14,47 @@ type componentMap = {
   [key: string]: JSX.Element;
 };
 
+type PinRequest = Database["public"]["Tables"]["requests"]["Row"];
+
 const ClaimItem = ({
   path,
   itemID,
+  pin_creator_id,
   username,
   claimStatus,
+  userID,
   setClaimStatus,
   user,
 }: {
   path: string;
   itemID: string;
+  pin_creator_id: string;
   username: string;
   claimStatus: string;
+  userID: string;
   setClaimStatus: Function;
   user: boolean;
 }) => {
-  const supabase = createClient();
+  const [activeUser, setActiveUser] = useState<User>();
   const [reasoning, setReasoning] = useState<string>("");
   const [characterCount, setCharacterCount] = useState<number>(0);
   const [contactMethod, setContactMethod] = useState<string>("email");
   const [contactInfo, setContactInfo] = useState<string>("");
   const [fieldError, setFieldError] = useState<boolean>(false);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const data = await fetchUser();
+
+      if (data instanceof AuthError || "message" in data) {
+        return;
+      }
+
+      setActiveUser(data);
+    };
+
+    getUser();
+  }, []);
 
   useEffect(() => {
     setCharacterCount(reasoning.length);
@@ -57,7 +80,7 @@ const ClaimItem = ({
         if (validator.isMobilePhone(e.target.value)) {
           setFieldError(false);
           setContactInfo(e.target.value);
-          console.log("valid phone")
+          console.log("valid phone");
         } else {
           console.log("invalid phone");
           setFieldError(true);
@@ -74,21 +97,26 @@ const ClaimItem = ({
     );
   };
 
-  const claimItem = async () => {
+  const claimDisplayedItem = async () => {
     setClaimStatus("loading");
+    const claimRequest: PinRequest = {
+      description: reasoning,
+      item_id: itemID,
+      request_id: userID + itemID,
+      creator_name: username,
+      contact: contactInfo,
+      pin_creator_id: pin_creator_id,
+      created_at: "",
+      creator_id: null,
+      status: null,
+    };
 
-    const { data, error } = await supabase
-      .from("requests")
-      .insert([
-        {
-          description: reasoning,
-          item_id: itemID,
-          request_id: username.toUpperCase().replace(" ", "") + itemID,
-          creator_name: username,
-          contact: contactInfo,
-        },
-      ])
-      .select();
+    if (activeUser instanceof AuthError || !activeUser) {
+      return;
+    }
+
+    const claim = await claimItem(claimRequest, activeUser, contactInfo);
+    console.log(claim);
 
     setClaimStatus("Fresh Request Submitted");
   };
@@ -144,7 +172,7 @@ const ClaimItem = ({
         <p className="text-white text-xs">{characterCount}/250</p>
         <button
           disabled={!completedForm()}
-          onClick={claimItem}
+          onClick={claimDisplayedItem}
           className={`flex disabled:bg-gray-700 disabled:text-gray-400 w-36 h-10 absolute bottom-4 right-4 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover`}
         >
           Submit Request
@@ -192,7 +220,7 @@ const ClaimItem = ({
         <div className="flex w-full h-full">
           <Link
             href={path + "?claim=false"}
-            className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+            className="flex absolute rounded-lg duration-200 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
           >
             <IoMdClose />
           </Link>

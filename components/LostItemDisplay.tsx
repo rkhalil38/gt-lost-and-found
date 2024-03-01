@@ -5,29 +5,33 @@ import { Database } from "@/supabase";
 import DisplayMap from "./DisplayMap";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { User } from "@supabase/supabase-js";
+import { AuthError, PostgrestError, User } from "@supabase/supabase-js";
 import { useSearchParams } from "next/navigation";
 import ClaimItem from "./ClaimItem";
 import Overlay from "./Overlay";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FaCheck } from "react-icons/fa";
 import Link from "next/link";
 import ClipLoader from "react-spinners/ClipLoader";
 import { notFound } from "next/navigation";
-
-type Pin = Database["public"]["Tables"]["pins"]["Row"];
-type Request = Database["public"]["Tables"]["requests"]["Row"];
+import {
+  Pin,
+  fetchClaims,
+  fetchPin,
+  fetchUser,
+  getUserName,
+} from "@/db/database";
+import { PinRequest } from "@/db/database";
 
 const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const supabase = createClient();
-  const router = useRouter();
 
   const [item, setItem] = useState<Pin>();
   const [loadMap, setLoadMap] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>();
+  const [user, setUser] = useState<User>();
   const [username, setUsername] = useState<string>("");
   const [claimState, setClaimState] = useState<string>("loading");
-  const [fetchClaims, setFetchClaims] = useState<boolean>(false);
+  const [retrieveClaims, setRetrieveClaims] = useState<boolean>(false);
 
   const claimStates = {
     notSignedIn: "Sign In to Claim",
@@ -40,59 +44,56 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const claim = search.get("claim") == "true" ? true : false;
 
   const [itemID, setItemID] = useState<string>("");
+  const [pinCreatorID, setPinCreatorID] = useState<string>("");
   const [currentClaims, setCurrentClaims] = useState<number>(0);
 
   useEffect(() => {
-    const fetchItem = async () => {
+    const fetchThisItem = async () => {
       const item_id = window.location.pathname.split("/")[2];
       setItemID(item_id);
 
-      let { data, error } = await supabase
-        .from("pins")
-        .select("*")
-        .eq("item_id", item_id);
+      const data = await fetchPin(item_id);
 
-      if (data) {
-        setItem(data ? data[0] : "");
-        setCurrentClaims(data ? data[0].claim_requests : 0);
-        setLoadMap(true);
-        setFetchClaims(true);
-      } else {
+      if ("message" in data) {
         notFound();
       }
+
+      setItem(data);
+      setCurrentClaims(data.claim_requests ? data.claim_requests : 0);
+      setPinCreatorID(data.creator_id);
+      setLoadMap(true);
+      setRetrieveClaims(true);
     };
 
-    fetchItem();
+    fetchThisItem();
   }, []);
 
   useEffect(() => {
-    const fetchClaims = async (username: string): Promise<Request[]> => {
-      let { data, error } = await supabase
-        .from("requests")
-        .select("*")
-        .eq("request_id", username.toUpperCase().replace(" ", "") + itemID);
+    const fetchUserAndClaims = async (): Promise<void> => {
+      const data = await fetchUser();
 
-      if (data) {
-        return data;
+      if (data instanceof AuthError || "message" in data) {
+        setClaimState(claimStates.notSignedIn);
+        return;
       }
 
-      return [];
-    };
+      setUser(data);
 
-    const fetchUserAndClaims = async (): Promise<void> => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data.user);
-
-      const user_name = data.user
-        ? data.user.identities![0].identity_data!.full_name!
-        : "";
+      const user_name = await getUserName(data);
       setUsername(user_name);
 
-      const requests: Request[] = await fetchClaims(user_name);
+      const requests: PinRequest[] | PostgrestError = await fetchClaims(
+        itemID,
+        data
+      );
 
-      if (requests.length > 0 && data.user) {
+      if ("message" in requests) {
+        return;
+      }
+
+      if (requests.length > 0 && data) {
         setClaimState(claimStates.claimed);
-      } else if (data.user) {
+      } else if (data) {
         setClaimState(claimStates.notClaimed);
       } else {
         setClaimState(claimStates.notSignedIn);
@@ -100,7 +101,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
     };
 
     fetchUserAndClaims();
-  }, [fetchClaims]);
+  }, [retrieveClaims]);
 
   useEffect(() => {
     const channel = supabase
@@ -131,8 +132,10 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
           <ClaimItem
             path={pathname}
             itemID={itemID}
+            pin_creator_id={pinCreatorID}
             username={username}
             claimStatus={claimState}
+            userID={user instanceof AuthError ? "" : user ? user.id : ""}
             setClaimStatus={setClaimState}
             user={user ? true : false}
           />
