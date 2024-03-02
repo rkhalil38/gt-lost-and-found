@@ -216,15 +216,25 @@ const ItemDisplay = ({ itemID }: { itemID: string }) => {
   }, [itemID]);
 
   return (
-    <div className="flex flex-col p-4 bg-mainHover rounded-lg border-[1px] border-gray-500 gap-2 w-full h-1/2">
-      <h1 className="text-2xl font-semibold">
-        {item?.item || <Skeleton height={20} width={120} baseColor="#B3A369" />}
+    <div className="flex flex-col justify-between p-4 bg-mainHover rounded-lg border-[1px] border-gray-500 gap-2 w-full h-1/2">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-2xl font-semibold">
+          {item?.item || (
+            <Skeleton height={20} width={120} baseColor="#B3A369" />
+          )}
+        </h1>
+        <p className="text-xs text-gray-400">
+          {item?.description || (
+            <Skeleton height={15} width={150} baseColor="#B3A369" />
+          )}
+        </p>
+      </div>
+      <h1 className="text-xs flex flex-row items-center gap-2">
+        {item?.claim_requests || (
+          <Skeleton height={15} width={15} baseColor="#B3A369" />
+        )}{" "}
+        claim requests
       </h1>
-      <p className="text-xs text-gray-400">
-        {item?.description || (
-          <Skeleton height={15} width={150} baseColor="#B3A369" />
-        )}
-      </p>
     </div>
   );
 };

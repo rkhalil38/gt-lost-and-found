@@ -5,7 +5,6 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 import { PiBackpackLight } from "react-icons/pi";
 import { MdOutlineAccountCircle } from "react-icons/md";
-import { createClient } from "@/utils/supabase/client";
 import { PiSignOutBold } from "react-icons/pi";
 import { FaSignInAlt } from "react-icons/fa";
 import { CgScrollV } from "react-icons/cg";
@@ -58,13 +57,12 @@ const NavigationBar = ({
     console.log("Signing out");
     const error = await signOut();
 
-    if (error) {
-      console.log("Error signing out");
-    } else if (location.pathname !== "/") {
-      router.push("/");
-    } else {
-      location.reload();
+    if (error instanceof AuthError) {
+      return;
     }
+
+    router.push("/");
+    location.reload();
   };
 
   const navbarItems = [
