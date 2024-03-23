@@ -1,6 +1,6 @@
-import UnivHeader from "@/components/UnivHeader";
 import React from "react";
 import { Metadata } from "next";
+import MyRequests from "@/components/MyRequests";
 
 type Props = {
   params: {
@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const page = () => {
   return (
-    <div className="flex flex-col bg-mainTheme items-center w-screen min-h-screen">
-      
+    <div className="flex flex-col pt-28 px-8 bg-mainTheme w-screen min-h-screen">
+      <MyRequests />
     </div>
   );
 };

@@ -1,8 +1,7 @@
 "use client";
 import { claimItem, fetchUser } from "@/db/database";
 import { Database } from "@/supabase";
-import { createClient } from "@/utils/supabase/client";
-import { AuthApiError, AuthError, User } from "@supabase/supabase-js";
+import { AuthError, User } from "@supabase/supabase-js";
 import Link from "next/link";
 import React, { use, useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
@@ -47,6 +46,7 @@ const ClaimItem = ({
       const data = await fetchUser();
 
       if (data instanceof AuthError || "message" in data) {
+        console.log(data);
         return;
       }
 
@@ -107,16 +107,22 @@ const ClaimItem = ({
       contact: contactInfo,
       pin_creator_id: pin_creator_id,
       created_at: "",
-      creator_id: null,
-      status: null,
+      creator_id: userID,
+      status: "",
     };
 
     if (activeUser instanceof AuthError || !activeUser) {
+      setClaimStatus("Claim Item");
       return;
     }
 
     const claim = await claimItem(claimRequest, activeUser, contactInfo);
-    console.log(claim);
+   
+    if ('message' in claim) {
+      console.log(claim);
+      setClaimStatus("Claim Item");
+      return;
+    }
 
     setClaimStatus("Fresh Request Submitted");
   };

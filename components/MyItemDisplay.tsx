@@ -1,6 +1,6 @@
 "use client";
 import { Database } from "@/supabase";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { IoIosArrowBack, IoMdClose } from "react-icons/io";
@@ -23,6 +23,9 @@ type Pin = Database["public"]["Tables"]["pins"]["Row"];
 type PinRequest = Database["public"]["Tables"]["requests"]["Row"];
 type ComponentMap = {
   [key: string]: JSX.Element;
+};
+type requestStatus = {
+  [key: string]: any;
 };
 
 const MyItemDisplay = () => {
@@ -73,9 +76,15 @@ const MyItemDisplay = () => {
     fetchPinRequests();
   }, [getRequests]);
 
+  const requestStatus: requestStatus = {
+    undecided: "border-gray-500",
+    accepted: "border-green-400 text-white",
+    rejected: "border-red-400 text-white",
+  };
+
   return (
     <div className="flex flex-row gap-4 text-gtGold w-screen h-screen items-center justify-center">
-      <div className="flex flex-col gap-4 rounded-lg items-center w-1/4 h-3/4">
+      <div className="flex flex-col gap-4 rounded-lg items-center w-[40%] h-3/4">
         <ItemDisplay itemID={itemID} />
         <div className="flex flex-col overflow-y-scroll gap-4 rounded-lg items-center w-full h-1/2">
           {requests ? (
@@ -83,7 +92,9 @@ const MyItemDisplay = () => {
               <button
                 onClick={() => setCurrentRequest(request)}
                 key={request.request_id}
-                className="flex flex-row group w-full h-28 justify-between border-[1px] p-4 overflow-scroll gap-4 duration-300 cursor-pointer bg-mainHover hover:bg-mainHover2 border-gray-500 rounded-lg"
+                className={`flex flex-row hover:bg-mainHover2 cursor-pointer bg-mainHover group w-full h-28 justify-between border-[1px] ${
+                  requestStatus[request.status]
+                } p-4 gap-4 duration-300 rounded-lg`}
               >
                 <div className="flex flex-col items-start gap-1 w-[60%]">
                   <p className="text-sm">{request.creator_name}</p>
@@ -92,7 +103,7 @@ const MyItemDisplay = () => {
                   </p>
                 </div>
                 <div className="flex flex-col justify-between items-end">
-                  <IoIosArrowBack className="group-hover:text-white group-hover:translate-x-1 text-gray-500 duration-300 rotate-180" />
+                  <IoIosArrowBack className="rotate-180 text-gray-500 group-hover:text-white group-hover:translate-x-1 duration-300" />
                   <p className="text-xs text-gray-400">
                     {request.created_at.substring(0, 10)}
                   </p>
@@ -111,7 +122,7 @@ const MyItemDisplay = () => {
         description={currentRequest ? currentRequest.description : ""}
         itemID={currentRequest ? currentRequest.item_id : ""}
         creatorID={currentRequest ? currentRequest.creator_id : ""}
-        date={currentRequest ? currentRequest.created_at.substring(1, 9) : ""}
+        status={currentRequest ? currentRequest.status : ""}
         contact={currentRequest ? currentRequest.contact : ""}
       />
     </div>
@@ -123,14 +134,14 @@ const CurrentRequestDock = ({
   description,
   itemID,
   creatorID,
-  date,
+  status,
   contact,
 }: {
   creator: string | null;
   description: string | null;
   itemID: string | null;
   creatorID: string | null;
-  date: string | null;
+  status: string;
   contact: string | null;
 }) => {
   const [areYouSure, setAreYouSure] = useState<boolean>(false);
@@ -146,6 +157,11 @@ const CurrentRequestDock = ({
     setAction("reject");
   };
 
+  const requestStatus: requestStatus = {
+    accepted: <h1 className="text-green-400 text-xs">Claim Accepted</h1>,
+    rejected: <h1 className="text-red-400 text-xs">Claim Rejected</h1>,
+  };
+
   return (
     <div className="flex flex-col justify-between w-1/4 h-3/4 rounded-lg bg-mainHover border-[1px] border-gray-500">
       {areYouSure ? (
@@ -153,19 +169,22 @@ const CurrentRequestDock = ({
           <AreYouSure
             setAreYouSure={setAreYouSure}
             action={action}
-            creator={creator}
+            status={status}
             itemID={itemID}
             creatorID={creatorID}
           />
-          <Overlay on={areYouSure} zIndex="z-30" />
+          <Overlay on={areYouSure} setOn={setAreYouSure} zIndex="z-30" />
         </div>
       ) : null}
 
       {creator ? (
         <div className="flex flex-col gap-4 m-4">
-          <div className="flex flex-col">
-            <h1 className="text-2xl font-semibold">{creator}</h1>
-            <p className="text-xs text-gray-400">{contact}</p>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col">
+              <h1 className="text-2xl font-semibold">{creator}</h1>
+              <p className="text-xs text-gray-400">{contact}</p>
+            </div>
+            {status !== "undecided" && requestStatus[status]}
           </div>
           <p className="text-base text-white">{description}</p>
         </div>
@@ -174,15 +193,25 @@ const CurrentRequestDock = ({
       {creator ? (
         <div className="flex flex-row w-full">
           <button
+            disabled={status !== "undecided"}
             onClick={handleAcceptButton}
-            className="flex w-1/2 items-center justify-center gap-2 rounded-bl-lg duration-100 hover:bg-green-400 hover:text-white text-sm p-4 border-t-[1px] border-r-[1px] border-gray-400"
+            className={`flex w-1/2 items-center justify-center ${
+              status !== "undecided"
+                ? "bg-gray-700 text-gray-500"
+                : "hover:bg-green-400 hover:text-white"
+            } gap-2 rounded-bl-lg duration-100 text-sm p-4 border-t-[1px] border-r-[1px] border-gray-400`}
           >
             <FaCheck />
             Accept Claim
           </button>
           <button
+            disabled={status !== "undecided"}
             onClick={handleRejectButton}
-            className="flex w-1/2 items-center justify-center gap-1 rounded-br-lg duration-100 hover:bg-red-400 hover:text-white text-sm p-4 border-t-[1px] border-gray-400"
+            className={`flex w-1/2 items-center justify-center ${
+              status !== "undecided"
+                ? "bg-gray-700 text-gray-500"
+                : "hover:bg-red-400 hover:text-white"
+            } gap-1 rounded-br-lg duration-100 text-sm p-4 border-t-[1px] border-gray-400`}
           >
             <IoClose className="text-lg" />
             Reject Claim
@@ -205,7 +234,6 @@ const ItemDisplay = ({ itemID }: { itemID: string }) => {
       const data = await fetchPin(itemID);
 
       if ("message" in data) {
-        console.log(data);
         return;
       }
 
@@ -217,23 +245,33 @@ const ItemDisplay = ({ itemID }: { itemID: string }) => {
 
   return (
     <div className="flex flex-col justify-between p-4 bg-mainHover rounded-lg border-[1px] border-gray-500 gap-2 w-full h-1/2">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold">
-          {item?.item || (
-            <Skeleton height={20} width={120} baseColor="#B3A369" />
-          )}
-        </h1>
-        <p className="text-xs text-gray-400">
-          {item?.description || (
-            <Skeleton height={15} width={150} baseColor="#B3A369" />
-          )}
-        </p>
+      <div className="flex flex-row justify-between">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-semibold">
+            {item?.item || (
+              <Skeleton height={20} width={120} baseColor="#B3A369" />
+            )}
+          </h1>
+          <p className="text-xs text-gray-400">
+            {item?.description || (
+              <Skeleton height={15} width={150} baseColor="#B3A369" />
+            )}
+          </p>
+        </div>
+        {item?.resolved && (
+          <div className="flex flex-row h-fit gap-2 text-xl text-green-400 font-semibold items-center">
+            <FaCheck />
+            Item Found
+          </div>
+        )}
       </div>
       <h1 className="text-xs flex flex-row items-center gap-2">
-        {item?.claim_requests || (
-          <Skeleton height={15} width={15} baseColor="#B3A369" />
-        )}{" "}
-        claim requests
+        {item?.claim_requests != null ? (
+          item?.claim_requests
+        ) : (
+          <Skeleton height={20} width={20} baseColor="#B3A369" />
+        )}
+        {" "}claim requests
       </h1>
     </div>
   );
@@ -242,13 +280,13 @@ const ItemDisplay = ({ itemID }: { itemID: string }) => {
 const AreYouSure = ({
   setAreYouSure,
   action,
-  creator,
+  status,
   itemID,
   creatorID,
 }: {
   setAreYouSure: Function;
   action: string;
-  creator: string | null;
+  status: string;
   itemID: string | null;
   creatorID: string | null;
 }) => {
@@ -260,6 +298,7 @@ const AreYouSure = ({
       creatorID ? creatorID : "",
       itemID ? itemID : ""
     );
+    console.log(data);
     setDecisionState("true");
   };
 
@@ -269,6 +308,7 @@ const AreYouSure = ({
       creatorID ? creatorID : "",
       itemID ? itemID : ""
     );
+    console.log(data);
     setDecisionState("true");
   };
 

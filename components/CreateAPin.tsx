@@ -75,16 +75,20 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   }, []);
 
   useEffect(() => {
-    setCharacterCount(description.length);
-  }, [description]);
-
-  useEffect(() => {
     setOverlay(true);
 
     return () => {
       setOverlay(false);
     };
   }, []);
+
+  useEffect(() => {
+    
+  }, []);
+
+  useEffect(() => {
+    setCharacterCount(description.length);
+  }, [description]);
 
   const createNewPin = async () => {
     if (user instanceof AuthError) {

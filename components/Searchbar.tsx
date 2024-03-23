@@ -63,13 +63,13 @@ const Searchbar = () => {
     <div
       onBlur={handleBlur}
       id="searchbar-element"
-      className="flex flex-col w-[40%] h-10 border-[1px] bg-mainHover border-gray-600 rounded-lg fixed left-[30%]"
+      className="flex flex-col text-white w-[40%] h-10 border-[1px] border-gray-400 rounded-lg fixed left-[30%]"
     >
       <input
         onFocus={() => setPinItemsVisible(true)}
         onChange={handleChange}
         type="text"
-        className="absolute px-2 bg-transparent w-full h-full focus:outline-none"
+        className="absolute text-white text-sm px-2 bg-transparent w-full h-full focus:outline-none"
         placeholder="Search for an item"
       />
       <div className="flex flex-col shadow-lg absolute top-10 w-full rounded-lg h-fit bg-mainHover">
@@ -78,7 +78,7 @@ const Searchbar = () => {
               <Link
                 href={`/lostitems/${pin.item_id}`}
                 key={pin.created_at}
-                className="flex flex-row cursor-pointer rounded-lg hover:bg-slate-700 h-10 p-2 w-full gap-2"
+                className="flex flex-row cursor-pointer rounded-lg hover:bg-mainHover2 h-10 p-2 w-full gap-2"
               >
                 <h1 className="w-1/4 font-semibold text-gtGold">{pin.item}</h1>
                 <p className="w-2/4 overflow-clip">{pin.description}</p>

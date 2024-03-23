@@ -93,7 +93,7 @@ export type Database = {
           item_id: string | null
           pin_creator_id: string
           request_id: string
-          status: string | null
+          status: string
         }
         Insert: {
           contact?: string | null
@@ -104,7 +104,7 @@ export type Database = {
           item_id?: string | null
           pin_creator_id: string
           request_id: string
-          status?: string | null
+          status?: string
         }
         Update: {
           contact?: string | null
@@ -115,7 +115,7 @@ export type Database = {
           item_id?: string | null
           pin_creator_id?: string
           request_id?: string
-          status?: string | null
+          status?: string
         }
         Relationships: [
           {

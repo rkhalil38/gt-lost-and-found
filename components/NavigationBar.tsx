@@ -37,9 +37,8 @@ const NavigationBar = ({
   const router = useRouter();
 
   useEffect(() => {
-    const fetcThisUser = async () => {
+    const fetchThisUser = async () => {
       const user = await fetchUser();
-      console.log(user);
 
       if (user instanceof AuthError || "message" in user) {
         return;
@@ -50,7 +49,7 @@ const NavigationBar = ({
       setUserName(user_name);
     };
 
-    fetcThisUser();
+    fetchThisUser();
   }, []);
 
   const handleSignOut = async () => {
@@ -71,7 +70,7 @@ const NavigationBar = ({
       icon: <AiFillHome className="ml-2" />,
       link: "/",
       active: true,
-      onClick: () => {},
+      onClick: () => toggle(false),
     },
     {
       name: "Create a Found Item",
@@ -85,66 +84,67 @@ const NavigationBar = ({
       icon: <CgScrollV className="ml-2" />,
       link: "/lostitems",
       active: true,
-      onClick: () => {},
+      onClick: () => toggle(false),
     },
     {
       name: "My Found Items",
       icon: <FaBookmark className="ml-2" />,
       link: `/${user_name.replace(" ", "").toLowerCase()}/myitems`,
       active: activeUser ? true : false,
-      onClick: () => {},
+      onClick: () => toggle(false),
     },
     {
       name: "My Requests",
       icon: <PiBackpackLight className="ml-2" />,
       link: `/${user_name.replace(" ", "").toLowerCase()}/myrequests`,
       active: activeUser ? true : false,
-      onClick: () => {},
+      onClick: () => toggle(false),
     },
     {
       name: "Sign In",
       icon: <FaSignInAlt className="ml-2" />,
       link: "/login",
       active: activeUser ? false : true,
-      onClick: () => {},
+      onClick: () => toggle(false),
     },
     {
       name: "My Account",
       icon: <MdOutlineAccountCircle className="ml-2" />,
-      link: "",
+      link: `/${user_name.replace(" ", "").toLowerCase()}/myaccount`,
       active: activeUser ? true : false,
-      onClick: () => {},
+      onClick: () => toggle(false),
     },
   ];
 
   return (
     <div
-      className={`flex flex-col text-white duration-300 w-[300px] h-full rounded-r-lg border-b-[1px] border-t-[1px] border-r-[1px] border-gray-600 fixed top-0 ${
+      className={`flex flex-col text-gray-300 duration-300 w-[300px] h-full rounded-r-lg border-b-[1px] border-t-[1px] border-r-[1px] border-gray-400 fixed top-0 ${
         toggled ? "left-0" : "left-[-300px]"
       } bg-mainTheme z-20 shadow-xl`}
     >
       <div className="flex flex-row my-3 items-center w-full">
-        <h1 className="bg-gradient-to-b from-gtGold to-white text-transparent bg-clip-text text-xl font-semibold pl-6">
+        <h1 className="text-gtGold text-xl font-semibold pl-6">
           GT Lost and Found
         </h1>
         <button
           onClick={() => toggle(false)}
-          className="flex absolute rounded-lg duration-200 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+          className="flex absolute rounded-lg duration-200 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-400 bg-mainHover hover:text-gtGold text-xl"
         >
           <IoMdClose />
         </button>
       </div>
       <ol className="flex flex-col px-4 pt-4">
         {navbarItems.map((item) => (
-          <Link href={item.link} key={item.name} onClick={item.onClick}>
-            <div
-              className={`flex flex-row rounded-lg items-center duration-[50ms] gap-1 hover:bg-mainHover ${
-                item.active ? "block" : "hidden"
-              } text-base`}
-            >
-              {item.icon}
-              <p className="py-2">{item.name}</p>
-            </div>
+          <Link
+            className={`flex flex-row rounded-lg items-center duration-[50ms] gap-1 hover:bg-mainHover ${
+              item.active ? "block" : "hidden"
+            } text-base`}
+            href={item.link}
+            key={item.name}
+            onClick={item.onClick}
+          >
+            {item.icon}
+            <p className="py-2">{item.name}</p>
           </Link>
         ))}
       </ol>
@@ -166,7 +166,7 @@ const NavigationBar = ({
       {creatingPin ? (
         <div className="flex flex-col h-full w-full">
           <CreateAPin apiKey={apiKey} toggle={setCreatingPin} />
-          <Overlay zIndex="z-10" on={creatingPin} />
+          <Overlay zIndex="z-10" on={creatingPin} setOn={setCreatingPin}/>
         </div>
       ) : null}
     </div>

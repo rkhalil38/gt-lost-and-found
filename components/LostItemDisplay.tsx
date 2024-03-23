@@ -1,12 +1,12 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Database } from "@/supabase";
 import DisplayMap from "./DisplayMap";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { AuthError, PostgrestError, User } from "@supabase/supabase-js";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ClaimItem from "./ClaimItem";
 import Overlay from "./Overlay";
 import { usePathname } from "next/navigation";
@@ -46,6 +46,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const [itemID, setItemID] = useState<string>("");
   const [pinCreatorID, setPinCreatorID] = useState<string>("");
   const [currentClaims, setCurrentClaims] = useState<number>(0);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchThisItem = async () => {
@@ -139,7 +140,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
             setClaimStatus={setClaimState}
             user={user ? true : false}
           />
-          <Overlay on={claim} zIndex="z-30" />
+          <Overlay on={claim} setOn={() => {router.push(`${pathname}?claim=false`)}} zIndex="z-30" />
         </div>
       ) : null}
       <div className="flex flex-col w-[30%] h-[60%] items-center gap-4">

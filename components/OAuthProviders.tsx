@@ -93,7 +93,7 @@ const OAuthProviders = () => {
         onClick={signInWithGithub}
         className="flex flex-row duration-300 hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-600"
       >
-        <BsGithub className="hover:cursor-pointer h-[30px] w-[30px] my-2" />
+        <BsGithub className="text-white hover:cursor-pointer h-[30px] w-[30px] my-2" />
         <p className="text-white">Sign in with Github</p>
       </button>
       <button

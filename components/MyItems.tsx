@@ -1,6 +1,5 @@
 "use client";
-import { createClient } from "@/utils/supabase/client";
-import { AuthApiError, AuthError, User } from "@supabase/supabase-js";
+import { AuthError, User } from "@supabase/supabase-js";
 import React, { useEffect, useState } from "react";
 import { Database } from "@/supabase";
 import { IoIosArrowBack } from "react-icons/io";
@@ -21,7 +20,7 @@ const MyItems = () => {
     const fetchUserAndPins = async () => {
       const data = await fetchUser();
 
-      if (data instanceof AuthError || "message" in data) {
+      if (data instanceof AuthError) {
         return;
       }
 
@@ -66,7 +65,11 @@ const MyItems = () => {
                   <h1 className="text-sm">{pin.item}</h1>
                   <p className="text-xs text-gray-400">{pin.description}</p>
                 </div>
-                <IoIosArrowBack className="group-hover:text-white group-hover:translate-x-1 text-gray-500 duration-300 rotate-180" />
+                {pin.resolved?
+                  <p className="text-green-400 text-xs">Resolved</p>
+                  :
+                  <IoIosArrowBack className="group-hover:text-white group-hover:translate-x-1 text-gray-500 duration-300 rotate-180" />
+                }
               </div>
               <div className="flex flex-row justify-between text-xs text-gtGold w-full">
                 <div className="flex flex-row items-center w-1/3 gap-2">
