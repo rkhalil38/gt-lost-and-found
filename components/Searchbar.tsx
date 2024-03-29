@@ -82,7 +82,7 @@ const Searchbar = () => {
               >
                 <h1 className="w-1/4 font-semibold text-gtGold">{pin.item}</h1>
                 <p className="w-2/4 overflow-clip">{pin.description}</p>
-                <p className="flex text-gray-500 items-center text-xs overflow-x-clip">
+                <p className="flex text-gray-400 items-center text-xs overflow-x-clip">
                   {pin.user_name}
                 </p>
               </Link>

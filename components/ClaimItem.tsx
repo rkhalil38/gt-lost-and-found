@@ -221,7 +221,7 @@ const ClaimItem = ({
   };
 
   return (
-    <div className="flex flex-col p-4 animate-in fixed gap-4 border-[1px] border-gray-600 w-1/2 h-[70%] rounded-lg bg-mainTheme shaodw-lg z-40">
+    <div className="flex flex-col p-4 animate-in fixed gap-4 border-[1px] border-gray-500 w-1/2 h-[70%] rounded-lg bg-mainTheme shaodw-lg z-40">
       {claimStatus !== "loading" ? (
         <div className="flex w-full h-full">
           <Link

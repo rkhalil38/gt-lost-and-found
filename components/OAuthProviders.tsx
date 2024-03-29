@@ -60,7 +60,7 @@ const OAuthProviders = () => {
     <div className="flex flex-col gap-2 w-1/6">
       <button
         onClick={signInWithGoogle}
-        className="flex flex-row duration-300 hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-600"
+        className="flex flex-row duration-300 hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-500"
       >
         <svg
           className="my-2"
@@ -91,14 +91,14 @@ const OAuthProviders = () => {
       </button>
       <button
         onClick={signInWithGithub}
-        className="flex flex-row duration-300 hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-600"
+        className="flex flex-row duration-300 hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-500"
       >
         <BsGithub className="text-white hover:cursor-pointer h-[30px] w-[30px] my-2" />
         <p className="text-white">Sign in with Github</p>
       </button>
       <button
         onClick={signInWithFacebook}
-        className="flex flex-row duration-300 hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-600"
+        className="flex flex-row duration-300 hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-500"
       >
         <svg
           className="my-2"

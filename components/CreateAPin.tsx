@@ -166,7 +166,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
                     <button
                       key={index}
                       onClick={() => setFoundItem(item)}
-                      className={`flex text-xs p-2 justify-center items-center rounded-lg border-[1px] border-gray-600 duration-300 hover:text-gtGold hover:border-gtGold ${
+                      className={`flex text-xs p-2 justify-center items-center rounded-lg border-[1px] border-gray-500 duration-300 hover:text-gtGold hover:border-gtGold ${
                         foundItem === item
                           ? "border-gtGold text-gtGold"
                           : "text-gray-400"
@@ -188,7 +188,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
                   rows={3}
                   cols={50}
                   id="description"
-                  className="text-white text-sm focus:border-gtGold focus:outline-none duration-300 resize-none mx-4 px-4 py-2 bg-mainTheme border-[1px] border-gray-600 rounded-lg"
+                  className="text-white text-sm focus:border-gtGold focus:outline-none duration-300 resize-none mx-4 px-4 py-2 bg-mainTheme border-[1px] border-gray-500 rounded-lg"
                   placeholder="Describe the item"
                 />
                 <div className="flex flex-row justify-end px-4">
@@ -209,7 +209,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
                 ) : null}
                 <button
                   onClick={() => setPickLocation(true)}
-                  className="flex w-36 h-10 mx-4 text-xs justify-center items-center rounded-lg border-[1px] border-gray-600 duration-300 hover:text-gtGold hover:bg-mainHover text-gray-400"
+                  className="flex w-36 h-10 mx-4 text-xs justify-center items-center rounded-lg border-[1px] border-gray-500 duration-300 hover:text-gtGold hover:bg-mainHover text-gray-400"
                 >
                   <FaMapMarkerAlt className="mr-1" />
                   {location.lat !== 0 && location.lng !== 0

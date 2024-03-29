@@ -146,14 +146,14 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
       <div className="flex flex-col w-[30%] h-[60%] items-center gap-4">
         <div className="flex flex-row w-full h-[40%] gap-4">
           <div className="flex flex-col w-1/2 h-full items-center gap-4">
-            <div className="flex items-center justify-center w-full h-[30%] bg-mainHover border-[1px] border-gray-600 rounded-lg">
+            <div className="flex items-center justify-center w-full h-[30%] bg-mainHover border-[1px] border-gray-500 rounded-lg">
               <h1 className="text-lg font-semibold text-gtGold">
                 {item?.item || (
                   <Skeleton height={20} width={80} baseColor="#B3A369" />
                 )}
               </h1>
             </div>
-            <div className="flex flex-col justify-center items-center w-full h-[70%] border-[1px] border-gray-600 bg-mainHover rounded-lg">
+            <div className="flex flex-col justify-center items-center w-full h-[70%] border-[1px] border-gray-500 bg-mainHover rounded-lg">
               <p className="px-2 text-xl text-gtGold">
                 {item?.created_at?.slice(0, 10) || (
                   <Skeleton height={20} width={120} baseColor="#B3A369" />
@@ -161,7 +161,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
               </p>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center w-1/2 h-full bg-mainHover border-[1px] border-gray-600 rounded-lg">
+          <div className="flex flex-col items-center justify-center w-1/2 h-full bg-mainHover border-[1px] border-gray-500 rounded-lg">
             <h1 className="text-9xl text-gtGold">
               {item?.claim_requests != null ? (
                 item?.claim_requests
@@ -172,7 +172,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
             <p className="text-sm text-gray-400">Claim Requests</p>
           </div>
         </div>
-        <div className="flex flex-col justify-between w-full h-[60%] p-4 bg-mainHover border-[1px] border-gray-600 rounded-lg">
+        <div className="flex flex-col justify-between w-full h-[60%] p-4 bg-mainHover border-[1px] border-gray-500 rounded-lg">
           <h1 className="text-2xl text-gtGold font-semibold">
             Found by{" "}
             {item?.user_name || (
@@ -217,7 +217,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
           </Link>
         </div>
       </div>
-      <div className="flex w-[60%] h-[60%] bg-mainHover border-[1px] border-gray-600 rounded-lg">
+      <div className="flex w-[60%] h-[60%] bg-mainHover border-[1px] border-gray-500 rounded-lg">
         {loadMap ? (
           <DisplayMap
             apiKey={apiKey}
