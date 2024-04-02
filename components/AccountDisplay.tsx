@@ -24,7 +24,7 @@ const AccountDisplay = () => {
   return (
     <div className='flex flex-col gap-1 text-white items-center justify-center'>
         <p>{user?.email}</p>
-        <p>{user?.id}</p>
+        <p>{`Date Joined:`} {user?.created_at.slice(0, 10)}</p>
     </div>
   )
 }

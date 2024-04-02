@@ -18,6 +18,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { createClient } from "@/utils/supabase/client";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
 type PinRequest = Database["public"]["Tables"]["requests"]["Row"];
@@ -199,7 +200,7 @@ const CurrentRequestDock = ({
               status !== "undecided"
                 ? "bg-gray-700 text-gray-500"
                 : "hover:bg-green-400 hover:text-white"
-            } gap-2 rounded-bl-lg duration-100 text-sm p-4 border-t-[1px] border-r-[1px] border-gray-400`}
+            } gap-2 rounded-bl-lg duration-300 text-sm p-4 border-t-[1px] border-r-[1px] border-gray-400`}
           >
             <FaCheck />
             Accept Claim
@@ -211,7 +212,7 @@ const CurrentRequestDock = ({
               status !== "undecided"
                 ? "bg-gray-700 text-gray-500"
                 : "hover:bg-red-400 hover:text-white"
-            } gap-1 rounded-br-lg duration-100 text-sm p-4 border-t-[1px] border-gray-400`}
+            } gap-1 rounded-br-lg duration-300 text-sm p-4 border-t-[1px] border-gray-400`}
           >
             <IoClose className="text-lg" />
             Reject Claim
@@ -229,6 +230,8 @@ const CurrentRequestDock = ({
 const ItemDisplay = ({ itemID }: { itemID: string }) => {
   const [item, setItem] = useState<Pin>();
 
+  const supabase = createClient();
+
   useEffect(() => {
     const fetchItem = async () => {
       const data = await fetchPin(itemID);
@@ -242,6 +245,22 @@ const ItemDisplay = ({ itemID }: { itemID: string }) => {
 
     fetchItem();
   }, [itemID]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("realtime-pins")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "pins" },
+        (payload) =>
+          setItem(payload.new as Database["public"]["Tables"]["pins"]["Row"])
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, setItem, item]);
 
   return (
     <div className="flex flex-col justify-between p-4 bg-mainHover rounded-lg border-[1px] border-gray-500 gap-2 w-full h-1/2">
@@ -259,7 +278,7 @@ const ItemDisplay = ({ itemID }: { itemID: string }) => {
           </p>
         </div>
         {item?.resolved && (
-          <div className="flex flex-row h-fit gap-2 text-xl text-green-400 font-semibold items-center">
+          <div className="flex flex-row self-start w-44 gap-2 text-xl text-green-400 font-semibold items-center">
             <FaCheck />
             Item Found
           </div>
@@ -315,7 +334,7 @@ const AreYouSure = ({
   const closeButton = (
     <button
       onClick={() => setAreYouSure(false)}
-      className="flex absolute rounded-lg duration-100 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+      className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
     >
       <IoMdClose />
     </button>
@@ -355,14 +374,14 @@ const AreYouSure = ({
         )}
         <div className="flex flex-row gap-4 w-full">
           <button
-            className="flex w-1/2 duration-100 items-center justify-center gap-2 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            className="flex w-1/2 duration-300 items-center justify-center gap-2 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
             onClick={action === "accept" ? acceptThisClaim : rejectThisClaim}
           >
             {action.toUpperCase().slice(0, 1) + action.slice(1)} Claim
           </button>
           <button
             onClick={() => setAreYouSure(false)}
-            className="flex w-1/2 duration-100 items-center justify-center gap-1 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            className="flex w-1/2 duration-300 items-center justify-center gap-1 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
           >
             Cancel
           </button>
