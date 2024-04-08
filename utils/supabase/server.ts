@@ -1,4 +1,6 @@
+import { Pin } from "@/db/database";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { PostgrestError } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
@@ -33,3 +35,15 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
   );
 };
 
+//functions that are only here for metadata generataion
+export const getItemInfo = async (id: string): Promise<Pin | PostgrestError> => {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const { data, error } = await supabase.from("pins").select("*").eq("item_id", id);
+
+  if (error) {
+    return error;
+  }
+
+  return data ? data[0] : {};
+}

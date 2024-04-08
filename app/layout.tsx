@@ -9,8 +9,29 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "GT Lost and Found",
+  description: "The best way to find lost items at Georgia Tech.",
+  keywords: [
+    "lost items georgia tech",
+    "lost and found georgia tech",
+    "lost items in georgia tech",
+    "lost and found gt",
+    "GT lost and found",
+    "items lost at georgia tech",
+  ],
+  openGraph: {
+    title: "GT Lost and Found",
+    description: "The best way to find lost items at Georgia Tech.",
+    siteName: "GT Lost and Found",
+    images: [
+      {
+        url: "/Buzz.png",
+        width: 1200,
+        height: 630,
+        alt: "GT Lost and Found",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

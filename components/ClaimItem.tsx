@@ -175,7 +175,7 @@ const ClaimItem = ({
           name="reasoning"
           className="w-full h-64 resize-none border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg p-4"
         ></textarea>
-        <p className="text-white text-xs">{characterCount}/250</p>
+        <p className="text-white text-xs self-end">{characterCount}/250</p>
         <button
           disabled={!completedForm()}
           onClick={claimDisplayedItem}
