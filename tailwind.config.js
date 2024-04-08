@@ -21,6 +21,9 @@ module.exports = {
         'gtGoldHover': '#A1800A',
         'gtBlueHover': '#013D6E',
       },
+      fontSize: {
+        'xxs': '.65rem',
+      }
     },
     transitionDuration: {
       '200': '200ms',

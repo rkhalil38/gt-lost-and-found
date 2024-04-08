@@ -37,7 +37,12 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
   useEffect(() => {
     const getPins = async () => {
       const data = await fetchPins();
-      setPins(data as Pin[]);
+
+      if ("message" in data) {
+        return;
+      }
+
+      setPins(data);
     };
 
     getPins();
@@ -48,7 +53,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
       .channel("realtime-pins")
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "pins" },
+        { event: "*", schema: "public", table: "pins" },
         (payload) =>
           setPins((pins) => [
             ...pins,
@@ -65,7 +70,6 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
   useEffect(() => {
     const parser = new DOMParser();
 
-
     try {
       const initMap = async () => {
         const loader = new Loader({
@@ -81,7 +85,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
           south: -84.39,
           east: 33.78,
           west: 33.77,
-        }
+        };
 
         const mapOptions: google.maps.MapOptions = {
           center: defaultProps.center,
@@ -91,9 +95,9 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
           draggableCursor: "default",
           restriction: {
             latLngBounds: MAP_BOUNDARIES,
-            strictBounds: true
+            strictBounds: true,
           },
-          gestureHandling: 'greedy'
+          gestureHandling: "greedy",
         };
 
         const map = new Map(mapRef.current as HTMLDivElement, mapOptions);
@@ -122,91 +126,95 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
           "flex items-center justify-center border-[1px] border-white w-10 h-10 bg-blue-800 rounded-full";
 
         for (const pin of pins) {
-          const parentWrapper = document.createElement("div");
-          parentWrapper.className = "flex absolute items-center justify-center";
+          if (!pin.resolved) {
+            const parentWrapper = document.createElement("div");
+            parentWrapper.className = "flex absolute items-center justify-center";
 
-          const pinWrapper = document.createElement("div");
-          pinWrapper.className = "flex absolute items-center justify-center";
-          const pinElement = pinSvg.cloneNode(true);
+            const pinWrapper = document.createElement("div");
+            pinWrapper.className = "flex absolute items-center justify-center";
+            const pinElement = pinSvg.cloneNode(true);
 
-          const svgWrapper = document.createElement("div");
-          svgWrapper.className = "flex mb-2 absolute items-center justify-center";
+            const svgWrapper = document.createElement("div");
+            svgWrapper.className =
+              "flex mb-2 absolute items-center justify-center";
 
-          const icon = pin.item as string;
-          const svg = parser
-            .parseFromString(htmlIconMatcher[icon], "image/svg+xml")
-            .documentElement.cloneNode(true);
+            const icon = pin.item as string;
+            const svg = parser
+              .parseFromString(htmlIconMatcher[icon], "image/svg+xml")
+              .documentElement.cloneNode(true);
 
-          pinWrapper.appendChild(pinElement);
-          svgWrapper.appendChild(svg);
-          pinWrapper.appendChild(svgWrapper);
+            pinWrapper.appendChild(pinElement);
+            svgWrapper.appendChild(svg);
+            pinWrapper.appendChild(svgWrapper);
 
-          parentWrapper.appendChild(pinWrapper);
+            parentWrapper.appendChild(pinWrapper);
 
-          const marker = new AdvancedMarkerElement({
-            position: new google.maps.LatLng(
-              pin.x_coordinate as number,
-              pin.y_coordinate as number
-            ),
-            map: map,
-            content: parentWrapper,
-          });
+            const marker = new AdvancedMarkerElement({
+              position: new google.maps.LatLng(
+                pin.x_coordinate as number,
+                pin.y_coordinate as number
+              ),
+              map: map,
+              content: parentWrapper,
+            });
 
-          const infoElement = document.createElement("div");
-          infoElement.className =
-            "flex flex-col gap-2 animate-in self-center text-black w-44 rounded-lg";
+            const infoElement = document.createElement("div");
+            infoElement.className =
+              "flex flex-col gap-2 animate-in self-center text-black w-44 rounded-lg";
 
-          const item = document.createElement("h1");
-          item.textContent = pin.item;
-          item.className = "text-lg text-gtGold font-semibold";
+            const item = document.createElement("h1");
+            item.textContent = pin.item;
+            item.className = "text-lg text-gtGold font-semibold";
 
-          const creator = document.createElement("h2");
-          creator.textContent = `Possessed By: ${pin.user_name}`;
-          creator.className = "text-sm font-semibold text-gtBlue";
+            const creator = document.createElement("h2");
+            creator.textContent = `Possessed By: ${pin.user_name}`;
+            creator.className = "text-sm font-semibold text-gtBlue";
 
-          const description = document.createElement("p");
-          description.textContent = pin.description;
-          description.className = "text-sm w-full overflow-scroll-y text-gtBlue";
+            const description = document.createElement("p");
+            description.textContent = pin.description;
+            description.className =
+              "text-sm w-full overflow-scroll-y text-gtBlue";
 
-          const buttonDiv = document.createElement("div");
-          buttonDiv.className = "flex flex-row gap-2 items-center justify-center";
+            const buttonDiv = document.createElement("div");
+            buttonDiv.className =
+              "flex flex-row gap-2 items-center justify-center";
 
-          const claimButton = document.createElement("a");
-          claimButton.className =
-            "flex bg-white border-gtGold hover:bg-gtGold hover:text-white duration-300 items-center text-gtGold justify-center w-20 h-10 border-[1px] rounded-lg";
-          claimButton.textContent = "Claim";
-          claimButton.href = `/lostitems/${pin.item_id}?claim=true`;
+            const claimButton = document.createElement("a");
+            claimButton.className =
+              "flex bg-white border-gtGold hover:bg-gtGold hover:text-white duration-300 items-center text-gtGold justify-center w-20 h-10 border-[1px] rounded-lg";
+            claimButton.textContent = "Claim";
+            claimButton.href = `/lostitems/${pin.item_id}?claim=true`;
 
-          const viewButton = document.createElement("a");
-          viewButton.className =
-            "flex bg-white border-gtBlue hover:bg-gtBlue hover:text-white duration-300 items-center text-gtBlue justify-center w-20 h-10 border-[1px] rounded-lg";
-          viewButton.textContent = "View";
-          viewButton.href = `/lostitems/${pin.item_id}?claim=false`;
+            const viewButton = document.createElement("a");
+            viewButton.className =
+              "flex bg-white border-gtBlue hover:bg-gtBlue hover:text-white duration-300 items-center text-gtBlue justify-center w-20 h-10 border-[1px] rounded-lg";
+            viewButton.textContent = "View";
+            viewButton.href = `/lostitems/${pin.item_id}?claim=false`;
 
-          buttonDiv.appendChild(claimButton);
-          buttonDiv.appendChild(viewButton);
+            buttonDiv.appendChild(claimButton);
+            buttonDiv.appendChild(viewButton);
 
-          infoElement.appendChild(item);
-          infoElement.appendChild(creator);
-          infoElement.appendChild(description);
-          infoElement.appendChild(buttonDiv);
+            infoElement.appendChild(item);
+            infoElement.appendChild(creator);
+            infoElement.appendChild(description);
+            infoElement.appendChild(buttonDiv);
 
-          marker.addListener(
-            "click",
-            ({ domEvent, latLng }: google.maps.MapMouseEvent) => {
-              const { target } = domEvent;
-              infoWindow.close();
-              infoWindow.setContent(infoElement);
-              infoWindow.open(marker.map, marker);
-            }
-          );
+            marker.addListener(
+              "click",
+              ({ domEvent, latLng }: google.maps.MapMouseEvent) => {
+                const { target } = domEvent;
+                infoWindow.close();
+                infoWindow.setContent(infoElement);
+                infoWindow.open(marker.map, marker);
+              }
+            );
+          }
         }
       };
 
       initMap();
-
     } catch (error) {
-      console.log('Error loading map: ', error);
+      console.log("Error loading map: ", error);
     }
   }, [pins]);
 
@@ -221,7 +229,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
             lat={clickPosition.lat}
             lng={clickPosition.lng}
           />
-          <Overlay on={toggle} setOn={setToggle} zIndex="z-20" clear={false}/>
+          <Overlay on={toggle} setOn={setToggle} zIndex="z-20" clear={false} />
         </div>
       ) : null}
     </div>

@@ -9,7 +9,7 @@ import { MdCancel } from "react-icons/md";
 import { ClipLoader } from "react-spinners";
 import { AuthApiError, AuthError, User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { createPin, fetchUser, getUserName } from "@/db/database";
+import { createPin, fetchProfile, fetchUser } from "@/db/database";
 import { Pin } from "@/db/database";
 
 type Location = {
@@ -37,6 +37,7 @@ interface CreateAPinProps {
 const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   const [user, setUser] = useState<User>();
   const [pickLocation, setPickLocation] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>("");
   const [foundItem, setFoundItem] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [location, setLocation] = useState<Location>({
@@ -45,6 +46,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   });
   const [characterCount, setCharacterCount] = useState<number>(0);
   const [pinCreationStatus, setPinCreationStatus] = useState<string>("loading");
+  const [dailyCount, setDailyCount] = useState<number>(0);
 
   const itemOptions = [
     "iphone",
@@ -76,6 +78,22 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
       }
 
       setUser(data);
+
+      const profile = await fetchProfile(data.id);
+
+      if ("message" in profile || profile.username === null) {
+        setPinCreationStatus("notSignedIn");
+        return;
+      }
+
+      setUsername(profile.username);
+
+      if (profile.daily_pin_count >= 5) {
+        setPinCreationStatus("exceededDailyLimit");
+        return;
+      }
+
+      setDailyCount(profile.daily_pin_count)
       setPinCreationStatus("creationEligible");
     };
 
@@ -91,15 +109,12 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
       return;
     }
 
-    const uuid = user?.id ? user?.id : "";
-    const user_name = await getUserName(
-      user ? user : new AuthError("User not found")
-    );
+    const uuid = user.id;
     setPinCreationStatus("loading");
 
     const pin: Pin = {
       creator_id: uuid,
-      user_name: user_name,
+      user_name: username,
       x_coordinate: location.lat,
       y_coordinate: location.lng,
       item: foundItem,
@@ -160,6 +175,19 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
           className="flex w-36 h-10 duration-300 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover"
         >
           Sign In
+        </Link>
+      </div>
+    ),
+    exceededDailyLimit: (
+      <div className="flex flex-col gap-4 w-full h-full items-center justify-center">
+        <p className="text-gtGold text-xl">
+          You have exceeded the daily pin limit.
+        </p>
+        <Link
+          href={`/${username.toLowerCase().replace(" ", "")}/myitems`}
+          className="flex w-36 h-10 duration-300 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover"
+        >
+          Manage Pins
         </Link>
       </div>
     ),
@@ -234,6 +262,9 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
             setLocation={setLocation}
           />
         ) : null}
+        <p className="flex absolute left-4 bottom-4 text-sm text-gtGold">
+          { 5 - dailyCount + ' pins left today'}
+        </p>
         <button
           disabled={!completedForm()}
           onClick={createNewPin}

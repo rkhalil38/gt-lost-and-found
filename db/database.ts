@@ -11,13 +11,13 @@ export const getURL = () => {
   let url =
     process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
     process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
-    'http://localhost:3000/'
+    "http://localhost:3000/";
   // Make sure to include `https://` when not localhost.
-  url = url.includes('http') ? url : `https://${url}`
+  url = url.includes("http") ? url : `https://${url}`;
   // Make sure to include a trailing `/`.
-  url = url.charAt(url.length - 1) === '/' ? url : `${url}/`
-  return url
-}
+  url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
+  return url;
+};
 
 export async function signOut(): Promise<AuthError | null> {
   const supabase = createClient();
@@ -29,7 +29,7 @@ export async function signOut(): Promise<AuthError | null> {
 export async function fetchUser(): Promise<User | AuthError> {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
-  
+
   if (error) {
     return error;
   }
@@ -37,9 +37,11 @@ export async function fetchUser(): Promise<User | AuthError> {
   return data.user;
 }
 
-export async function fetchProfile(userID: string): Promise<Profile | PostgrestError> {
+export async function fetchProfile(
+  userID: string
+): Promise<Profile | PostgrestError> {
   const supabase = createClient();
-  
+
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
@@ -50,17 +52,6 @@ export async function fetchProfile(userID: string): Promise<Profile | PostgrestE
   }
 
   return data ? data[0] : {};
-
-}
-
-export async function getUserName(user: User | AuthError): Promise<string> {
-  if (user instanceof AuthError || user.id === undefined) {
-    return "Error retrieving user";
-  }
-
-  const user_name: string = user.identities![0].identity_data!.full_name!;
-
-  return user_name;
 }
 
 export async function fetchPins(): Promise<Pin[] | PostgrestError> {
@@ -185,12 +176,23 @@ export async function createPin(
     };
   }
 
+  const profile = await fetchProfile(user.id);
+
+  if ("message" in profile) {
+    return {
+      message: "Error retrieving username",
+      details: "Error retrieving username",
+      hint: "Error retrieving username",
+      code: "Error retrieving username",
+    };
+  }
+
   const { data, error } = await supabase
     .from("pins")
     .insert([
       {
         creator_id: user.id,
-        user_name: await getUserName(user),
+        user_name: profile.username,
         x_coordinate: pin.x_coordinate,
         y_coordinate: pin.y_coordinate,
         item: pin.item,
@@ -221,6 +223,17 @@ export async function claimItem(
     };
   }
 
+  const profile = await fetchProfile(user.id);
+
+  if ("message" in profile) {
+    return {
+      message: "Error retrieving username",
+      details: "Error retrieving username",
+      hint: "Error retrieving username",
+      code: "Error retrieving username",
+    };
+  }
+
   const { data, error } = await supabase
     .from("requests")
     .insert([
@@ -229,7 +242,7 @@ export async function claimItem(
         item_id: request.item_id,
         request_id: user.id + request.item_id,
         creator_id: request.creator_id,
-        creator_name: await getUserName(user),
+        creator_name: profile.username,
         contact: contactInfo,
         pin_creator_id: request.pin_creator_id,
       },

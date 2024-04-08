@@ -19,9 +19,17 @@ import {
   fetchClaims,
   fetchPin,
   fetchUser,
-  getUserName,
+  fetchProfile,
 } from "@/db/database";
 import { PinRequest } from "@/db/database";
+
+type componentMap = {
+  [key: string]: JSX.Element;
+};
+
+type stringMap = {
+  [key: string]: string;
+};
 
 const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const supabase = createClient();
@@ -31,12 +39,12 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const [user, setUser] = useState<User>();
   const [username, setUsername] = useState<string>("");
   const [claimState, setClaimState] = useState<string>("loading");
-  const [retrieveClaims, setRetrieveClaims] = useState<boolean>(false);
 
   const claimStates = {
-    notSignedIn: "Sign In to Claim",
-    claimed: "Request Submitted",
-    notClaimed: "Claim Item",
+    notSignedIn: "notSignedIn",
+    claimed: "claimed",
+    notClaimed: "notClaimed",
+    pinOwner: "pinOwner",
   };
 
   const search = useSearchParams();
@@ -46,7 +54,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const [itemID, setItemID] = useState<string>("");
   const [pinCreatorID, setPinCreatorID] = useState<string>("");
   const [currentClaims, setCurrentClaims] = useState<number>(0);
-  const [ screenWidth, setScreenWidth ] = useState<number>(0);
+  const [screenWidth, setScreenWidth] = useState<number>(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -54,13 +62,13 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   }, []);
 
   useEffect(() => {
-    const fetchThisItem = async () => {
+    const fetchAllInfo = async () => {
       const item_id = window.location.pathname.split("/")[2];
       setItemID(item_id);
 
       const data = await fetchPin(item_id);
 
-      if ("message" in data) {
+      if ("message" in data || !data) {
         notFound();
       }
 
@@ -68,46 +76,52 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
       setCurrentClaims(data.claim_requests ? data.claim_requests : 0);
       setPinCreatorID(data.creator_id);
       setLoadMap(true);
-      setRetrieveClaims(true);
-    };
 
-    fetchThisItem();
-  }, []);
+      const userData = await fetchUser();
 
-  useEffect(() => {
-    const fetchUserAndClaims = async (): Promise<void> => {
-      const data = await fetchUser();
-
-      if (data instanceof AuthError || "message" in data) {
+      if (userData instanceof AuthError || !userData) {
         setClaimState(claimStates.notSignedIn);
         return;
       }
 
-      setUser(data);
+      setUser(userData);
 
-      const user_name = await getUserName(data);
-      setUsername(user_name);
+      const profile = await fetchProfile(userData.id);
+
+      if ("message" in profile || profile.username === null) {
+        return;
+      }
+
+      setUsername(profile.username);
+
+      if (userData.id === data.creator_id) {
+        setClaimState(claimStates.pinOwner);
+        return;
+      }
 
       const requests: PinRequest[] | PostgrestError = await fetchClaims(
-        itemID,
-        data
+        item_id,
+        userData
       );
 
       if ("message" in requests) {
         return;
       }
 
-      if (requests.length > 0 && data) {
+      if (requests.length > 0) {
         setClaimState(claimStates.claimed);
-      } else if (data) {
-        setClaimState(claimStates.notClaimed);
       } else {
-        setClaimState(claimStates.notSignedIn);
+        setClaimState(claimStates.notClaimed);
       }
+
     };
 
-    fetchUserAndClaims();
-  }, [retrieveClaims]);
+    fetchAllInfo();
+  }, []);
+
+  useEffect(() => {
+    console.log(claimState);
+  }, [claimState])
 
   useEffect(() => {
     const channel = supabase
@@ -131,6 +145,34 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
     };
   }, [supabase, item, setItem]);
 
+  const buttonComponentMap: componentMap = {
+    notClaimed: <p>Claim Item</p>,
+    claimed: (
+      <p className="flex flex-row gap-2 items-center">
+        <FaCheck /> Request Submitted
+      </p>
+    ),
+    pinOwner: <p>You are the finder of this item.</p>,
+    notSignedIn: <p>Sign In to Claim</p>,
+    loading: <ClipLoader color="#B3A369" />,
+  };
+
+  const stylesMap: stringMap = {
+    notClaimed: 'border-gtGold bg-gtGoldHover hover:opacity-80',
+    claimed: 'cursor-default bg-green-500 border-green-600',
+    pinOwner: 'cursor-default bg-gtGold border-gtGoldHover',
+    notSignedIn: 'border-gtGold bg-gtGoldHover hover:opacity-80',
+    loading: 'cursor-default bg-gtGold border-gtGold'
+  }
+
+  const linkMap: stringMap = {
+    notClaimed: pathname + "?claim=true",
+    claimed: "",
+    pinOwner: "",
+    notSignedIn: "/login",
+    loading: ""
+  }
+
   return (
     <div className="flex flex-col py-24 tb:pt-0 tb:flex-row w-full h-full justify-center items-center gap-4 text-white">
       {claim ? (
@@ -145,7 +187,14 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
             setClaimStatus={setClaimState}
             user={user ? true : false}
           />
-          <Overlay on={claim} setOn={() => {router.push(`${pathname}?claim=false`)}} zIndex="z-30" clear={false}/>
+          <Overlay
+            on={claim}
+            setOn={() => {
+              router.push(`${pathname}?claim=false`);
+            }}
+            zIndex="z-30"
+            clear={false}
+          />
         </div>
       ) : null}
       <div className="flex flex-col w-[80%] tb:w-[30%] h-[65%] items-center gap-4">
@@ -171,7 +220,11 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
               {item?.claim_requests != null ? (
                 item?.claim_requests
               ) : (
-                <Skeleton height={screenWidth < 450 ? 80 : 100} width={screenWidth < 450 ? 80 : 100} baseColor="#B3A369" />
+                <Skeleton
+                  height={screenWidth < 450 ? 80 : 100}
+                  width={screenWidth < 450 ? 80 : 100}
+                  baseColor="#B3A369"
+                />
               )}
             </h1>
             <p className="text-sm text-gray-400 pb-2">Claim Requests</p>
@@ -193,32 +246,11 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
           </p>
 
           <Link
-            href={
-              claimState === "Request Submitted" ||
-              claimState === "Fresh Request Submitted"
-                ? ""
-                : user
-                ? pathname + "?claim=true"
-                : "/login"
-            }
-            className={`flex gap-2 p-4 text-white items-center justify-center text-sm ${
-              claimState === "Request Submitted" ||
-              claimState === "Fresh Request Submitted"
-                ? "cursor-default bg-green-500 border-green-600"
-                : "hover:opacity-80 border-gtGold bg-gtGoldHover"
-            } w-full h-10 border-[1px] rounded-lg duration-300`}
+            href={linkMap[claimState]}
+            className={`flex gap-2 p-4 text-white items-center justify-center text-sm 
+            ${stylesMap[claimState]} w-full h-10 border-[1px] rounded-lg duration-300`}
           >
-            {claimState === "Request Submitted" ||
-            claimState === "Fresh Request Submitted" ? (
-              <FaCheck />
-            ) : null}
-            {claimState === "Request Submitted" ||
-            claimState === "Fresh Request Submitted" ? (
-              <p>Request Submitted</p>
-            ) : null}
-            {claimState === "Claim Item" ? "Claim Item" : null}
-            {claimState === "Sign In to Claim" ? "Sign In to Claim" : null}
-            {claimState === "loading" ? <ClipLoader color="#B3A369" /> : null}
+            {buttonComponentMap[claimState]}
           </Link>
         </div>
       </div>

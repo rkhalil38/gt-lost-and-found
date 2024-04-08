@@ -62,16 +62,19 @@ export type Database = {
       }
       profiles: {
         Row: {
+          daily_pin_count: number
           id: string
           items_found: number | null
           username: string | null
         }
         Insert: {
+          daily_pin_count?: number
           id: string
           items_found?: number | null
           username?: string | null
         }
         Update: {
+          daily_pin_count?: number
           id?: string
           items_found?: number | null
           username?: string | null
@@ -154,6 +157,10 @@ export type Database = {
           "": unknown
         }
         Returns: string
+      }
+      reset_daily_pin_count: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
     }
     Enums: {

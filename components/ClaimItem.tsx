@@ -42,15 +42,16 @@ const ClaimItem = ({
   const [fieldError, setFieldError] = useState<boolean>(false);
 
   useEffect(() => {
+    setClaimStatus("loading");
     const getUser = async () => {
       const data = await fetchUser();
 
-      if (data instanceof AuthError || "message" in data) {
-        console.log(data);
+      if (data instanceof AuthError) {
         return;
       }
 
       setActiveUser(data);
+      setClaimStatus("notClaimed");
     };
 
     getUser();
@@ -112,23 +113,23 @@ const ClaimItem = ({
     };
 
     if (activeUser instanceof AuthError || !activeUser) {
-      setClaimStatus("Claim Item");
+      setClaimStatus("notClaimed");
       return;
     }
 
     const claim = await claimItem(claimRequest, activeUser, contactInfo);
-   
-    if ('message' in claim) {
+
+    if ("message" in claim) {
       console.log(claim);
-      setClaimStatus("Claim Item");
+      setClaimStatus("notClaimed");
       return;
     }
 
-    setClaimStatus("Fresh Request Submitted");
+    setClaimStatus("claimed");
   };
 
   const componentMap: componentMap = {
-    "Claim Item": (
+    notClaimed: (
       <div className="flex flex-col gap-4 w-full h-full">
         <h1 className="font-bold text-xl pb:text-2xl text-gtGold">
           You are claiming this item as
@@ -186,7 +187,7 @@ const ClaimItem = ({
       </div>
     ),
 
-    "Sign In to Claim": (
+    notSignedIn: (
       <div className="flex flex-col gap-2 w-full h-full items-center justify-center">
         <h1>Sign in to claim this item.</h1>
         <Link
@@ -198,24 +199,30 @@ const ClaimItem = ({
       </div>
     ),
 
-    "Request Submitted": (
-      <div className="flex flex-col gap-2 w-full h-full items-center justify-center">
-        <h1>You have already submitted a request for this item.</h1>
-        <Link
-          href="/lostitems"
-          className="flex h-10 text-sm duration-300 p-4 items-center justify-center bg-gtGold text-white rounded-lg hover:bg-gtGoldHover"
-        >
-          Find another item
-        </Link>
-      </div>
-    ),
-
-    "Fresh Request Submitted": (
+    claimed: (
       <div className="flex flex-col gap-2 h-full w-full items-center justify-center">
         <FaCheck className="text-gtGold text-6xl" />
         <h1 className="text-lg text-gtGold self-center justify-center">
           Request Submitted!
         </h1>
+      </div>
+    ),
+
+    loading: (
+      <div className="flex w-full h-full items-center justify-center">
+        <ClipLoader color="#C29B0C" size={65} />
+      </div>
+    ),
+
+    pinOwner: (
+      <div className="flex flex-col gap-4 w-full h-full items-center justify-center">
+        <h1 className="text-gtGold text-xl">{`You cannot claim an item you found.`}</h1>
+        <Link
+          className="flex items-center justify-center w-48 text-sm p-2 bg-gtGold hover:bg-gtGoldHover rounded-lg duration-300 border-[1px] border-gtGoldHover"
+          href={`/${username}/myitems/${itemID}`}
+        >
+          Manage this item
+        </Link>
       </div>
     ),
   };

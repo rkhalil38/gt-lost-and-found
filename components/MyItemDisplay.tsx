@@ -12,7 +12,7 @@ import {
   fetchRequests,
   fetchUser,
   fetchUserItems,
-  getUserName,
+  fetchProfile,
   rejectClaim,
 } from "@/db/database";
 import { ClipLoader } from "react-spinners";
@@ -57,8 +57,13 @@ const MyItemDisplay = () => {
       setMyItem(items[0]);
       setGetRequests(true);
 
-      const user_name = await getUserName(data);
-      setUserName(user_name);
+      const profile = await fetchProfile(data.id);
+
+      if ("message" in profile || profile.username === null) {
+        return;
+      }
+
+      setUserName(profile.username);
     };
 
     fetchComponentData();
