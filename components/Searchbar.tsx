@@ -3,6 +3,7 @@ import React, { use, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Database } from "@/supabase";
 import Link from "next/link";
+import Overlay from "./Overlay";
 /*
 
 Searchbar component that allows users to search through pins in database
@@ -18,31 +19,25 @@ const Searchbar = () => {
   const [pinItemsVisible, setPinItemsVisible] = useState<boolean>(false);
   const [pins, setPins] = useState<Pin[]>([]);
 
-  const defaultPin: Pin = {
-    created_at: "",
-    x_coordinate: 0,
-    y_coordinate: 0,
-    item: "",
-    description: "",
-    user_name: "",
-    creator_id: "",
-    item_id: "",
-    item_description_username: "",
-    claim_requests: 0,
-    fts: "",
-    resolved: false,
-  };
-
   const search = async (queryingPins: string) => {
     let searchString = queryingPins.trim();
-    searchString = searchString.split(" ").join(" | ");
+    let searchArray = searchString.split(" ");
+    searchString = searchArray.join(" & ");
 
+    console.log(searchString);
+     
     const { data, error } = await supabase
       .from("pins")
       .select()
-      .textSearch("fts", searchString);
+      .textSearch("fts", searchString, {
+        type: "websearch"
+      });
 
-    setPins(data ? data.slice(0, 15) : []);
+    if (error) {
+      return;
+    }
+
+    setPins(data.slice(0, 15));
   };
 
   useEffect(() => {
@@ -53,42 +48,41 @@ const Searchbar = () => {
     setPinsToSearch(`'${e.target.value}'`);
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-    e.relatedTarget instanceof HTMLAnchorElement
-      ? null
-      : setPinItemsVisible(false);
-  };
-
   return (
     <div
-      onBlur={handleBlur}
       id="searchbar-element"
-      className="flex flex-col text-white w-[40%] h-10 border-[1px] border-gray-400 rounded-lg fixed left-[30%]"
+      className="flex flex-col text-white w-full h-10 border-[1px] border-gray-500 rounded-lg"
     >
       <input
         onFocus={() => setPinItemsVisible(true)}
         onChange={handleChange}
         type="text"
-        className="absolute text-white text-sm px-2 bg-transparent w-full h-full focus:outline-none"
+        className="text-white text-sm px-2 bg-transparent w-full h-full focus:outline-none"
         placeholder="Search for an item"
       />
-      <div className="flex flex-col shadow-lg absolute top-10 w-full rounded-lg h-fit bg-mainHover">
+      <div className="flex flex-col self-center z-50 absolute shadow-lg top-[51px] w-[65%] tb:w-[40%] rounded-lg h-fit bg-mainHover">
         {pinItemsVisible
-          ? pins.map((pin) => (
+          ?
+          <div>
+            {pins.map((pin) => (
               <Link
                 href={`/lostitems/${pin.item_id}`}
+                onClick={() => setPinItemsVisible(false)}
                 key={pin.created_at}
-                className="flex flex-row cursor-pointer rounded-lg hover:bg-mainHover2 h-10 p-2 w-full gap-2"
+                className="flex flex-row justify-between cursor-pointer rounded-lg hover:bg-mainHover2 h-10 p-2 w-full gap-2"
               >
-                <h1 className="w-1/4 font-semibold text-gtGold">{pin.item}</h1>
-                <p className="w-2/4 overflow-clip">{pin.description}</p>
-                <p className="flex text-gray-400 items-center text-xs overflow-x-clip">
+                <h1 className="w-full pb:w-1/4 text-sm pb:text-base font-semibold text-gtGold">{pin.item}</h1>
+                <p className="w-2/4 text-sm pb:text-base overflow-clip text-start">{pin.description}</p>
+                <p className="hidden pb:flex text-gray-400 items-center text-xs overflow-x-clip">
                   {pin.user_name}
                 </p>
               </Link>
-            ))
+            ))}
+          </div>
+
           : null}
       </div>
+      <Overlay on={pinItemsVisible} setOn={() => setPinItemsVisible(false)} zIndex="z-20" clear={true} />
     </div>
   );
 };

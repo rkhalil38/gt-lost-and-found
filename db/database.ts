@@ -5,6 +5,19 @@ import { AuthError, PostgrestError, User } from "@supabase/supabase-js";
 
 export type PinRequest = Database["public"]["Tables"]["requests"]["Row"];
 export type Pin = Database["public"]["Tables"]["pins"]["Row"];
+export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+
+export const getURL = () => {
+  let url =
+    process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+    process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
+    'http://localhost:3000/'
+  // Make sure to include `https://` when not localhost.
+  url = url.includes('http') ? url : `https://${url}`
+  // Make sure to include a trailing `/`.
+  url = url.charAt(url.length - 1) === '/' ? url : `${url}/`
+  return url
+}
 
 export async function signOut(): Promise<AuthError | null> {
   const supabase = createClient();
@@ -16,9 +29,28 @@ export async function signOut(): Promise<AuthError | null> {
 export async function fetchUser(): Promise<User | AuthError> {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
-  const user = data.user;
+  
+  if (error) {
+    return error;
+  }
 
-  return user ? user : error ? error : new AuthError("User not found");
+  return data.user;
+}
+
+export async function fetchProfile(userID: string): Promise<Profile | PostgrestError> {
+  const supabase = createClient();
+  
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userID);
+
+  if (error) {
+    return error;
+  }
+
+  return data ? data[0] : {};
+
 }
 
 export async function getUserName(user: User | AuthError): Promise<string> {
@@ -39,7 +71,7 @@ export async function fetchPins(): Promise<Pin[] | PostgrestError> {
     return error;
   }
 
-  return data? data : [];
+  return data ? data : [];
 }
 
 export async function fetchUserItems(
@@ -55,7 +87,7 @@ export async function fetchUserItems(
     return error;
   }
 
-  return data? data : [];
+  return data ? data : [];
 }
 
 export async function fetchClaims(
@@ -92,6 +124,22 @@ export async function fetchRequests(
   return data ? data : [];
 }
 
+export async function fetchPinRequest(
+  requestID: string
+): Promise<PinRequest | PostgrestError> {
+  const supabase = createClient();
+  let { data, error } = await supabase
+    .from("requests")
+    .select("*")
+    .eq("request_id", requestID);
+
+  if (error) {
+    return error;
+  }
+
+  return data ? data[0] : {};
+}
+
 export async function fetchUserRequests(
   creator_id: string
 ): Promise<PinRequest[] | PostgrestError> {
@@ -102,7 +150,7 @@ export async function fetchUserRequests(
     .eq("creator_id", creator_id);
 
   if (error) {
-    return error
+    return error;
   }
 
   return data ? data : [];
@@ -119,7 +167,7 @@ export async function fetchPin(itemID: string): Promise<Pin | PostgrestError> {
     return error;
   }
 
-  return data? data[0] : {};
+  return data ? data[0] : {};
 }
 
 export async function createPin(

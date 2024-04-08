@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 
-const Overlay = ({ on, setOn, zIndex }: { on: boolean; setOn: Function; zIndex: string; }) => {
+const Overlay = ({ on, setOn, zIndex, clear }: { on: boolean; setOn: Function; zIndex: string; clear: boolean; }) => {
   const overlay = useRef<HTMLDivElement>(null);
 
   return (
@@ -9,7 +9,7 @@ const Overlay = ({ on, setOn, zIndex }: { on: boolean; setOn: Function; zIndex: 
       ref={overlay}
       className={`flex ${
         on ? "fixed" : "hidden"
-      } left-0 top-0 bg-gray-800 w-full h-full opacity-50 ${zIndex}`}
+      } left-0 top-0 bg-gray-800 w-screen h-screen ${clear? 'opacity-0' : 'opacity-50'} ${zIndex}`}
       onClick={() => setOn(false)}
     />
   );

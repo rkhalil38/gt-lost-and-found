@@ -7,12 +7,17 @@ import { IoIosArrowBack } from "react-icons/io";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { FaFilter } from "react-icons/fa";
+import CreateAPin from "./CreateAPin";
+import Overlay from "./Overlay";
+import RequestPopUp from "./RequestPopUp";
 
 const MyRequests = () => {
   const [pins, setPins] = useState<Pin[]>([]);
   const [pinToRequests, setPinToRequests] = useState<Map<string, PinRequest>>();
   const [user, setUser] = useState<User>();
-  const [ loading, setLoading ] = useState<boolean>(true);
+  const [viewingRequest, setViewingRequest] = useState<boolean>(false);
+  const [currentRequest, setCurrentRequest] = useState<PinRequest>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const params = useSearchParams();
   const filter = params.get("filter") || "all";
@@ -60,8 +65,10 @@ const MyRequests = () => {
     getUserPinsAndRequests();
   }, []);
 
-  const filterElement = (filter: string, request: PinRequest | undefined): boolean => {
-
+  const filterElement = (
+    filter: string,
+    request: PinRequest | undefined
+  ): boolean => {
     if (!request) {
       return false;
     }
@@ -90,9 +97,8 @@ const MyRequests = () => {
 
   return (
     <div className="flex flex-row gap-4 w-full h-full">
-      {loading?
-
-        <div className="flex flex-row gap-4">
+      {loading ? (
+        <div className="flex flex-wrap gap-4 w-full h-full py-16 pb:pt-0">
           <div className="flex flex-col bg-mainTheme border-[1px] border-gray-500 items-center justify-center w-96 h-48 shadow-lg rounded-lg">
             <div className="w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse" />
           </div>
@@ -100,18 +106,32 @@ const MyRequests = () => {
             <div className="w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse" />
           </div>
         </div>
-
-        :
-
-        <div className="flex flex-wrap gap-4 w-full">
+      ) : (
+        <div className="flex flex-wrap gap-4 w-full h-full py-16 pb:pt-0">
           {pins.map((pin) => (
             <div
               key={pin.item_id}
-              className={`${filterElement(filter, pinToRequests?.get(pin.item_id))? 'flex' : 'hidden'} flex-col justify-between w-96 h-48 cursor-pointer bg-mainHover hover:bg-mainHover2 duration-300 border-[1px] border-gray-400 rounded-lg p-4 gap-4`}
+              className={`${
+                filterElement(filter, pinToRequests?.get(pin.item_id))
+                  ? "flex"
+                  : "hidden"
+              } flex-col justify-between w-96 h-48 bg-mainHover border-gray-500 ${
+                pinToRequests?.get(pin.item_id)?.status === "accepted"
+                  ? "hover:bg-mainHover2 cursor-pointer"
+                  : ""
+              } duration-300 border-[1px] border-gray-400 rounded-lg p-4 gap-4`}
+              onClick={() => {
+                if (pinToRequests?.get(pin.item_id)?.status === "accepted") {
+                  setCurrentRequest(pinToRequests?.get(pin.item_id));
+                  setViewingRequest(true);
+                }
+              }}
             >
               <div className="flex flex-row justify-between">
                 <div className="flex flex-col">
-                  <h1 className="text-base text-gtGold font-bold">{pin.item}</h1>
+                  <h1 className="text-base text-gtGold font-bold">
+                    {pin.item}
+                  </h1>
                   <p className="text-xs text-gray-400">{pin.description}</p>
                 </div>
                 <p
@@ -126,15 +146,35 @@ const MyRequests = () => {
                 <h2 className={`text-base`}>
                   {pinToRequests?.get(pin.item_id)?.description}
                 </h2>
-                <p className="text-xs text-gray-400">
-                  Click for more Info
-                </p>
+                {pinToRequests?.get(pin.item_id)?.status === "accepted" && (
+                  <p className="text-xs text-gray-400">
+                    Click for what's next!
+                  </p>
+                )}
               </div>
             </div>
           ))}
+          <FilterComponent filter={filter} />
         </div>
-      }
-      <FilterComponent filter={filter} />
+      )}
+      {viewingRequest && (
+        <div className="flex fixed z-20 h-screen w-screen">
+          <RequestPopUp
+            itemOwnerID={
+              currentRequest?.pin_creator_id
+                ? currentRequest.pin_creator_id
+                : ""
+            }
+            toggle={setViewingRequest}
+          />
+          <Overlay
+            zIndex="z-20"
+            on={viewingRequest}
+            setOn={setViewingRequest}
+            clear={false}
+          />
+        </div>
+      )}
     </div>
   );
 };
@@ -151,12 +191,12 @@ const FilterComponent = ({ filter }: { filter: string }) => {
   };
 
   return (
-    <div className="flex flex-col duration-300 right-10 absolute text-white self-start p-4 gap-4 w-52 rounded-lg bg-mainHover border-[1px] border-gray-500">
+    <div className="flex flex-col duration-300 top-20 pb:top-auto right-8 pb:right-8 absolute text-white self-start p-4 gap-4 w-52 rounded-lg bg-mainHover border-[1px] border-gray-500">
       <div className="flex flex-row w-full items-center justify-between gap-2 duration-300">
         <h1 className="text-sm">Filtered by: {filter}</h1>
         <button
           onClick={() => setHideOptions(!hideOptions)}
-          className="flex p-2 rounded-lg border-gray-400 border-[1px] hover:bg-mainHover2 duration-300"
+          className="flex p-2 rounded-lg border-gray-500 border-[1px] hover:bg-mainHover2 duration-300"
         >
           <FaFilter className="text-gtGold text-base" />
         </button>

@@ -17,6 +17,10 @@ type Location = {
   lng: number;
 };
 
+type componentMap = {
+  [key: string]: JSX.Element;
+};
+
 /*
 Create a pin component that allows the users to create a pin on the map
 User selects item, gives description, and chooses the location via ChooseLocation component when 
@@ -33,7 +37,6 @@ interface CreateAPinProps {
 const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   const [user, setUser] = useState<User>();
   const [pickLocation, setPickLocation] = useState<boolean>(false);
-  const [overlay, setOverlay] = useState<boolean>(false);
   const [foundItem, setFoundItem] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [location, setLocation] = useState<Location>({
@@ -41,8 +44,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
     lng: lng ? lng : 0,
   });
   const [characterCount, setCharacterCount] = useState<number>(0);
-  const [pinCreationStatus, setPinCreationStatus] = useState<string>("");
-  const [fetchingUser, setFetchingUser] = useState<boolean>(true);
+  const [pinCreationStatus, setPinCreationStatus] = useState<string>("loading");
 
   const itemOptions = [
     "iphone",
@@ -63,27 +65,21 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
     const fetchActiveUser = async () => {
       const data = await fetchUser();
 
-      if (data instanceof AuthError || data instanceof AuthApiError) {
+      if (data instanceof AuthError) {
+        setPinCreationStatus("notSignedIn");
+        return;
+      }
+
+      if (data === undefined) {
+        setPinCreationStatus("notSignedIn");
         return;
       }
 
       setUser(data);
-      setFetchingUser(false);
+      setPinCreationStatus("creationEligible");
     };
 
     fetchActiveUser();
-  }, []);
-
-  useEffect(() => {
-    setOverlay(true);
-
-    return () => {
-      setOverlay(false);
-    };
-  }, []);
-
-  useEffect(() => {
-    
   }, []);
 
   useEffect(() => {
@@ -91,7 +87,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   }, [description]);
 
   const createNewPin = async () => {
-    if (user instanceof AuthError) {
+    if (user instanceof AuthError || user === undefined) {
       return;
     }
 
@@ -116,15 +112,12 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
       resolved: false,
     };
 
-    const data = await createPin(
-      pin,
-      user ? user : new AuthError("User not found")
-    );
+    const data = await createPin(pin, user);
 
     if ("message" in data) {
-      setPinCreationStatus("Error creating pin");
+      setPinCreationStatus("pinCreationFailed");
     } else {
-      setPinCreationStatus("Pin created successfully!");
+      setPinCreationStatus("pinCreatedSuccessfully");
     }
   };
 
@@ -141,150 +134,128 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
     return false;
   };
 
-  return (
-    <div className="flex flex-col z-30 animate-in fixed top-1/4 left-1/4 bg-mainTheme w-1/2 h-1/2 rounded-lg border-[1px]">
-      {!fetchingUser ? (
-        user ? (
-          pinCreationStatus === "" ? (
-            <div className="flex w-full h-full">
-              <div
-                className={`${
-                  pickLocation ? "hidden" : "flex"
-                } flex-col w-full h-full`}
-              >
-                <button
-                  onClick={() => toggle(false)}
-                  className="flex absolute rounded-lg duration-200 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
-                >
-                  <IoMdClose />
-                </button>
-                <h1 className="text-white pt-4 pb-2 px-4 text-lg">
-                  Found Item
-                </h1>
-                <div className="flex flex-row px-4 gap-2">
-                  {itemOptions.map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setFoundItem(item)}
-                      className={`flex text-xs p-2 justify-center items-center rounded-lg border-[1px] border-gray-500 duration-300 hover:text-gtGold hover:border-gtGold ${
-                        foundItem === item
-                          ? "border-gtGold text-gtGold"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-                <label
-                  htmlFor="description"
-                  className="text-white px-4 pb-2 pt-4 text-lg"
-                >
-                  Description
-                </label>
-                <textarea
-                  onChange={handleChange}
-                  maxLength={100}
-                  rows={3}
-                  cols={50}
-                  id="description"
-                  className="text-white text-sm focus:border-gtGold focus:outline-none duration-300 resize-none mx-4 px-4 py-2 bg-mainTheme border-[1px] border-gray-500 rounded-lg"
-                  placeholder="Describe the item"
-                />
-                <div className="flex flex-row justify-end px-4">
-                  <p className="justify-self-end text-gray-400 text-xs">
-                    {characterCount}/{100}
-                  </p>
-                </div>
-                <label
-                  htmlFor="location"
-                  className="text-white px-4 pb-2 pt-4 text-lg"
-                >
-                  Location
-                </label>
-                {location.lat !== 0 && location.lng !== 0 ? (
-                  <p className="text-sm text-gtGold mx-4 mb-2">
-                    Location: {location.lat}, {location.lng}
-                  </p>
-                ) : null}
-                <button
-                  onClick={() => setPickLocation(true)}
-                  className="flex w-36 h-10 mx-4 text-xs justify-center items-center rounded-lg border-[1px] border-gray-500 duration-300 hover:text-gtGold hover:bg-mainHover text-gray-400"
-                >
-                  <FaMapMarkerAlt className="mr-1" />
-                  {location.lat !== 0 && location.lng !== 0
-                    ? "Change Location"
-                    : "Pick Location"}
-                </button>
-              </div>
-              {pickLocation ? (
-                <ChooseLocation
-                  apiKey={apiKey}
-                  setToggled={setPickLocation}
-                  setLocation={setLocation}
-                />
-              ) : null}
+  const componentMap: componentMap = {
+    loading: (
+      <div className="flex w-full h-full items-center justify-center">
+        <ClipLoader color="#C29B0C" size={65} />
+      </div>
+    ),
+    pinCreatedSuccessfully: (
+      <div className="flex flex-col w-full h-full items-center justify-center">
+        <FaCheck className="text-gtGold text-6xl" />
+        <p className="text-white text-xl">{`Pin Created Successfully!`}</p>
+      </div>
+    ),
+    pinCreationFailed: (
+      <div className="flex flex-col w-full h-full items-center justify-center">
+        <MdCancel className="text-red-500 text-6xl" />
+        <p className="text-white text-xl">{`Failed to Create Pin`}</p>
+      </div>
+    ),
+    notSignedIn: (
+      <div className="flex flex-col gap-4 w-full h-full items-center justify-center">
+        <p className="text-gtGold text-xl">Please sign in to create a pin.</p>
+        <Link
+          href={"/login"}
+          className="flex w-36 h-10 duration-300 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover"
+        >
+          Sign In
+        </Link>
+      </div>
+    ),
+    creationEligible: (
+      <div className="flex w-full h-full">
+        <div
+          className={`${
+            pickLocation ? "hidden" : "flex"
+          } flex-col w-full h-full`}
+        >
+          <h1 className="text-white pt-4 pb-2 px-4 text-lg">Found Item</h1>
+          <div className="flex flex-row px-4 gap-2 overflow-scroll tb:flex-wrap">
+            {itemOptions.map((item, index) => (
               <button
-                disabled={!completedForm()}
-                onClick={createNewPin}
-                className={`${
-                  pickLocation ? "hidden" : "flex"
-                } disabled:bg-gray-700 disabled:text-gray-400 w-36 h-10 absolute bottom-4 right-4 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover`}
+                key={index}
+                onClick={() => setFoundItem(item)}
+                className={`flex text-xs p-2 justify-center items-center rounded-lg border-[1px] border-gray-500 duration-300 hover:text-gtGold hover:border-gtGold ${
+                  foundItem === item
+                    ? "border-gtGold text-gtGold"
+                    : "text-gray-400"
+                }`}
               >
-                Create Found Item
+                {item}
               </button>
-            </div>
-          ) : (
-            <div className="flex w-full h-full items-center justify-center">
-              <button
-                onClick={() => toggle(false)}
-                className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-white text-xl"
-              >
-                <IoMdClose />
-              </button>
-              {pinCreationStatus === "loading" ? (
-                <ClipLoader color="#C29B0C" size={65} />
-              ) : (
-                <div>
-                  {pinCreationStatus === "Pin created successfully!" ? (
-                    <div className="flex flex-col items-center justify-center">
-                      <FaCheck className="text-gtGold text-6xl" />
-                      <p className="text-white text-xl">{pinCreationStatus}</p>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center">
-                      <MdCancel className="text-red-500 text-6xl" />
-                      <p className="text-white text-xl">{pinCreationStatus}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )
-        ) : (
-          <div className="flex flex-col gap-4 w-full h-full items-center justify-center">
-            <button
-              onClick={() => toggle(false)}
-              className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-white text-xl"
-            >
-              <IoMdClose />
-            </button>
-            <p className="text-gtGold text-xl">
-              Please sign in to create a pin.
-            </p>
-            <Link
-              href={"/login"}
-              className="flex w-36 h-10 duration-300 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover"
-            >
-              Sign In
-            </Link>
+            ))}
           </div>
-        )
-      ) : (
-        <div className="flex w-full h-full items-center justify-center">
-          <ClipLoader color="#C29B0C" size={65} />
+          <label
+            htmlFor="description"
+            className="text-white px-4 pb-2 pt-4 text-lg"
+          >
+            Description
+          </label>
+          <textarea
+            onChange={handleChange}
+            maxLength={100}
+            rows={3}
+            cols={50}
+            id="description"
+            className="text-white text-sm focus:border-gtGold focus:outline-none duration-300 resize-none mx-4 px-4 py-2 bg-mainTheme border-[1px] border-gray-500 rounded-lg"
+            placeholder="Describe the item"
+          />
+          <div className="flex flex-row justify-end px-4">
+            <p className="justify-self-end text-gray-400 text-xs">
+              {characterCount}/{100}
+            </p>
+          </div>
+          <label
+            htmlFor="location"
+            className="text-white px-4 pb-2 pt-4 text-lg"
+          >
+            Location
+          </label>
+          {location.lat !== 0 && location.lng !== 0 ? (
+            <p className="text-sm text-gtGold mx-4 mb-2">
+              Location: {location.lat}, {location.lng}
+            </p>
+          ) : null}
+          <button
+            onClick={() => setPickLocation(true)}
+            className="flex w-36 h-10 mx-4 text-xs justify-center items-center rounded-lg border-[1px] border-gray-500 duration-300 hover:text-gtGold hover:bg-mainHover text-gray-400"
+          >
+            <FaMapMarkerAlt className="mr-1" />
+            {location.lat !== 0 && location.lng !== 0
+              ? "Change Location"
+              : "Pick Location"}
+          </button>
         </div>
-      )}
+        {pickLocation ? (
+          <ChooseLocation
+            apiKey={apiKey}
+            setToggled={setPickLocation}
+            setLocation={setLocation}
+          />
+        ) : null}
+        <button
+          disabled={!completedForm()}
+          onClick={createNewPin}
+          className={`${
+            pickLocation ? "hidden" : "flex"
+          } disabled:bg-gray-700 disabled:text-gray-400 w-36 h-10 absolute bottom-4 right-4 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover`}
+        >
+          Create Found Item
+        </button>
+      </div>
+    ),
+  };
+
+  return (
+    <div className="flex flex-col z-30 animate-in fixed top-16 left-0 pb:top-[20%] pb:left-[10%] tb:top-1/4 tb:left-1/4 bg-mainTheme w-full h-[70%] pb:w-[80%] pb:h-1/2 tb:w-1/2 tb:h-1/2 rounded-lg border-[1px]">
+      <button
+          onClick={() => toggle(false)}
+          className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+        >
+          <IoMdClose />
+        </button>
+      {componentMap[pinCreationStatus]}
     </div>
   );
 };

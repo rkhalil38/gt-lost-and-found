@@ -130,7 +130,7 @@ const ClaimItem = ({
   const componentMap: componentMap = {
     "Claim Item": (
       <div className="flex flex-col gap-4 w-full h-full">
-        <h1 className="font-bold text-2xl text-gtGold">
+        <h1 className="font-bold text-xl pb:text-2xl text-gtGold">
           You are claiming this item as
           <a className="text-white"> {username}</a>
         </h1>
@@ -149,7 +149,7 @@ const ClaimItem = ({
           {contactMethod === "email" ? (
             <input
               type="email"
-              className={`w-96 h-10 p-2 border-[1px] ${
+              className={`w-full text-sm pb:text-base pb:w-96 h-10 p-2 border-[1px] ${
                 fieldError ? "border-red-400" : "focus:border-gtGold"
               } focus:outline-none bg-mainTheme text-white rounded-lg`}
               placeholder="Enter your preferred email"
@@ -158,7 +158,7 @@ const ClaimItem = ({
           ) : (
             <input
               type="tel"
-              className={`w-96 h-10 p-2 border-[1px] ${
+              className={`w-full text-sm pb:text-base pb:w-96 h-10 p-2 border-[1px] ${
                 fieldError ? "border-red-400" : "focus:border-gtGold"
               } focus:outline-none bg-mainTheme text-white rounded-lg`}
               placeholder="Enter your phone number"
@@ -221,7 +221,7 @@ const ClaimItem = ({
   };
 
   return (
-    <div className="flex flex-col p-4 animate-in fixed gap-4 border-[1px] border-gray-500 w-1/2 h-[70%] rounded-lg bg-mainTheme shaodw-lg z-40">
+    <div className="flex flex-col self-start pb:self-center p-4 animate-in fixed gap-4 border-[1px] border-gray-500 w-full h-3/4 tb:w-1/2 tb:h-[70%] rounded-lg bg-mainTheme shaodw-lg z-40">
       {claimStatus !== "loading" ? (
         <div className="flex w-full h-full">
           <Link

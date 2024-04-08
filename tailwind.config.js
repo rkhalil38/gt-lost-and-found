@@ -31,6 +31,10 @@ module.exports = {
       '700': '700ms',
       '800': '800ms',
       
+    },
+    screens: {
+      'pb': '450px',
+      'tb': '1050px'
     }
   },
   plugins: [],

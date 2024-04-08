@@ -118,7 +118,7 @@ const NavigationBar = ({
 
   return (
     <div
-      className={`flex flex-col text-gray-300 duration-300 w-[300px] h-full rounded-r-lg border-b-[1px] border-t-[1px] border-r-[1px] border-gray-400 fixed top-0 ${
+      className={`flex flex-col text-gray-300 duration-300 w-[300px] h-full rounded-r-lg border-b-[1px] border-t-[1px] border-r-[1px] border-gray-500 fixed top-0 ${
         toggled ? "left-0" : "left-[-300px]"
       } bg-mainTheme z-20 shadow-xl`}
     >
@@ -166,7 +166,7 @@ const NavigationBar = ({
       {creatingPin ? (
         <div className="flex flex-col h-full w-full">
           <CreateAPin apiKey={apiKey} toggle={setCreatingPin} />
-          <Overlay zIndex="z-10" on={creatingPin} setOn={setCreatingPin}/>
+          <Overlay zIndex="z-10" on={creatingPin} setOn={setCreatingPin} clear={false}/>
         </div>
       ) : null}
     </div>

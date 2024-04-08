@@ -64,16 +64,16 @@ const MyItems = () => {
       className={`flex flex-row items-center w-full h-full gap-2 p-10 pt-28`}
     >
       {loading ? (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-wrap gap-4 w-full h-full py-24 pb:pt-0">
           <div className="flex flex-col bg-mainTheme border-[1px] border-gray-500 items-center justify-center w-96 h-48 shadow-lg rounded-lg">
             <div className="w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse" />
           </div>
-          <div className="flex flex-col bg-mainTheme border-[1px] border-gray-500 items-center justify-center w-96 h-48 shadow-lg rounded-lg">
+          <div className="hidden pb:flex flex-col bg-mainTheme border-[1px] border-gray-500 items-center justify-center pb:w-96 pb:h-48 shadow-lg rounded-lg">
             <div className="w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse" />
           </div>
         </div>
       ) : user ? (
-        <div  className={`flex flex-wrap gap-4 w-full h-full`}>
+        <div  className={`flex flex-wrap gap-4 w-full h-full py-24 pb:pt-0`}>
           {pins.map((pin) => (
             <Link
               href={`${pathname}/${pin.item_id}`}
@@ -92,10 +92,9 @@ const MyItems = () => {
                     <IoIosArrowBack className="group-hover:text-white group-hover:translate-x-1 text-gray-500 duration-300 rotate-180" />
                   )}
                 </div>
-                <div className="flex flex-row justify-between text-xs text-gtGold w-full">
+                <div className="flex flex-row justify-between text-[.65rem] pb:text-xs text-gtGold w-full">
                   <div className="flex flex-row items-center w-1/3 gap-2">
-                    <h1>{pin.claim_requests}</h1>
-                    <p>Claim Requests</p>
+                    <p>{pin.claim_requests}  Claim Requests</p>
                   </div>
                   <p className="text-gray-500">
                     {pin.created_at.substring(0, 10)}

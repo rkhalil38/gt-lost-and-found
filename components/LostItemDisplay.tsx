@@ -46,7 +46,12 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const [itemID, setItemID] = useState<string>("");
   const [pinCreatorID, setPinCreatorID] = useState<string>("");
   const [currentClaims, setCurrentClaims] = useState<number>(0);
+  const [ screenWidth, setScreenWidth ] = useState<number>(0);
   const router = useRouter();
+
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+  }, []);
 
   useEffect(() => {
     const fetchThisItem = async () => {
@@ -127,7 +132,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   }, [supabase, item, setItem]);
 
   return (
-    <div className="flex flex-row w-full h-full justify-center items-center gap-4 text-white">
+    <div className="flex flex-col py-24 tb:pt-0 tb:flex-row w-full h-full justify-center items-center gap-4 text-white">
       {claim ? (
         <div className="flex z-30 items-center justify-center w-full h-full fixed">
           <ClaimItem
@@ -140,11 +145,11 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
             setClaimStatus={setClaimState}
             user={user ? true : false}
           />
-          <Overlay on={claim} setOn={() => {router.push(`${pathname}?claim=false`)}} zIndex="z-30" />
+          <Overlay on={claim} setOn={() => {router.push(`${pathname}?claim=false`)}} zIndex="z-30" clear={false}/>
         </div>
       ) : null}
-      <div className="flex flex-col w-[30%] h-[60%] items-center gap-4">
-        <div className="flex flex-row w-full h-[40%] gap-4">
+      <div className="flex flex-col w-[80%] tb:w-[30%] h-[65%] items-center gap-4">
+        <div className="flex flex-row w-full h-[70%] gap-4">
           <div className="flex flex-col w-1/2 h-full items-center gap-4">
             <div className="flex items-center justify-center w-full h-[30%] bg-mainHover border-[1px] border-gray-500 rounded-lg">
               <h1 className="text-lg font-semibold text-gtGold">
@@ -162,18 +167,18 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center w-1/2 h-full bg-mainHover border-[1px] border-gray-500 rounded-lg">
-            <h1 className="text-9xl text-gtGold">
+            <h1 className="text-8xl tb:text-9xl text-gtGold">
               {item?.claim_requests != null ? (
                 item?.claim_requests
               ) : (
-                <Skeleton height={100} width={100} baseColor="#B3A369" />
+                <Skeleton height={screenWidth < 450 ? 80 : 100} width={screenWidth < 450 ? 80 : 100} baseColor="#B3A369" />
               )}
             </h1>
-            <p className="text-sm text-gray-400">Claim Requests</p>
+            <p className="text-sm text-gray-400 pb-2">Claim Requests</p>
           </div>
         </div>
         <div className="flex flex-col justify-between w-full h-[60%] p-4 bg-mainHover border-[1px] border-gray-500 rounded-lg">
-          <h1 className="text-2xl text-gtGold font-semibold">
+          <h1 className="text-xl tb:text-2xl text-gtGold font-semibold">
             Found by{" "}
             {item?.user_name || (
               <Skeleton height={20} width={120} baseColor="#B3A369" />
@@ -196,7 +201,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
                 ? pathname + "?claim=true"
                 : "/login"
             }
-            className={`flex gap-2 text-white items-center justify-center text-sm ${
+            className={`flex gap-2 p-4 text-white items-center justify-center text-sm ${
               claimState === "Request Submitted" ||
               claimState === "Fresh Request Submitted"
                 ? "cursor-default bg-green-500 border-green-600"
@@ -217,7 +222,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
           </Link>
         </div>
       </div>
-      <div className="flex w-[60%] h-[60%] bg-mainHover border-[1px] border-gray-500 rounded-lg">
+      <div className="flex w-[80%] h-[40%] tb:w-[60%] tb:h-[65%] bg-mainHover border-[1px] border-gray-500 rounded-lg">
         {loadMap ? (
           <DisplayMap
             apiKey={apiKey}

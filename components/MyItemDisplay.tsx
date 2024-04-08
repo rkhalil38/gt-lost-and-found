@@ -36,6 +36,7 @@ const MyItemDisplay = () => {
   const [getRequests, setGetRequests] = useState<boolean>(false);
   const [currentRequest, setCurrentRequest] = useState<PinRequest>();
   const [username, setUserName] = useState<string | null>();
+  const supabase = createClient();
 
   useEffect(() => {
     const fetchComponentData = async () => {
@@ -77,6 +78,36 @@ const MyItemDisplay = () => {
     fetchPinRequests();
   }, [getRequests]);
 
+  useEffect(() => {
+    const channel = supabase
+      .channel("realtime-requests")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "requests" },
+        (payload) =>
+          replaceOldRequest(payload.new as Database["public"]["Tables"]["requests"]["Row"])
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, setRequests, requests]);
+
+  const replaceOldRequest = (request: PinRequest) => {
+    const newRequests = requests?.map((req) => {
+      if (req.request_id === request.request_id) {
+        return request;
+      }
+
+      return req;
+    });
+
+    setRequests(newRequests);
+    setCurrentRequest(request);
+  }
+
+  
   const requestStatus: requestStatus = {
     undecided: "border-gray-500",
     accepted: "border-green-400 text-white",
@@ -84,10 +115,10 @@ const MyItemDisplay = () => {
   };
 
   return (
-    <div className="flex flex-row gap-4 text-gtGold w-screen h-screen items-center justify-center">
-      <div className="flex flex-col gap-4 rounded-lg items-center w-[40%] h-3/4">
+    <div className="flex flex-col tb:flex-row py-28 tb:pt-0 gap-4 text-gtGold w-screen h-screen items-center justify-center">
+      <div className="flex flex-col gap-4 rounded-lg items-center w-[80%] tb:w-[40%] h-3/4">
         <ItemDisplay itemID={itemID} />
-        <div className="flex flex-col overflow-y-scroll gap-4 rounded-lg items-center w-full h-1/2">
+        <div className="flex flex-row overflow-x-scroll tb:flex-col tb:overflow-y-scroll gap-4 rounded-lg tb:items-center w-full h-1/2">
           {requests ? (
             requests?.map((request) => (
               <button
@@ -164,7 +195,7 @@ const CurrentRequestDock = ({
   };
 
   return (
-    <div className="flex flex-col justify-between w-1/4 h-3/4 rounded-lg bg-mainHover border-[1px] border-gray-500">
+    <div className="flex flex-col justify-between w-[80%] tb:w-1/4 h-3/4 rounded-lg bg-mainHover border-[1px] border-gray-500">
       {areYouSure ? (
         <div className="flex fixed items-center justify-center z-30 top-0 left-0 w-screen h-screen">
           <AreYouSure
@@ -174,7 +205,7 @@ const CurrentRequestDock = ({
             itemID={itemID}
             creatorID={creatorID}
           />
-          <Overlay on={areYouSure} setOn={setAreYouSure} zIndex="z-30" />
+          <Overlay on={areYouSure} setOn={setAreYouSure} zIndex="z-30" clear={false}/>
         </div>
       ) : null}
 
@@ -278,9 +309,9 @@ const ItemDisplay = ({ itemID }: { itemID: string }) => {
           </p>
         </div>
         {item?.resolved && (
-          <div className="flex flex-row self-start w-44 gap-2 text-xl text-green-400 font-semibold items-center">
+          <div className="flex flex-row justify-end self-start w-44 gap-2 text-xl text-green-400 font-semibold items-center">
             <FaCheck />
-            Item Found
+            Owner Found
           </div>
         )}
       </div>
@@ -359,7 +390,7 @@ const AreYouSure = ({
     ),
 
     false: (
-      <div className="flex items-center justify-between p-4 flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[450px] h-64 bg-mainTheme">
+      <div className="flex items-center justify-between p-4 flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[90%] tb:w-[450px] h-64 bg-mainTheme">
         {closeButton}
         <div className="w-full h-6" />
         {action === "accept" ? (
