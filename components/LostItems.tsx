@@ -29,7 +29,14 @@ const LostItems = () => {
         return;
       }
 
-      setPins(data);
+      let viablePins = []
+      for (const pin of data) {
+        if (pin.resolved === false) {
+          viablePins.push(pin)
+        }
+      }
+
+      setPins(viablePins);
       setLoading(false);
     };
 

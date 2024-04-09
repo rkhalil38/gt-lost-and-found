@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { fetchUserRequests, fetchUser, Pin, fetchPin } from "@/db/database";
+import { fetchUserRequests, fetchUser, Pin, fetchPin, deleteRequest } from "@/db/database";
 import { AuthError, User } from "@supabase/supabase-js";
 import { PinRequest } from "@/db/database";
-import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowBack, IoMdClose } from "react-icons/io";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { FaFilter } from "react-icons/fa";
@@ -18,6 +18,8 @@ const MyRequests = () => {
   const [viewingRequest, setViewingRequest] = useState<boolean>(false);
   const [currentRequest, setCurrentRequest] = useState<PinRequest>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [areYouSure, setAreYouSure] = useState<boolean>(false);
+  const [currentRequestID, setCurrentRequestID] = useState<string>("");
 
   const params = useSearchParams();
   const filter = params.get("filter") || "all";
@@ -146,11 +148,22 @@ const MyRequests = () => {
                 <h2 className={`text-base`}>
                   {pinToRequests?.get(pin.item_id)?.description}
                 </h2>
-                {pinToRequests?.get(pin.item_id)?.status === "accepted" && (
+                {pinToRequests?.get(pin.item_id)?.status === "accepted" ? (
                   <p className="text-xs text-gray-400">
                     Click for what's next!
                   </p>
-                )}
+                )
+                :
+                (
+                  <button onClick={() => {
+                    setAreYouSure(true)
+                    setCurrentRequestID(pinToRequests?.get(pin.item_id)?.creator_id + pin.item_id)
+                    }} 
+                    className="flex items-center justify-center duration-300 rounded-lg px-2 py-2 text-xs text-white border-[1px] border-red-400 bg-red-500 hover:bg-opacity-80">
+                    Delete Request
+                  </button>
+                )
+                }
               </div>
             </div>
           ))}
@@ -175,6 +188,12 @@ const MyRequests = () => {
           />
         </div>
       )}
+      {areYouSure ? (
+        <div className="flex fixed items-center justify-center z-30 top-0 left-0 w-screen h-screen">
+          <DeleteItemPrompt setAreYouSure={setAreYouSure} requestID={currentRequestID} />
+          <Overlay on={areYouSure} setOn={setAreYouSure} zIndex="z-30" clear={false}/>
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -232,5 +251,45 @@ const FilterComponent = ({ filter }: { filter: string }) => {
     </div>
   );
 };
+
+const DeleteItemPrompt = ({setAreYouSure, requestID} : {setAreYouSure: Function, requestID: string}) => {
+
+  const closeButton = (
+    <button
+      onClick={() => setAreYouSure(false)}
+      className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+    >
+      <IoMdClose />
+    </button>
+  );
+
+  return (
+    <div className="flex text-gtGold items-center justify-end p-4 flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[90%] tb:w-[450px] h-64 bg-mainTheme">
+        {closeButton}
+        <div className="flex flex-col justify-between w-full h-[60%]">
+          <h1 className="text-base text-center">
+            Are you sure you would like to delete this request? 
+          </h1>
+          <div className="flex flex-row gap-4 w-full">
+            <button
+              className="flex w-1/2 duration-300 items-center justify-center gap-2 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+              onClick={() => {
+                deleteRequest(requestID)
+                location.reload()
+              }}
+            >
+              Delete Request
+            </button>
+            <button
+              onClick={() => setAreYouSure(false)}
+              className="flex w-1/2 duration-300 items-center justify-center gap-1 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+  );
+}
 
 export default MyRequests;

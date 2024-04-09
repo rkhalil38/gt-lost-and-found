@@ -14,11 +14,13 @@ import {
   fetchUserItems,
   fetchProfile,
   rejectClaim,
+  deletePin,
 } from "@/db/database";
 import { ClipLoader } from "react-spinners";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { createClient } from "@/utils/supabase/client";
+import Link from "next/link";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
 type PinRequest = Database["public"]["Tables"]["requests"]["Row"];
@@ -265,6 +267,7 @@ const CurrentRequestDock = ({
 
 const ItemDisplay = ({ itemID }: { itemID: string }) => {
   const [item, setItem] = useState<Pin>();
+  const [areYouSure, setAreYouSure] = useState<boolean>(false);
 
   const supabase = createClient();
 
@@ -320,14 +323,25 @@ const ItemDisplay = ({ itemID }: { itemID: string }) => {
           </div>
         )}
       </div>
-      <h1 className="text-xs flex flex-row items-center gap-2">
-        {item?.claim_requests != null ? (
-          item?.claim_requests
-        ) : (
-          <Skeleton height={20} width={20} baseColor="#B3A369" />
-        )}
-        {" "}claim requests
-      </h1>
+      <div className="flex flex-row justify-between w-full">
+        <h1 className="text-xs flex flex-row items-center gap-2">
+          {item?.claim_requests != null ? (
+            item?.claim_requests
+          ) : (
+            <Skeleton height={20} width={20} baseColor="#B3A369" />
+          )}
+          {" "}claim requests
+        </h1>
+        <button onClick={() => setAreYouSure(true)} className="flex items-center justify-center duration-300 rounded-lg px-4 py-2 text-xs text-white border-[1px] border-red-400 bg-red-500 hover:bg-opacity-80">
+          Delete Item
+        </button>
+      </div>
+      {areYouSure ? (
+        <div className="flex fixed items-center justify-center z-30 top-0 left-0 w-screen h-screen">
+          <DeleteItemPrompt setAreYouSure={setAreYouSure} itemID={itemID} />
+          <Overlay on={areYouSure} setOn={setAreYouSure} zIndex="z-30" clear={false}/>
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -428,5 +442,44 @@ const AreYouSure = ({
 
   return activeComponent[decisionState];
 };
+
+const DeleteItemPrompt = ({setAreYouSure, itemID} : {setAreYouSure: Function, itemID: string}) => {
+
+  const closeButton = (
+    <button
+      onClick={() => setAreYouSure(false)}
+      className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+    >
+      <IoMdClose />
+    </button>
+  );
+
+  return (
+    <div className="flex items-center justify-end p-4 flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[90%] tb:w-[450px] h-64 bg-mainTheme">
+        {closeButton}
+        <div className="flex flex-col justify-between w-full h-[65%]">
+          <h1 className="text-base text-center">
+            Are you sure you would like to delete this item? 
+            All claims associated with the item will be deleted as well.
+          </h1>
+          <div className="flex flex-row gap-4 w-full">
+            <Link
+              className="flex w-1/2 duration-300 items-center justify-center gap-2 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+              onClick={() => deletePin(itemID)}
+              href={'/'}
+            >
+              Delete Item
+            </Link>
+            <button
+              onClick={() => setAreYouSure(false)}
+              className="flex w-1/2 duration-300 items-center justify-center gap-1 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+  );
+}
 
 export default MyItemDisplay;

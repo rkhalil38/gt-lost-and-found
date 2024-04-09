@@ -293,3 +293,37 @@ export async function rejectClaim(
 
   return data ? data : [];
 }
+
+export async function deletePin(
+  itemID: string
+): Promise<Pin[] | PostgrestError> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("pins")
+    .delete()
+    .eq("item_id", itemID)
+    .select();
+
+  if (error) {
+    return error;
+  }
+
+  return data ? data : [];
+}
+
+export async function deleteRequest(
+  requestID: string
+): Promise<PinRequest[] | PostgrestError> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("requests")
+    .delete()
+    .eq("request_id", requestID)
+    .select();
+
+  if (error) {
+    return error;
+  }
+
+  return data ? data : [];
+}
