@@ -208,6 +208,32 @@ export async function createPin(
   return data ? data[0] : {};
 }
 
+export async function updatePin(
+  itemID: string,
+  item: string,
+  description: string,
+  x_coordinate: number,
+  y_coordinate: number
+): Promise<Pin | PostgrestError> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("pins")
+    .update({
+      item: item,
+      description: description,
+      x_coordinate: x_coordinate,
+      y_coordinate: y_coordinate,
+    })
+    .eq("item_id", itemID)
+    .select();
+
+  if (error) {
+    return error;
+  }
+
+  return data ? data[0] : {};
+}
+
 export async function claimItem(
   request: PinRequest,
   user: User,
