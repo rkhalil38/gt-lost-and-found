@@ -125,6 +125,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
       fts: undefined,
       item_description_username: null,
       resolved: false,
+      days_resolved: 0,
     };
 
     const data = await createPin(pin, user);

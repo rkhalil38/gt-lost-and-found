@@ -14,41 +14,44 @@ export type Database = {
           claim_requests: number | null
           created_at: string
           creator_id: string
+          days_resolved: number
           description: string | null
           fts: unknown | null
           item: string | null
           item_id: string
           resolved: boolean
           user_name: string | null
-          x_coordinate: number | null
-          y_coordinate: number | null
+          x_coordinate: number
+          y_coordinate: number
           item_description_username: string | null
         }
         Insert: {
           claim_requests?: number | null
           created_at?: string
           creator_id: string
+          days_resolved?: number
           description?: string | null
           fts?: unknown | null
           item?: string | null
           item_id?: string
           resolved?: boolean
           user_name?: string | null
-          x_coordinate?: number | null
-          y_coordinate?: number | null
+          x_coordinate?: number
+          y_coordinate?: number
         }
         Update: {
           claim_requests?: number | null
           created_at?: string
           creator_id?: string
+          days_resolved?: number
           description?: string | null
           fts?: unknown | null
           item?: string | null
           item_id?: string
           resolved?: boolean
           user_name?: string | null
-          x_coordinate?: number | null
-          y_coordinate?: number | null
+          x_coordinate?: number
+          y_coordinate?: number
         }
         Relationships: [
           {
@@ -159,6 +162,10 @@ export type Database = {
         Returns: string
       }
       reset_daily_pin_count: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      update_days_resolved: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }

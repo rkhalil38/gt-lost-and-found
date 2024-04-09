@@ -80,23 +80,12 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
         const { Map, InfoWindow } = await loader.importLibrary("maps");
         const { AdvancedMarkerElement } = await loader.importLibrary("marker");
 
-        const MAP_BOUNDARIES = {
-          north: -84.4,
-          south: -84.39,
-          east: 33.78,
-          west: 33.77,
-        };
-
         const mapOptions: google.maps.MapOptions = {
           center: defaultProps.center,
           zoom: defaultProps.zoom,
           disableDefaultUI: true,
           mapId: "33ef6ba1cc80f774",
           draggableCursor: "default",
-          restriction: {
-            latLngBounds: MAP_BOUNDARIES,
-            strictBounds: true,
-          },
           gestureHandling: "greedy",
         };
 
