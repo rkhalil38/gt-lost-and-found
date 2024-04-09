@@ -4,9 +4,7 @@ import UnivHeader from "@/components/UnivHeader";
 import Footer from "@/components/Footer";
 import { Analytics } from '@vercel/analytics/react';
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const defaultUrl = `https://gt-lost-and-found.org`;
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
