@@ -2,6 +2,7 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import UnivHeader from "@/components/UnivHeader";
 import Footer from "@/components/Footer";
+import { Analytics } from '@vercel/analytics/react';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -47,6 +48,7 @@ export default function RootLayout({
         <main className="min-h-screen flex flex-col items-center">
           <UnivHeader apiKey={apiKey} />
           {children}
+          <Analytics />
           <Footer />
         </main>
       </body>

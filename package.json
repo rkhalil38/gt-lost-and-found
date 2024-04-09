@@ -10,6 +10,7 @@
     "@react-google-maps/api": "^2.19.2",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+    "@vercel/analytics": "^1.2.2",
     "autoprefixer": "10.4.17",
     "dotenv": "^16.4.1",
     "geist": "^1.2.1",
