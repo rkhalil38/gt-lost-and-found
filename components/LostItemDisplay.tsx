@@ -162,7 +162,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
     claimed: 'cursor-default bg-green-500 border-green-600',
     pinOwner: 'cursor-default bg-gtGold border-gtGoldHover',
     notSignedIn: 'border-gtGold bg-gtGoldHover hover:opacity-80',
-    loading: 'cursor-default bg-gtGold border-gtGold'
+    loading: 'cursor-default bg-gtGoldHover border-gtGold'
   }
 
   const linkMap: stringMap = {
