@@ -140,8 +140,8 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
 
             const marker = new AdvancedMarkerElement({
               position: new google.maps.LatLng(
-                pin.x_coordinate as number,
-                pin.y_coordinate as number
+                pin.x_coordinate,
+                pin.y_coordinate,
               ),
               map: map,
               content: parentWrapper,
