@@ -124,7 +124,7 @@ const MyItemDisplay = () => {
   return (
     <div className="flex flex-col tb:flex-row py-28 tb:pt-0 gap-4 text-gtGold w-screen h-screen items-center justify-center">
       <div className="flex flex-col gap-4 rounded-lg items-center w-[80%] tb:w-[40%] h-3/4">
-        <ItemDisplay itemID={itemID} />
+        <ItemDisplay itemID={itemID} username={username ? username : ""}/>
         <div className="flex flex-row overflow-x-scroll tb:flex-col tb:overflow-y-scroll gap-4 rounded-lg tb:items-center w-full h-1/2">
           {requests ? (
             requests?.map((request) => (
@@ -265,7 +265,7 @@ const CurrentRequestDock = ({
   );
 };
 
-const ItemDisplay = ({ itemID }: { itemID: string }) => {
+const ItemDisplay = ({ itemID, username }: { itemID: string, username: string }) => {
   const [item, setItem] = useState<Pin>();
   const [areYouSure, setAreYouSure] = useState<boolean>(false);
 
@@ -338,7 +338,7 @@ const ItemDisplay = ({ itemID }: { itemID: string }) => {
       </div>
       {areYouSure ? (
         <div className="flex fixed items-center justify-center z-30 top-0 left-0 w-screen h-screen">
-          <DeleteItemPrompt setAreYouSure={setAreYouSure} itemID={itemID} />
+          <DeleteItemPrompt setAreYouSure={setAreYouSure} itemID={itemID} username={username}/>
           <Overlay on={areYouSure} setOn={setAreYouSure} zIndex="z-30" clear={false}/>
         </div>
       ) : null}
@@ -443,7 +443,7 @@ const AreYouSure = ({
   return activeComponent[decisionState];
 };
 
-const DeleteItemPrompt = ({setAreYouSure, itemID} : {setAreYouSure: Function, itemID: string}) => {
+const DeleteItemPrompt = ({setAreYouSure, itemID, username} : {setAreYouSure: Function, itemID: string, username: string}) => {
 
   const closeButton = (
     <button
@@ -466,7 +466,7 @@ const DeleteItemPrompt = ({setAreYouSure, itemID} : {setAreYouSure: Function, it
             <Link
               className="flex w-1/2 duration-300 items-center justify-center gap-2 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
               onClick={() => deletePin(itemID)}
-              href={'/'}
+              href={`/${username.toLowerCase().replace(" ", "")}/myitems`}
             >
               Delete Item
             </Link>
