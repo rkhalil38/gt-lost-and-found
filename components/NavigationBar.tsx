@@ -166,12 +166,13 @@ const NavigationBar = ({
           ) : null}
         </ol>
       </div>
-      <div className="flex w-full px-6">
+      <div className="flex flex-col gap-2 w-full px-6">
         <p className="text-xxs text-gray-400">
           {`Disclaimer: GT Lost and Found provides a platform for GT students and faculty to interact with 
           each other regarding lost items. Users should perform full validation as to whether or not the finder of 
           their items are trustworthy.`}
         </p>
+        <Link className="text-xs text-gtGold underline" href={"/privacypolicy"}>Privacy Policy</Link>
       </div>
 
       {creatingPin ? (
