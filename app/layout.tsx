@@ -18,6 +18,8 @@ export const metadata = {
     "lost and found gt",
     "GT lost and found",
     "items lost at georgia tech",
+    "georgia tech lost and found",
+    "lost and found at georgia tech",
   ],
   openGraph: {
     title: "GT Lost and Found",
