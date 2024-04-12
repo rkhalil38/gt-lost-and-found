@@ -56,7 +56,7 @@ export async function fetchProfile(
 
 export async function fetchPins(): Promise<Pin[] | PostgrestError> {
   const supabase = createClient();
-  const { data, error } = await supabase.from("pins").select("*");
+  const { data, error } = await supabase.from("pins").select("*").order("created_at", { ascending: false });
 
   if (error) {
     return error;
