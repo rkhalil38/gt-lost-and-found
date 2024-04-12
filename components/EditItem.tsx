@@ -54,6 +54,7 @@ const EditItem = ({
     "android phone",
     "backpack",
     "jacket",
+    "airpods",
     "miscellaneous",
   ];
 

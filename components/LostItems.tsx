@@ -133,6 +133,7 @@ const FilterComponent = ({ filter }: { filter: string }) => {
     "buzzcard",
     "backpack",
     "jacket",
+    "airpods",
   ];
 
   const handleChange = (value: string) => {
