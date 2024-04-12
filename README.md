@@ -2,7 +2,7 @@
 
 GT Lost and Found is a web service that allows GT students and faculty to locate their lost items around campus.
 
-## 📃License & Copyright Notice
+## 📃 License & Copyright Notice
 
 GT Lost and Found and all modifications are licensed under the AGPL v3.0 license.
 
