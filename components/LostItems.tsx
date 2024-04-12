@@ -59,6 +59,8 @@ const LostItems = () => {
         return pin.item === "backpack";
       case "jacket":
         return pin.item === "jacket";
+      case "airpods":
+        return pin.item === "airpods";
       default:
         return true;
     }
