@@ -1,6 +1,6 @@
 # GT Lost and Found
 
-GT Lost and Found lets you find items that were lost around GT campus.
+GT Lost and Found is a web service that allows GT students and faculty to locate their lost items around campus.
 
 ## Overview
 
