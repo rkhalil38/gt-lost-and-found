@@ -10,11 +10,11 @@ GT Lost and Found and all modifications are licensed under the AGPL v3.0 license
 
 Copyright © 2024 Romulus Khalil (romuluskhalil3@gmail.com)
 
-## 🚀Overview
+## 🚀 Overview
 
 The app is a NextJS 13 application (built using create-next-app). GT Lost and Found is written in TypeScript and uses Tailwind CSS for styling. GT Lost and Found uses Supabase (a PostgreSQL alternative to Firebase) as its primary database and authenticator. Supabase utilizes Cookie-based authentication, meaning user's credentials are stored in cookies upon login.
 
-## 💻Running Locally
+## 💻 Running Locally
 
 ### Required Software
 - Node.js (any recent version will suffice)
@@ -39,7 +39,7 @@ The app will then become viewable at http://localhost:3000, which can then be vi
 
 With that, any changes in the frontend code should be hot-reloaded to localhost.
 
-## 😀Contributing
+## 😀 Contributing
 
 GT Lost and Found welcomes contributions from anyone! Regular development is performed by the project owner ([Romulus Khalil](https://www.linkedin.com/in/romulus-khalil/)) but contributions are still encouraged. There is no set guide on how to contribute just yet but expect one in the future!
 
