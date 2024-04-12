@@ -20,15 +20,15 @@ const page = () => {
           Information You Provide
         </h3>
         <p className="mx-6">
-          We collect the information you voluntarily provide, such as your name
+          We collect the information you provide, such as your name
           and contact information, when you sign up.
         </p>
         <h3 className="text-lg mx-6 mt-4 font-semibold">
           Information We Collect Automatically
         </h3>
         <p className="mx-6">
-          Like many websites, we collect some information automatically. This
-          includes what features you interacted with, your operating system, and
+          Like many websites, we collect information automatically. This
+          includes what pages you visited, your operating system, and
           your type of internet browser.
         </p>
         <hr className="w-full my-10 rounded-lg" />
@@ -39,8 +39,7 @@ const page = () => {
           Improving GT Lost and Found
         </h3>
         <p className="mx-6">
-          We may use aggregated, non-identifiable information for analytical
-          purposes to improve our website and services.
+          We use aggregated, non-identifiable information to improve our website.
         </p>
         <hr className="w-full my-10 rounded-lg" />
         <h2 className="text-xl mx-6 font-semibold">
@@ -54,8 +53,7 @@ const page = () => {
         </p>
         <h3 className="text-lg mx-6 mt-4 font-semibold">No Hidden Policies</h3>
         <p className="mx-6">
-          We do not and will not sell your information. All policies are
-          outlined in this Privacy Policy.
+          GT Lost and Found does not and will not sell your information to third parties.
         </p>
         <hr className="w-full my-10 rounded-lg" />
         <h2 className="text-xl mx-6 font-semibold">Security</h2>
@@ -63,9 +61,8 @@ const page = () => {
           Protecting Your Information
         </h3>
         <p className="mx-6">
-          We take reasonable precautions to protect your information. However,
-          please be aware no method of transmission over the internet is
-          completely secure.
+          We take the necessary precautions to protect your information. We
+          encrypt sensitive information transmitted online.
         </p>
         <hr className="w-full my-10 rounded-lg" />
         <h2 className="text-xl mx-6 font-semibold">
@@ -75,8 +72,8 @@ const page = () => {
           Updating the Privacy Policy
         </h3>
         <p className="mx-6">
-          We reserve the right to update this Privacy Policy at any time.
-          Changes will be effective immediately upon posting on the website.
+          GT Lost and Found may update this policy at any time.
+          Policy changes will be posted on this page.
         </p>
         <h3 className="text-lg mx-6 mt-4 font-semibold">Contact Information</h3>
         <p className="mx-6">{`If you have any questions about this Privacy Policy, please contact us at ${process.env.BUSINESS_EMAIL}`}</p>
