@@ -8,6 +8,7 @@ const defaultUrl = `https://gt-lost-and-found.org`;
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
+  author: "Romulus Khalil",
   title: "GT Lost and Found",
   description: "The best way to find lost items at Georgia Tech. Place a pin on the map to indicate where you found a lost item, or search for lost items to see if someone has found your lost item.",
   keywords: [
