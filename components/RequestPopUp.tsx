@@ -6,6 +6,12 @@ import { IoMdClose } from "react-icons/io";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+/**
+ * Component that displays the request pop-up.
+ *
+ * @param toggle The toggle function
+ * @return The RequestPopUp component that displays the request pop-up.
+ */
 const RequestPopUp = ({
   toggle,
   itemOwnerID,
@@ -13,21 +19,19 @@ const RequestPopUp = ({
   toggle: Function;
   itemOwnerID: string;
 }) => {
-  const [ priorityData, setPriorityData ] = useState<Profile>();
+  const [priorityData, setPriorityData] = useState<Profile>();
 
   useEffect(() => {
     const fetchUser = async () => {
       const user = await fetchProfile(itemOwnerID);
-      
+
       if ("message" in user) {
         console.error(user.message);
         return;
       }
 
-      
       setPriorityData(user);
-      
-    }
+    };
 
     fetchUser();
   }, [itemOwnerID]);
@@ -44,21 +48,27 @@ const RequestPopUp = ({
         <div>
           <h1 className="text-xl text-gtGold font-bold">{`Congratulations! Your item has been confirmed as yours!`}</h1>
           <p className="text-gray-400 text-xs">
-            The user who found your item is {priorityData?.username || <Skeleton height={10} width={80} baseColor="#B3A369" />}. 
-            They will be in touch with you soon&#33;
+            The user who found your item is{" "}
+            {priorityData?.username || (
+              <Skeleton height={10} width={80} baseColor="#B3A369" />
+            )}
+            . They will be in touch with you soon&#33;
           </p>
-        </div>      
+        </div>
       </div>
       <div>
-          <p className="text-white text-base">
-            <a className="text-gtGold">{`Finder Username: `}</a>
-            {priorityData?.username || <Skeleton height={20} width={100} baseColor="#B3A369" />}
-          </p>
-          <p className="text-white text-base">
-            <a className="text-gtGold">{`Past Items Found: `}</a>
-            {priorityData?.items_found || <Skeleton height={20} width={20} baseColor="#B3A369" />}
-          </p>
-
+        <p className="text-white text-base">
+          <a className="text-gtGold">{`Finder Username: `}</a>
+          {priorityData?.username || (
+            <Skeleton height={20} width={100} baseColor="#B3A369" />
+          )}
+        </p>
+        <p className="text-white text-base">
+          <a className="text-gtGold">{`Past Items Found: `}</a>
+          {priorityData?.items_found || (
+            <Skeleton height={20} width={20} baseColor="#B3A369" />
+          )}
+        </p>
       </div>
       <p className="text-gtGold text-sm">{`Thank you for using GT Lost and Found!`}</p>
     </div>

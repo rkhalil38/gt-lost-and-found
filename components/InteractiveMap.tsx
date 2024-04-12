@@ -11,10 +11,12 @@ require("dotenv").config();
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
 
-/*
-Main map that displays on the home page
-Calls Maps API and uses the AdvancedMarkers API to map fetched pins on the map
-*/
+/**
+ * Component that displays the main interactive map on the home page.
+ *
+ * @param apiKey The Google Maps API key
+ * @returns The InteractiveMap component that displays the main interactive map on the home page.
+ */
 const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
   const [pins, setPins] = useState<Pin[]>([]);
   const [clickPosition, setClickPosition] = useState<{
@@ -117,7 +119,8 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
         for (const pin of pins) {
           if (!pin.resolved) {
             const parentWrapper = document.createElement("div");
-            parentWrapper.className = "flex absolute items-center justify-center";
+            parentWrapper.className =
+              "flex absolute items-center justify-center";
 
             const pinWrapper = document.createElement("div");
             pinWrapper.className = "flex absolute items-center justify-center";
@@ -141,7 +144,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
             const marker = new AdvancedMarkerElement({
               position: new google.maps.LatLng(
                 pin.x_coordinate,
-                pin.y_coordinate,
+                pin.y_coordinate
               ),
               map: map,
               content: parentWrapper,

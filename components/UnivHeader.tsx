@@ -5,13 +5,12 @@ import { IoIosMenu } from "react-icons/io";
 import Overlay from "./Overlay";
 import Searchbar from "./Searchbar";
 
-/*
-
-Header that displays at the top of screen
-Allows users to call upon navigation bar and search through database
-
-*/
-
+/**
+ * The header component for the application.
+ *
+ * @param apiKey The Google Maps API key
+ * @returns The UnivHeader component that displays the header for the application.
+ */
 const UnivHeader = ({ apiKey }: { apiKey: string }) => {
   const [toggled, setToggled] = useState(false);
 
@@ -33,11 +32,9 @@ const UnivHeader = ({ apiKey }: { apiKey: string }) => {
       <div className="flex items-center justify-center w-[80%] tb:w-[40%]">
         <Searchbar />
       </div>
-      <div className="flex items-center justify-end w-[20%]">
-
-      </div>
+      <div className="flex items-center justify-end w-[20%]"></div>
       <NavigationBar apiKey={apiKey} toggle={setToggled} toggled={toggled} />
-      <Overlay zIndex="z-10" on={toggled} setOn={setToggled} clear={false}/>
+      <Overlay zIndex="z-10" on={toggled} setOn={setToggled} clear={false} />
     </div>
   );
 };

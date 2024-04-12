@@ -21,12 +21,6 @@ type componentMap = {
   [key: string]: JSX.Element;
 };
 
-/*
-Create a pin component that allows the users to create a pin on the map
-User selects item, gives description, and chooses the location via ChooseLocation component when 
-select button is pressed
-*/
-
 interface CreateAPinProps {
   apiKey: string;
   toggle: Function;
@@ -34,6 +28,15 @@ interface CreateAPinProps {
   lng?: number;
 }
 
+/**
+ * Component that allows the user to create a pin.
+ *
+ * @param apiKey The Google Maps API key
+ * @param toggle Function that toggles the CreateAPin component
+ * @param lat The latitude of the location
+ * @param lng The longitude of the location
+ * @returns The CreateAPin component that allows the user to create a pin.
+ */
 const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   const [user, setUser] = useState<User>();
   const [pickLocation, setPickLocation] = useState<boolean>(false);
@@ -94,7 +97,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
         return;
       }
 
-      setDailyCount(profile.daily_pin_count)
+      setDailyCount(profile.daily_pin_count);
       setPinCreationStatus("creationEligible");
     };
 
@@ -265,7 +268,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
           />
         ) : null}
         <p className="flex absolute left-4 bottom-4 text-sm text-gtGold">
-          { 5 - dailyCount + ' pins left today'}
+          {5 - dailyCount + " pins left today"}
         </p>
         <button
           disabled={!completedForm()}
@@ -283,11 +286,11 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   return (
     <div className="flex flex-col z-30 animate-in fixed top-16 left-0 pb:top-[20%] pb:left-[10%] tb:top-1/4 tb:left-1/4 bg-mainTheme w-full h-[70%] pb:w-[80%] pb:h-1/2 tb:w-1/2 tb:h-1/2 rounded-lg border-[1px]">
       <button
-          onClick={() => toggle(false)}
-          className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
-        >
-          <IoMdClose />
-        </button>
+        onClick={() => toggle(false)}
+        className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+      >
+        <IoMdClose />
+      </button>
       {componentMap[pinCreationStatus]}
     </div>
   );

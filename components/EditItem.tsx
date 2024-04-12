@@ -16,6 +16,18 @@ type Location = {
   lng: number;
 };
 
+/**
+ * Component that allows the user to edit a pin.
+ *
+ * @param apiKey The Google Maps API key
+ * @param itemID The ID of the item
+ * @param item The item that was found
+ * @param oldDescription The old description of the item
+ * @param x_coordinate The x-coordinate of the location
+ * @param y_coordinate The y-coordinate of the location
+ * @param setEditItem Function that toggles the EditItem component
+ * @returns The EditItem component that allows the user to edit a pin.
+ */
 const EditItem = ({
   apiKey,
   itemID,

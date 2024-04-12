@@ -16,12 +16,14 @@ import { useRouter } from "next/navigation";
 import { AuthError, User } from "@supabase/supabase-js";
 import { fetchProfile, fetchUser, signOut } from "@/db/database";
 
-/*
-Side navigation bar that users can interact with
-Allows users to call CreateAPin component, navigate to other pages
-
-pending warning fix
-*/
+/**
+ * The side navigation bar component.
+ *
+ * @param apiKey The Google Maps API key
+ * @param toggle Function that toggles the navigation bar
+ * @param toggled Boolean that determines if the navigation bar is toggled
+ * @returns The NavigationBar component that displays the navigation bar.
+ */
 const NavigationBar = ({
   apiKey,
   toggle,
@@ -172,7 +174,9 @@ const NavigationBar = ({
           each other regarding lost items. Users should perform full validation as to whether or not the finder of 
           their items are trustworthy.`}
         </p>
-        <Link className="text-xs text-gtGold underline" href={"/privacypolicy"}>Privacy Policy</Link>
+        <Link className="text-xs text-gtGold underline" href={"/privacypolicy"}>
+          Privacy Policy
+        </Link>
       </div>
 
       {creatingPin ? (

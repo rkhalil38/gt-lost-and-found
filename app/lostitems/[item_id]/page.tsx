@@ -32,7 +32,7 @@ export async function generateMetadata(
             alt: "Lost Item",
           },
         ],
-      }
+      },
     };
   }
 
@@ -49,9 +49,8 @@ export async function generateMetadata(
           height: 630,
           alt: `Lost ${item.item} at Georgia Tech`,
         },
-      ]
-    }
-
+      ],
+    },
   };
 }
 
@@ -60,7 +59,7 @@ const page = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen bg-mainTheme">
-      <LostItemDisplay apiKey={apiKey}/>
+      <LostItemDisplay apiKey={apiKey} />
     </div>
   );
 };

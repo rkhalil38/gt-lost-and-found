@@ -31,6 +31,12 @@ type stringMap = {
   [key: string]: string;
 };
 
+/**
+ * The display component for a lost item.
+ *
+ * @param apiKey The Google Maps API key
+ * @returns The LostItemDisplay component that displays the lost item.
+ */
 const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const supabase = createClient();
 
@@ -113,7 +119,6 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
       } else {
         setClaimState(claimStates.notClaimed);
       }
-
     };
 
     fetchAllInfo();
@@ -121,7 +126,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
 
   useEffect(() => {
     console.log(claimState);
-  }, [claimState])
+  }, [claimState]);
 
   useEffect(() => {
     const channel = supabase
@@ -158,20 +163,20 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   };
 
   const stylesMap: stringMap = {
-    notClaimed: 'border-gtGold bg-gtGoldHover hover:opacity-80',
-    claimed: 'cursor-default bg-green-500 border-green-600',
-    pinOwner: 'cursor-default bg-gtGold border-gtGoldHover',
-    notSignedIn: 'border-gtGold bg-gtGoldHover hover:opacity-80',
-    loading: 'cursor-default bg-gtGoldHover border-gtGold'
-  }
+    notClaimed: "border-gtGold bg-gtGoldHover hover:opacity-80",
+    claimed: "cursor-default bg-green-500 border-green-600",
+    pinOwner: "cursor-default bg-gtGold border-gtGoldHover",
+    notSignedIn: "border-gtGold bg-gtGoldHover hover:opacity-80",
+    loading: "cursor-default bg-gtGoldHover border-gtGold",
+  };
 
   const linkMap: stringMap = {
     notClaimed: pathname + "?claim=true",
     claimed: "",
     pinOwner: "",
     notSignedIn: "/login",
-    loading: ""
-  }
+    loading: "",
+  };
 
   return (
     <div className="flex flex-col py-24 tb:pt-0 tb:flex-row w-full h-full justify-center items-center gap-4 text-white">

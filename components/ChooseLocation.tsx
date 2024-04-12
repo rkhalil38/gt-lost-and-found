@@ -2,12 +2,14 @@
 import React, { useEffect, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 
-/*
-Component that slide in when the user clicks select location
-Loads the map api and allows the user to drag a pin on the map 
-On the end of a drag, the pin calls the setLocation callback function to update the location state
-*/
-
+/**
+ * Component that slides into view when the user wants to choose a location on a map during Pin Creation.
+ *
+ * @param apiKey The Google Maps API key
+ * @param setToggled Function that toggles the ChooseLocation component
+ * @param setLocation Function that sets the location of the item
+ * @returns The ChooseLocation component that allows the user to choose a location on a map
+ */
 const ChooseLocation = ({
   apiKey,
   setToggled,
@@ -21,7 +23,6 @@ const ChooseLocation = ({
   const parser = new DOMParser();
 
   useEffect(() => {
-
     try {
       const initMap = async () => {
         const loader = new Loader({
@@ -88,7 +89,7 @@ const ChooseLocation = ({
 
       initMap();
     } catch (error) {
-      console.log('Error loading map: ', error)
+      console.log("Error loading map: ", error);
     }
   }, []);
 

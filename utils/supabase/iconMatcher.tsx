@@ -8,6 +8,10 @@ type htmlIconMatcher = {
 type reactIconMatcher = {
     [key: string]: ReactElement
 }
+
+/**
+ * Matches the corresponding item with an HTML SVG icon.
+ */
 export const htmlIconMatcher: htmlIconMatcher = {
     'ipad': `
     <svg fill="#B3A369" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
@@ -144,6 +148,9 @@ export const htmlIconMatcher: htmlIconMatcher = {
 
 }
 
+/**
+ * Matches the corresponding item with a React SVG icon.
+ */
 export const reactIconMatcher: reactIconMatcher = {
     'ipad': 
     <svg fill="#B3A369" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" 

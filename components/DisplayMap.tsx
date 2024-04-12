@@ -3,6 +3,16 @@ import { htmlIconMatcher } from "@/utils/supabase/iconMatcher";
 import { Loader } from "@googlemaps/js-api-loader";
 import React, { useEffect, useRef } from "react";
 
+/**
+ * Component that displays a map with a pin at a specific location.
+ *
+ *
+ * @param apiKey The Google Maps API key
+ * @param lat The latitude of the location
+ * @param lng The longitude of the location
+ * @param item The item that was found
+ * @returns The DisplayMap component that displays a map with a pin at a specific location.
+ */
 const DisplayMap = ({
   apiKey,
   lat,
@@ -17,7 +27,6 @@ const DisplayMap = ({
   const mapRef = useRef<HTMLDivElement>(document.createElement("div"));
 
   useEffect(() => {
-
     try {
       const initMap = async () => {
         const parser = new DOMParser();
@@ -88,7 +97,7 @@ const DisplayMap = ({
 
       initMap();
     } catch (error) {
-      console.log("Error loading map: ", error)
+      console.log("Error loading map: ", error);
     }
   }, []);
 

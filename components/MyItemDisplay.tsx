@@ -32,6 +32,12 @@ type requestStatus = {
   [key: string]: any;
 };
 
+/**
+ * Component that displays the user's found item.
+ *
+ * @param apiKey The Google Maps API key
+ * @returns The MyItemDisplay component that displays the user's found item.
+ */
 const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const [myItem, setMyItem] = useState<Pin>();
   const [requests, setRequests] = useState<PinRequest[]>();
@@ -174,6 +180,17 @@ const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
   );
 };
 
+/**
+ * Component that displays the current request dock.
+ *
+ * @param creator The name of the creator of the request
+ * @param description The description of the request
+ * @param itemID The ID of the item associated with the request
+ * @param creatorID The ID of the creator of the request
+ * @param status The status of the request
+ * @param contact The contact information of the creator of the request
+ * @returns The CurrentRequestDock component that displays the current request dock.
+ */
 const CurrentRequestDock = ({
   creator,
   description,
@@ -405,6 +422,16 @@ const ItemDisplay = ({
   );
 };
 
+/**
+ * Component that displays the AreYouSure prompt.
+ *
+ * @param setAreYouSure The function to set the AreYouSure state
+ * @param action The action to be taken
+ * @param status The status of the action
+ * @param itemID The ID of the item
+ * @param creatorID The ID of the creator of the item
+ * @returns The AreYouSure component that displays the AreYouSure prompt.
+ */
 const AreYouSure = ({
   setAreYouSure,
   action,
@@ -502,6 +529,14 @@ const AreYouSure = ({
   return activeComponent[decisionState];
 };
 
+/**
+ * Component that displays the DeleteItemPrompt.
+ *
+ * @param setAreYouSure The function to set the AreYouSure state
+ * @param itemID The ID of the item
+ * @param username The username of the user
+ * @returns The DeleteItemPrompt component that displays the DeleteItemPrompt.
+ */
 const DeleteItemPrompt = ({
   setAreYouSure,
   itemID,

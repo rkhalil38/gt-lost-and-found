@@ -35,7 +35,12 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
   );
 };
 
-//functions that are only here for metadata generataion
+/**
+ * Gets the item information. Used for metadata generation.
+ * 
+ * @param id The item ID 
+ * @returns The item information or an error if the item does not exist. 
+ */
 export const getItemInfo = async (id: string): Promise<Pin | PostgrestError> => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);

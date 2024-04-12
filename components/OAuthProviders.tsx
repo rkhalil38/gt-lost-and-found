@@ -5,13 +5,11 @@ import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { getURL } from "@/db/database";
 
-/*
-
-Componenet on login page that utilizes supabase third party Oauth
-to verify users
-Currently supports Facebook, Google, and Github
-
-*/
+/**
+ * The OAuth providers component.
+ *
+ * @returns The OAuthProviders component that displays the OAuth providers.
+ */
 const OAuthProviders = () => {
   const router = useRouter();
 
@@ -22,7 +20,7 @@ const OAuthProviders = () => {
       provider: "github",
       options: {
         redirectTo: getURL(),
-      }
+      },
     });
 
     if (error) {
@@ -56,7 +54,7 @@ const OAuthProviders = () => {
       provider: "facebook",
       options: {
         redirectTo: getURL(),
-      }
+      },
     });
 
     if (error) {

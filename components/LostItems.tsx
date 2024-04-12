@@ -11,6 +11,11 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
 
+/**
+ * Component that displays the lost items.
+ *
+ * @returns The LostItems component that displays the lost items.
+ */
 const LostItems = () => {
   const [loading, setLoading] = useState<boolean>(true);
   let parser;
@@ -29,10 +34,10 @@ const LostItems = () => {
         return;
       }
 
-      let viablePins = []
+      let viablePins = [];
       for (const pin of data) {
         if (pin.resolved === false) {
-          viablePins.push(pin)
+          viablePins.push(pin);
         }
       }
 
@@ -121,6 +126,12 @@ const LostItems = () => {
   );
 };
 
+/**
+ * Component that allows users to change the filter.
+ *
+ * @param filter The current filter.
+ * @returns The FilterComponent that allows users to change the filter.
+ */
 const FilterComponent = ({ filter }: { filter: string }) => {
   const [hideOptions, setHideOptions] = useState<boolean>(true);
   const [selectedFilter, setSelectedFilter] = useState<string>("all");

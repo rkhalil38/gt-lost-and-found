@@ -11,6 +11,11 @@ import { FaFilter } from "react-icons/fa";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
 
+/**
+ * Component that displays the user's items.
+ *
+ * @returns The MyItems component that displays the user's items.
+ */
 const MyItems = () => {
   const [user, setUser] = useState<User>();
   const [pins, setPins] = useState<Pin[]>([]);
@@ -30,7 +35,7 @@ const MyItems = () => {
       default:
         return true;
     }
-  }
+  };
 
   useEffect(() => {
     const fetchUserAndPins = async () => {
@@ -55,9 +60,7 @@ const MyItems = () => {
     fetchUserAndPins();
   }, []);
 
-  useEffect(() => {
-    
-  }, [filter]);
+  useEffect(() => {}, [filter]);
 
   return (
     <div
@@ -73,12 +76,14 @@ const MyItems = () => {
           </div>
         </div>
       ) : user ? (
-        <div  className={`flex flex-wrap gap-4 w-full h-full py-24 pb:pt-0`}>
+        <div className={`flex flex-wrap gap-4 w-full h-full py-24 pb:pt-0`}>
           {pins.map((pin) => (
             <Link
               href={`${pathname}/${pin.item_id}`}
               key={pin.item_id}
-              className={`${filterElement(filter, pin)? 'flex' : 'hidden'} flex-col group duration-500 cursor-pointer bg-mainHover hover:bg-mainHover2 border-[1px] border-gray-500 gap-4 p-2 items-center w-96 h-48 shadow-lg rounded-lg`}
+              className={`${
+                filterElement(filter, pin) ? "flex" : "hidden"
+              } flex-col group duration-500 cursor-pointer bg-mainHover hover:bg-mainHover2 border-[1px] border-gray-500 gap-4 p-2 items-center w-96 h-48 shadow-lg rounded-lg`}
             >
               <div className="flex flex-col h-full w-full p-3 overflow-clip justify-between">
                 <div className="flex flex-row w-full">
@@ -94,7 +99,7 @@ const MyItems = () => {
                 </div>
                 <div className="flex flex-row justify-between text-[.65rem] pb:text-xs text-gtGold w-full">
                   <div className="flex flex-row items-center w-1/3 gap-2">
-                    <p>{pin.claim_requests}  Claim Requests</p>
+                    <p>{pin.claim_requests} Claim Requests</p>
                   </div>
                   <p className="text-gray-500">
                     {pin.created_at.substring(0, 10)}
@@ -115,52 +120,64 @@ const MyItems = () => {
           </Link>
         </div>
       )}
-      <FilterComponent filter={filter}/>
+      <FilterComponent filter={filter} />
     </div>
   );
 };
 
-const FilterComponent = ({ filter } : { filter: string}) => {
-
-  const [ hideOptions, setHideOptions ] = useState<boolean>(true);
-  const [ selectedFilter, setSelectedFilter ] = useState<string>("all");
+/**
+ * Component that filters the user's items.
+ *
+ * @param filter The current filter.
+ * @returns The FilterComponent that filters the user's items.
+ */
+const FilterComponent = ({ filter }: { filter: string }) => {
+  const [hideOptions, setHideOptions] = useState<boolean>(true);
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const path = usePathname();
 
-  const optipns = [
-    "All",
-    "Resolved",
-    "Unresolved",
-    "No Claims",
-  ]
+  const optipns = ["All", "Resolved", "Unresolved", "No Claims"];
 
   const handleChange = (value: string) => {
     setSelectedFilter(value);
-  }
+  };
 
   return (
     <div className="flex flex-col duration-300 right-10 absolute text-white self-start p-4 gap-4 w-52 rounded-lg bg-mainHover border-[1px] border-gray-500">
       <div className="flex flex-row w-full items-center justify-between gap-2 duration-300">
         <h1 className="text-sm">Filtered by: {filter}</h1>
-        <button onClick={() => setHideOptions(!hideOptions)} className="flex p-2 rounded-lg border-gray-400 border-[1px] hover:bg-mainHover2 duration-300">
+        <button
+          onClick={() => setHideOptions(!hideOptions)}
+          className="flex p-2 rounded-lg border-gray-400 border-[1px] hover:bg-mainHover2 duration-300"
+        >
           <FaFilter className="text-gtGold text-base" />
         </button>
       </div>
-      <div className={`${hideOptions? 'hidden' : 'flex'} flex-col gap-2`}>
+      <div className={`${hideOptions ? "hidden" : "flex"} flex-col gap-2`}>
         <ol>
           {optipns.map((option) => (
             <li key={option} className="flex flex-row items-center gap-2">
-              <button onClick={() => handleChange(option)} 
-              className={`${selectedFilter === option? 'text-gtGold' : 'text-white'} hover:text-gtGold duration-300`}>
+              <button
+                onClick={() => handleChange(option)}
+                className={`${
+                  selectedFilter === option ? "text-gtGold" : "text-white"
+                } hover:text-gtGold duration-300`}
+              >
                 {option}
               </button>
             </li>
           ))}
         </ol>
-        <Link href={`${path}?filter=${selectedFilter.toLowerCase()}`} onClick={() => {
-          setHideOptions(true);
-          }} 
-          className={`${hideOptions? 'hidden' : 'flex'} bg-gtGold hover:bg-gtGoldHover 
-          text-sm duration-500 rounded-lg items-center justify-center p-2`}>
+        <Link
+          href={`${path}?filter=${selectedFilter.toLowerCase()}`}
+          onClick={() => {
+            setHideOptions(true);
+          }}
+          className={`${
+            hideOptions ? "hidden" : "flex"
+          } bg-gtGold hover:bg-gtGoldHover 
+          text-sm duration-500 rounded-lg items-center justify-center p-2`}
+        >
           Apply
         </Link>
       </div>

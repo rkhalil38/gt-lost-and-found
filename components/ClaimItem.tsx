@@ -15,6 +15,20 @@ type componentMap = {
 
 type PinRequest = Database["public"]["Tables"]["requests"]["Row"];
 
+/**
+ * Component that supplies form for user to claim an item.
+ *
+ * @param path The URL path
+ * @param itemID The ID of the item
+ * @param pin_creator_id The ID of the user who created the pin
+ * @param username The username of the user who created the pin
+ * @param claimStatus The status of the claim
+ * @param userID The ID of the user
+ * @param setClaimStatus Function that sets the claim status
+ * @param user Boolean that determines if the user is signed in
+ * @returns The ClaimItem component that allows the user to claim an item
+ */
+
 const ClaimItem = ({
   path,
   itemID,
