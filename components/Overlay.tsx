@@ -14,7 +14,7 @@ const Overlay = ({
   on,
   setOn,
   zIndex,
-  clear,
+  clear, GAYHSGUYPASHO IUGL
 }: {
   on: boolean;
   setOn: Function;
