@@ -28,7 +28,7 @@ const Overlay = ({
       ref={overlay}
       className={`flex ${
         on ? "fixed" : "hidden"
-      } left-0 top-0 bg-gray-800 w-screen h-screen ${
+      } left-0 top-0 h-screen w-screen bg-gray-800 ${
         clear ? "opacity-0" : "opacity-50"
       } ${zIndex}`}
       onClick={() => setOn(false)}

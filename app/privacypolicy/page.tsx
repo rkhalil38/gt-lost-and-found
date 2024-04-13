@@ -2,8 +2,8 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="flex flex-col text-gtGold bg-mainTheme items-center justify-center min-h-screen w-screen">
-      <div className="flex flex-col gap-4 w-3/6 self-center py-32">
+    <div className="flex min-h-screen w-screen flex-col items-center justify-center bg-mainTheme text-gtGold">
+      <div className="flex w-3/6 flex-col gap-4 self-center py-32">
         <h1 className="text-2xl font-semibold">Privacy Policy</h1>
         <p className="text-xs  italic">Effective date: April 9, 2024</p>
         <p className=" ">

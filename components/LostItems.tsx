@@ -72,13 +72,13 @@ const LostItems = () => {
   };
 
   return (
-    <div className="flex items-start justify-start pt-44 pb-24 pb:py-28 px-10 w-screen min-h-screen">
+    <div className="flex min-h-screen w-screen items-start justify-start px-10 pb-24 pt-44 pb:py-28">
       <div
-        className={`flex flex-col pt-0 pb:pt-24 tb:pt-0 px-0 pb:px-14 tb:px-0 pb:flex-row pb:flex-wrap items-center pb:items-start gap-6 w-full`}
+        className={`flex w-full flex-col items-center gap-6 px-0 pt-0 pb:flex-row pb:flex-wrap pb:items-start pb:px-14 pb:pt-24 tb:px-0 tb:pt-0`}
       >
         {loading ? (
-          <div className="flex flex-col border-[1px] border-gray-500 cursor-pointer duration-500 gap-4 p-2 items-center w-72 h-fit pb:h-96 bg-mainHover rounded-lg">
-            <div className="flex flex-col gap-4 p-4 border-[1px] border-gray-500 group-hover:border-white items-center rounded-lg duration-300 justify-center w-full h-1/2">
+          <div className="flex h-fit w-72 cursor-pointer flex-col items-center gap-4 rounded-lg border-[1px] border-gray-500 bg-mainHover p-2 duration-500 pb:h-96">
+            <div className="flex h-1/2 w-full flex-col items-center justify-center gap-4 rounded-lg border-[1px] border-gray-500 p-4 duration-300 group-hover:border-white">
               <div className="hidden pb:block">
                 <Skeleton width={100} height={100} baseColor="#B3A369" />
               </div>
@@ -86,12 +86,12 @@ const LostItems = () => {
                 <Skeleton width={90} baseColor="#B3A369" count={1} />
               </h1>
             </div>
-            <div className="flex flex-col justify-center items-center rounded-lg w-full h-[40%]">
+            <div className="flex h-[40%] w-full flex-col items-center justify-center rounded-lg">
               <p className="text-gtGold">
                 <Skeleton width={90} baseColor="#B3A369" />
               </p>
             </div>
-            <p className="text-gray-500 text-xs">
+            <p className="text-xs text-gray-500">
               <Skeleton width={150} baseColor="#B3A369" />
             </p>
           </div>
@@ -102,19 +102,19 @@ const LostItems = () => {
               key={pin.created_at}
               className={`${
                 filterElement(filter, pin) ? "flex" : "hidden"
-              } flex-col overflow-clip group hover:bg-mainHover2 border-[1px] 
-                  border-gray-500 cursor-pointer duration-300 gap-4 p-2 items-center w-72 h-fit pb:h-96 bg-mainHover shadow-lg rounded-lg`}
+              } group h-fit w-72 cursor-pointer flex-col 
+                  items-center gap-4 overflow-clip rounded-lg border-[1px] border-gray-500 bg-mainHover p-2 shadow-lg duration-300 hover:bg-mainHover2 pb:h-96`}
             >
-              <div className="flex flex-col p-4 border-[1px] border-gray-500 tb:group-hover:border-white items-center rounded-lg duration-300 justify-center w-full h-1/2">
+              <div className="flex h-1/2 w-full flex-col items-center justify-center rounded-lg border-[1px] border-gray-500 p-4 duration-300 tb:group-hover:border-white">
                 <div className="hidden pb:block">
                   {reactIconMatcher[pin.item ? pin.item : "miscellaneous"]}
                 </div>
                 <h1 className="font-semibold text-white">{pin.item}</h1>
               </div>
-              <div className="flex flex-col justify-center items-center rounded-lg w-full h-[40%]">
+              <div className="flex h-[40%] w-full flex-col items-center justify-center rounded-lg">
                 <p className="text-gtGold duration-300">{pin.description}</p>
               </div>
-              <p className="text-gray-500 tb:group-hover:text-white duration-300 text-xs">
+              <p className="text-xs text-gray-500 duration-300 tb:group-hover:text-white">
                 Found by {pin.user_name} on {pin.created_at.slice(0, 10)}
               </p>
             </Link>
@@ -154,16 +154,16 @@ const FilterComponent = ({ filter }: { filter: string }) => {
   };
 
   return (
-    <div className="flex flex-col duration-300 top-20 pb:top-auto right-11 pb:right-4 absolute text-white self-start p-4 gap-4 w-52 rounded-lg bg-mainHover border-[1px] border-gray-500">
-      <div className="flex flex-row w-full items-center justify-between gap-2 duration-300">
+    <div className="absolute right-11 top-20 flex w-52 flex-col gap-4 self-start rounded-lg border-[1px] border-gray-500 bg-mainHover p-4 text-white duration-300 pb:right-4 pb:top-auto">
+      <div className="flex w-full flex-row items-center justify-between gap-2 duration-300">
         <h1 className="text-sm">
           {`Filtered by:`} {filter}
         </h1>
         <button
           onClick={() => setHideOptions(!hideOptions)}
-          className="flex p-2 rounded-lg border-gray-400 border-[1px] hover:bg-mainHover2 duration-300"
+          className="flex rounded-lg border-[1px] border-gray-400 p-2 duration-300 hover:bg-mainHover2"
         >
-          <FaFilter className="text-gtGold text-base" />
+          <FaFilter className="text-base text-gtGold" />
         </button>
       </div>
       <div className={`${hideOptions ? "hidden" : "flex"} flex-col gap-2`}>
@@ -174,7 +174,7 @@ const FilterComponent = ({ filter }: { filter: string }) => {
                 onClick={() => handleChange(option)}
                 className={`${
                   selectedFilter === option ? "text-gtGold" : "text-white"
-                } hover:text-gtGold duration-300`}
+                } duration-300 hover:text-gtGold`}
               >
                 {option}
               </button>
@@ -188,8 +188,8 @@ const FilterComponent = ({ filter }: { filter: string }) => {
           }}
           className={`${
             hideOptions ? "hidden" : "flex"
-          } bg-gtGold hover:bg-gtGoldHover 
-          text-sm duration-500 rounded-lg items-center justify-center p-2`}
+          } items-center justify-center 
+          rounded-lg bg-gtGold p-2 text-sm duration-500 hover:bg-gtGoldHover`}
         >
           Apply
         </Link>

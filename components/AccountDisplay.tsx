@@ -34,7 +34,7 @@ const AccountDisplay = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-1 text-white items-center justify-center">
+    <div className="flex flex-col items-center justify-center gap-1 text-white">
       <p>{profile?.username}</p>
       <p>{user?.email}</p>
       <p>

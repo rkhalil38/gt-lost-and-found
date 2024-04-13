@@ -57,13 +57,13 @@ const ChooseLocation = ({
                 <path d="M24,1.32c-9.92,0-18,7.8-18,17.38A16.83,16.83,0,0,0,9.57,29.09l12.84,16.8a2,2,0,0,0,3.18,0l12.84-16.8A16.84,16.84,0,0,0,42,18.7C42,9.12,33.92,1.32,24,1.32Z" fill="#FFFFFF"/>
                 <path d="M25.37,12.13a7,7,0,1,0,5.5,5.5A7,7,0,0,0,25.37,12.13Z" fill="#FFFFFF"/>
               </svg>`,
-          "image/svg+xml"
+          "image/svg+xml",
         ).documentElement;
 
         const marker = new AdvancedMarkerElement({
           position: new google.maps.LatLng(
             defaultProps.center.lat,
-            defaultProps.center.lng
+            defaultProps.center.lng,
           ),
           map: map,
           content: pinSvg,
@@ -94,14 +94,14 @@ const ChooseLocation = ({
   }, []);
 
   return (
-    <div className="flex rounded-lg w-full h-full animate-in">
-      <h1 className="absolute animate-pulse text-sm text-white top-2 left-2 z-10">
+    <div className="animate-in flex h-full w-full rounded-lg">
+      <h1 className="absolute left-2 top-2 z-10 animate-pulse text-sm text-white">
         Click on or drag the pin to where you found the item.
       </h1>
-      <div ref={mapRef} className="w-full h-full" />
+      <div ref={mapRef} className="h-full w-full" />
       <button
         onClick={() => setToggled(false)}
-        className="flex absolute bottom-4 right-4 w-36 h-10 text-xs justify-center items-center rounded-lg border-[1px] border-gray-400 bg-mainTheme hover:bg-gtGold duration-300"
+        className="absolute bottom-4 right-4 flex h-10 w-36 items-center justify-center rounded-lg border-[1px] border-gray-400 bg-mainTheme text-xs duration-300 hover:bg-gtGold"
       >
         <p>Confirm Location</p>
       </button>

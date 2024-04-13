@@ -11,7 +11,7 @@ type Props = {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const username = params.username;
 
@@ -22,7 +22,7 @@ export async function generateMetadata(
 
 const page = () => {
   return (
-    <div className="flex flex-col bg-mainTheme items-center w-screen min-h-screen">
+    <div className="flex min-h-screen w-screen flex-col items-center bg-mainTheme">
       <MyItems />
     </div>
   );

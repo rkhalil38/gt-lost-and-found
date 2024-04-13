@@ -56,7 +56,7 @@ export async function fetchUser(): Promise<User | AuthError> {
  * @returns The profile or an error.
  */
 export async function fetchProfile(
-  userID: string
+  userID: string,
 ): Promise<Profile | PostgrestError> {
   const supabase = createClient();
 
@@ -98,7 +98,7 @@ export async function fetchPins(): Promise<Pin[] | PostgrestError> {
  * @returns The items of the user or an error.
  */
 export async function fetchUserItems(
-  user: User
+  user: User,
 ): Promise<Pin[] | PostgrestError> {
   const supabase = createClient();
   let { data, error } = await supabase
@@ -122,7 +122,7 @@ export async function fetchUserItems(
  */
 export async function fetchClaims(
   itemID: string,
-  user: User
+  user: User,
 ): Promise<PinRequest[] | PostgrestError> {
   const supabase = createClient();
   let { data, error } = await supabase
@@ -144,7 +144,7 @@ export async function fetchClaims(
  * @returns The requests of the item or an error.
  */
 export async function fetchRequests(
-  itemID: string
+  itemID: string,
 ): Promise<PinRequest[] | PostgrestError> {
   const supabase = createClient();
 
@@ -167,7 +167,7 @@ export async function fetchRequests(
  * @returns The request or an error.
  */
 export async function fetchPinRequest(
-  requestID: string
+  requestID: string,
 ): Promise<PinRequest | PostgrestError> {
   const supabase = createClient();
   let { data, error } = await supabase
@@ -189,7 +189,7 @@ export async function fetchPinRequest(
  * @returns The requests of the user or an error.
  */
 export async function fetchUserRequests(
-  creator_id: string
+  creator_id: string,
 ): Promise<PinRequest[] | PostgrestError> {
   const supabase = createClient();
   let { data, error } = await supabase
@@ -233,7 +233,7 @@ export async function fetchPin(itemID: string): Promise<Pin | PostgrestError> {
  */
 export async function createPin(
   pin: Pin,
-  user: User | AuthError
+  user: User | AuthError,
 ): Promise<Pin | PostgrestError> {
   const supabase = createClient();
 
@@ -293,7 +293,7 @@ export async function updatePin(
   item: string,
   description: string,
   x_coordinate: number,
-  y_coordinate: number
+  y_coordinate: number,
 ): Promise<Pin | PostgrestError> {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -325,7 +325,7 @@ export async function updatePin(
 export async function claimItem(
   request: PinRequest,
   user: User,
-  contactInfo: string
+  contactInfo: string,
 ): Promise<PinRequest | PostgrestError> {
   const supabase = createClient();
   if (user instanceof AuthError) {
@@ -379,7 +379,7 @@ export async function claimItem(
  */
 export async function acceptClaim(
   creatorID: string,
-  itemID: string
+  itemID: string,
 ): Promise<PinRequest[] | PostgrestError> {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -404,7 +404,7 @@ export async function acceptClaim(
  */
 export async function rejectClaim(
   creatorID: string,
-  itemID: string
+  itemID: string,
 ): Promise<PinRequest[] | PostgrestError> {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -429,7 +429,7 @@ export async function rejectClaim(
  * @returns The pin or an error.
  */
 export async function deletePin(
-  itemID: string
+  itemID: string,
 ): Promise<Pin[] | PostgrestError> {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -452,7 +452,7 @@ export async function deletePin(
  * @returns The request or an error.
  */
 export async function deleteRequest(
-  requestID: string
+  requestID: string,
 ): Promise<PinRequest[] | PostgrestError> {
   const supabase = createClient();
   const { data, error } = await supabase

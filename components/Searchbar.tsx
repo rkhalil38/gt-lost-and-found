@@ -48,16 +48,16 @@ const Searchbar = () => {
   return (
     <div
       id="searchbar-element"
-      className="flex flex-col text-white w-full h-10 border-[1px] border-gray-500 rounded-lg"
+      className="flex h-10 w-full flex-col rounded-lg border-[1px] border-gray-500 text-white"
     >
       <input
         onFocus={() => setPinItemsVisible(true)}
         onChange={handleChange}
         type="text"
-        className="text-white text-sm px-2 bg-transparent w-full h-full focus:outline-none"
+        className="h-full w-full bg-transparent px-2 text-sm text-white focus:outline-none"
         placeholder="Search for an item"
       />
-      <div className="flex flex-col self-center z-50 absolute shadow-lg top-[51px] w-[65%] tb:w-[40%] rounded-lg h-fit bg-mainHover">
+      <div className="absolute top-[51px] z-50 flex h-fit w-[65%] flex-col self-center rounded-lg bg-mainHover shadow-lg tb:w-[40%]">
         {pinItemsVisible ? (
           <div>
             {pins.map((pin) => (
@@ -65,15 +65,15 @@ const Searchbar = () => {
                 href={`/lostitems/${pin.item_id}`}
                 onClick={() => setPinItemsVisible(false)}
                 key={pin.created_at}
-                className="flex flex-row justify-between cursor-pointer rounded-lg hover:bg-mainHover2 h-10 p-2 w-full gap-2"
+                className="flex h-10 w-full cursor-pointer flex-row justify-between gap-2 rounded-lg p-2 hover:bg-mainHover2"
               >
-                <h1 className="w-full pb:w-1/4 text-sm pb:text-base font-semibold text-gtGold">
+                <h1 className="w-full text-sm font-semibold text-gtGold pb:w-1/4 pb:text-base">
                   {pin.item}
                 </h1>
-                <p className="w-2/4 text-sm pb:text-base overflow-clip text-start">
+                <p className="w-2/4 overflow-clip text-start text-sm pb:text-base">
                   {pin.description}
                 </p>
-                <p className="hidden pb:flex text-gray-400 items-center text-xs overflow-x-clip">
+                <p className="hidden items-center overflow-x-clip text-xs text-gray-400 pb:flex">
                   {pin.user_name}
                 </p>
               </Link>

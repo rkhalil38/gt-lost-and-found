@@ -126,18 +126,18 @@ const NavigationBar = ({
 
   return (
     <div
-      className={`flex flex-col py-3 justify-between text-gray-300 duration-300 w-[300px] h-full rounded-r-lg border-b-[1px] border-t-[1px] border-r-[1px] border-gray-500 fixed top-0 ${
+      className={`fixed top-0 flex h-full w-[300px] flex-col justify-between rounded-r-lg border-b-[1px] border-r-[1px] border-t-[1px] border-gray-500 py-3 text-gray-300 duration-300 ${
         toggled ? "left-0" : "left-[-300px]"
-      } bg-mainTheme z-20 shadow-xl`}
+      } z-20 bg-mainTheme shadow-xl`}
     >
       <div className="flex flex-col gap-2">
-        <div className="flex flex-row items-center w-full">
-          <h1 className="text-gtGold text-xl font-semibold pl-6">
+        <div className="flex w-full flex-row items-center">
+          <h1 className="pl-6 text-xl font-semibold text-gtGold">
             GT Lost and Found
           </h1>
           <button
             onClick={() => toggle(false)}
-            className="flex absolute rounded-lg duration-200 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-400 bg-mainHover hover:text-gtGold text-xl"
+            className="absolute right-2 top-[9px] flex h-8 w-8 items-center justify-center rounded-lg bg-mainHover text-xl text-gray-400 duration-200 hover:text-gtGold"
           >
             <IoMdClose />
           </button>
@@ -145,7 +145,7 @@ const NavigationBar = ({
         <ol className="flex flex-col px-4 pt-4">
           {navbarItems.map((item) => (
             <Link
-              className={`flex flex-row rounded-lg items-center duration-[50ms] gap-1 hover:bg-mainHover ${
+              className={`flex flex-row items-center gap-1 rounded-lg duration-[50ms] hover:bg-mainHover ${
                 item.active ? "block" : "hidden"
               } text-base`}
               href={item.link}
@@ -159,7 +159,7 @@ const NavigationBar = ({
           {activeUser ? (
             <button onClick={handleSignOut}>
               <div
-                className={`flex flex-row text-red-500 rounded-lg items-center duration-[50ms] gap-1 hover:bg-mainHover text-base`}
+                className={`flex flex-row items-center gap-1 rounded-lg text-base text-red-500 duration-[50ms] hover:bg-mainHover`}
               >
                 <PiSignOutBold className="ml-2" />
                 <p className="py-2">Sign Out</p>
@@ -168,7 +168,7 @@ const NavigationBar = ({
           ) : null}
         </ol>
       </div>
-      <div className="flex flex-col gap-2 w-full px-6">
+      <div className="flex w-full flex-col gap-2 px-6">
         <p className="text-xxs text-gray-400">
           {`Disclaimer: GT Lost and Found provides a platform for GT students and faculty to interact with 
           each other regarding lost items. Users should perform full validation as to whether or not the finder of 
@@ -180,7 +180,7 @@ const NavigationBar = ({
       </div>
 
       {creatingPin ? (
-        <div className="flex flex-col h-full w-full">
+        <div className="flex h-full w-full flex-col">
           <CreateAPin apiKey={apiKey} toggle={setCreatingPin} />
           <Overlay
             zIndex="z-10"

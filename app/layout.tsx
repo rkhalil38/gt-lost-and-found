@@ -2,7 +2,7 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import UnivHeader from "@/components/UnivHeader";
 import Footer from "@/components/Footer";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 
 const defaultUrl = `https://gt-lost-and-found.org`;
 
@@ -10,7 +10,8 @@ export const metadata = {
   metadataBase: new URL(defaultUrl),
   author: "Romulus Khalil",
   title: "GT Lost and Found",
-  description: "The best way to find lost items at Georgia Tech. Place a pin on the map to indicate where you found a lost item, or search for lost items to see if someone has found your lost item.",
+  description:
+    "The best way to find lost items at Georgia Tech. Place a pin on the map to indicate where you found a lost item, or search for lost items to see if someone has found your lost item.",
   keywords: [
     "lost items georgia tech",
     "lost and found georgia tech",
@@ -46,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.className}>
       <body className="bg-mainTheme text-foreground">
-        <main className="min-h-screen flex flex-col items-center">
+        <main className="flex min-h-screen flex-col items-center">
           <UnivHeader apiKey={apiKey} />
           {children}
           <Analytics />

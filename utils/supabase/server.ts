@@ -37,18 +37,23 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
 
 /**
  * Gets the item information. Used for metadata generation.
- * 
- * @param id The item ID 
- * @returns The item information or an error if the item does not exist. 
+ *
+ * @param id The item ID
+ * @returns The item information or an error if the item does not exist.
  */
-export const getItemInfo = async (id: string): Promise<Pin | PostgrestError> => {
+export const getItemInfo = async (
+  id: string,
+): Promise<Pin | PostgrestError> => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  const { data, error } = await supabase.from("pins").select("*").eq("item_id", id);
+  const { data, error } = await supabase
+    .from("pins")
+    .select("*")
+    .eq("item_id", id);
 
   if (error) {
     return error;
   }
 
   return data ? data[0] : {};
-}
+};

@@ -6,7 +6,7 @@ export default async function Index() {
   const apiKey = process.env.GOOGLE_MAPS_KEY ? process.env.GOOGLE_MAPS_KEY : "";
 
   return (
-    <div className="flex flex-col bg-mainTheme w-screen h-screen gap-20 items-center justify-center">
+    <div className="flex h-screen w-screen flex-col items-center justify-center gap-20 bg-mainTheme">
       <InteractiveMap apiKey={apiKey} />
     </div>
   );

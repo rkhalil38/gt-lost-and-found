@@ -13,9 +13,9 @@ export default async function Login() {
   const signedIn = await supabase.auth.getUser();
 
   return (
-    <div className="flex flex-col h-screen w-screen items-center justify-center bg-mainTheme">
+    <div className="flex h-screen w-screen flex-col items-center justify-center bg-mainTheme">
       {!signedIn.data.user ? (
-        <div className="flex flex-col animate-in h-full w-full items-center justify-center">
+        <div className="animate-in flex h-full w-full flex-col items-center justify-center">
           <OAuthProviders />
         </div>
       ) : (

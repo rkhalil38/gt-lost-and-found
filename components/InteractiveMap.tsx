@@ -60,7 +60,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
           setPins((pins) => [
             ...pins,
             payload.new as Database["public"]["Tables"]["pins"]["Row"],
-          ])
+          ]),
       )
       .subscribe();
 
@@ -99,7 +99,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
                   <path d="M24,1.32c-9.92,0-18,7.8-18,17.38A16.83,16.83,0,0,0,9.57,29.09l12.84,16.8a2,2,0,0,0,3.18,0l12.84-16.8A16.84,16.84,0,0,0,42,18.7C42,9.12,33.92,1.32,24,1.32Z" fill="#FFFFFF"/>
                   <path d="M25.37,12.13a7,7,0,1,0,5.5,5.5A7,7,0,0,0,25.37,12.13Z" fill="#FFFFFF"/>
               </svg>`,
-          "image/svg+xml"
+          "image/svg+xml",
         ).documentElement;
 
         map.addListener("click", (click: google.maps.MapMouseEvent) => {
@@ -144,7 +144,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
             const marker = new AdvancedMarkerElement({
               position: new google.maps.LatLng(
                 pin.x_coordinate,
-                pin.y_coordinate
+                pin.y_coordinate,
               ),
               map: map,
               content: parentWrapper,
@@ -198,7 +198,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
                 infoWindow.close();
                 infoWindow.setContent(infoElement);
                 infoWindow.open(marker.map, marker);
-              }
+              },
             );
           }
         }
@@ -211,10 +211,10 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
   }, [pins]);
 
   return (
-    <div className="flex items-center h-full w-full z-0">
-      <div id="map" ref={mapRef} className="h-full w-full z-0" />
+    <div className="z-0 flex h-full w-full items-center">
+      <div id="map" ref={mapRef} className="z-0 h-full w-full" />
       {toggle ? (
-        <div className="h-full w-full fixed">
+        <div className="fixed h-full w-full">
           <CreateAPin
             apiKey={apiKey}
             toggle={setToggle}

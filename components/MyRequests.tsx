@@ -80,7 +80,7 @@ const MyRequests = () => {
 
   const filterElement = (
     filter: string,
-    request: PinRequest | undefined
+    request: PinRequest | undefined,
   ): boolean => {
     if (!request) {
       return false;
@@ -109,18 +109,18 @@ const MyRequests = () => {
   };
 
   return (
-    <div className="flex flex-row gap-4 w-full h-full">
+    <div className="flex h-full w-full flex-row gap-4">
       {loading ? (
-        <div className="flex flex-wrap gap-4 w-full h-full py-16 pb:pt-0">
-          <div className="flex flex-col bg-mainTheme border-[1px] border-gray-500 items-center justify-center w-96 h-48 shadow-lg rounded-lg">
-            <div className="w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse" />
+        <div className="flex h-full w-full flex-wrap gap-4 py-16 pb:pt-0">
+          <div className="flex h-48 w-96 flex-col items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainTheme shadow-lg">
+            <div className="h-full w-full animate-pulse rounded-lg bg-mainHover2 duration-300" />
           </div>
-          <div className="flex flex-col bg-mainTheme border-[1px] border-gray-500 items-center justify-center w-96 h-48 shadow-lg rounded-lg">
-            <div className="w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse" />
+          <div className="flex h-48 w-96 flex-col items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainTheme shadow-lg">
+            <div className="h-full w-full animate-pulse rounded-lg bg-mainHover2 duration-300" />
           </div>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-4 w-full h-full py-16 pb:pt-0">
+        <div className="flex h-full w-full flex-wrap gap-4 py-16 pb:pt-0">
           {pins.map((pin) => (
             <div
               key={pin.item_id}
@@ -128,11 +128,11 @@ const MyRequests = () => {
                 filterElement(filter, pinToRequests?.get(pin.item_id))
                   ? "flex"
                   : "hidden"
-              } flex-col justify-between w-96 h-48 bg-mainHover border-gray-500 ${
+              } h-48 w-96 flex-col justify-between border-gray-500 bg-mainHover ${
                 pinToRequests?.get(pin.item_id)?.status === "accepted"
-                  ? "hover:bg-mainHover2 cursor-pointer"
+                  ? "cursor-pointer hover:bg-mainHover2"
                   : ""
-              } duration-300 border-[1px] border-gray-400 rounded-lg p-4 gap-4`}
+              } gap-4 rounded-lg border-[1px] border-gray-400 p-4 duration-300`}
               onClick={() => {
                 if (pinToRequests?.get(pin.item_id)?.status === "accepted") {
                   setCurrentRequest(pinToRequests?.get(pin.item_id));
@@ -142,26 +142,26 @@ const MyRequests = () => {
             >
               <div className="flex flex-row justify-between">
                 <div className="flex flex-col">
-                  <h1 className="text-base text-gtGold font-bold">
+                  <h1 className="text-base font-bold text-gtGold">
                     {pin.item}
                   </h1>
                   <p className="text-xs text-gray-400">{pin.description}</p>
                 </div>
                 <p
                   className={`text-xs ${decideColor(
-                    pinToRequests?.get(pin.item_id)?.status
+                    pinToRequests?.get(pin.item_id)?.status,
                   )}`}
                 >
                   {pinToRequests?.get(pin.item_id)?.status}
                 </p>
               </div>
-              <div className="flex items-end justify-between p-2 rounded-lg">
+              <div className="flex items-end justify-between rounded-lg p-2">
                 <h2 className={`text-base`}>
                   {pinToRequests?.get(pin.item_id)?.description}
                 </h2>
                 {pinToRequests?.get(pin.item_id)?.status === "accepted" ? (
                   <p className="text-xs text-gray-400">
-                    Click for what's next!
+                    {`Click for what's next!`}
                   </p>
                 ) : (
                   <button
@@ -169,10 +169,10 @@ const MyRequests = () => {
                       setAreYouSure(true);
                       setCurrentRequestID(
                         pinToRequests?.get(pin.item_id)?.creator_id +
-                          pin.item_id
+                          pin.item_id,
                       );
                     }}
-                    className="flex items-center justify-center duration-300 rounded-lg px-2 py-2 text-xs text-white border-[1px] border-red-400 bg-red-500 hover:bg-opacity-80"
+                    className="flex items-center justify-center rounded-lg border-[1px] border-red-400 bg-red-500 px-2 py-2 text-xs text-white duration-300 hover:bg-opacity-80"
                   >
                     Delete Request
                   </button>
@@ -184,7 +184,7 @@ const MyRequests = () => {
         </div>
       )}
       {viewingRequest && (
-        <div className="flex fixed z-20 h-screen w-screen">
+        <div className="fixed z-20 flex h-screen w-screen">
           <RequestPopUp
             itemOwnerID={
               currentRequest?.pin_creator_id
@@ -202,7 +202,7 @@ const MyRequests = () => {
         </div>
       )}
       {areYouSure ? (
-        <div className="flex fixed items-center justify-center z-30 top-0 left-0 w-screen h-screen">
+        <div className="fixed left-0 top-0 z-30 flex h-screen w-screen items-center justify-center">
           <DeleteItemPrompt
             setAreYouSure={setAreYouSure}
             requestID={currentRequestID}
@@ -237,14 +237,14 @@ const FilterComponent = ({ filter }: { filter: string }) => {
   };
 
   return (
-    <div className="flex flex-col duration-300 top-20 pb:top-auto right-8 pb:right-8 absolute text-white self-start p-4 gap-4 w-52 rounded-lg bg-mainHover border-[1px] border-gray-500">
-      <div className="flex flex-row w-full items-center justify-between gap-2 duration-300">
+    <div className="absolute right-8 top-20 flex w-52 flex-col gap-4 self-start rounded-lg border-[1px] border-gray-500 bg-mainHover p-4 text-white duration-300 pb:right-8 pb:top-auto">
+      <div className="flex w-full flex-row items-center justify-between gap-2 duration-300">
         <h1 className="text-sm">Filtered by: {filter}</h1>
         <button
           onClick={() => setHideOptions(!hideOptions)}
-          className="flex p-2 rounded-lg border-gray-500 border-[1px] hover:bg-mainHover2 duration-300"
+          className="flex rounded-lg border-[1px] border-gray-500 p-2 duration-300 hover:bg-mainHover2"
         >
-          <FaFilter className="text-gtGold text-base" />
+          <FaFilter className="text-base text-gtGold" />
         </button>
       </div>
       <div className={`${hideOptions ? "hidden" : "flex"} flex-col gap-2`}>
@@ -255,7 +255,7 @@ const FilterComponent = ({ filter }: { filter: string }) => {
                 onClick={() => handleChange(option)}
                 className={`${
                   selectedFilter === option ? "text-gtGold" : "text-white"
-                } hover:text-gtGold duration-300`}
+                } duration-300 hover:text-gtGold`}
               >
                 {option}
               </button>
@@ -269,8 +269,8 @@ const FilterComponent = ({ filter }: { filter: string }) => {
           }}
           className={`${
             hideOptions ? "hidden" : "flex"
-          } bg-gtGold hover:bg-gtGoldHover 
-          text-sm duration-500 rounded-lg items-center justify-center p-2`}
+          } items-center justify-center 
+          rounded-lg bg-gtGold p-2 text-sm duration-500 hover:bg-gtGoldHover`}
         >
           Apply
         </Link>
@@ -296,22 +296,22 @@ const DeleteItemPrompt = ({
   const closeButton = (
     <button
       onClick={() => setAreYouSure(false)}
-      className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+      className="absolute right-2 top-[9px] flex h-8 w-8 items-center justify-center rounded-lg bg-mainHover text-xl text-gray-600 duration-300 hover:text-gtGold"
     >
       <IoMdClose />
     </button>
   );
 
   return (
-    <div className="flex text-gtGold items-center justify-end p-4 flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[90%] tb:w-[450px] h-64 bg-mainTheme">
+    <div className="fixed z-40 flex h-64 w-[90%] flex-col items-center justify-end self-center justify-self-center rounded-lg border-[1px] border-gray-500 bg-mainTheme p-4 text-gtGold tb:w-[450px]">
       {closeButton}
-      <div className="flex flex-col justify-between w-full h-[60%]">
-        <h1 className="text-base text-center">
+      <div className="flex h-[60%] w-full flex-col justify-between">
+        <h1 className="text-center text-base">
           Are you sure you would like to delete this request?
         </h1>
-        <div className="flex flex-row gap-4 w-full">
+        <div className="flex w-full flex-row gap-4">
           <button
-            className="flex w-1/2 duration-300 items-center justify-center gap-2 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            className="flex w-1/2 items-center justify-center gap-2 rounded-lg border-[1px] border-gray-400 p-2 text-sm duration-300 hover:bg-mainHover2"
             onClick={() => {
               deleteRequest(requestID);
               location.reload();
@@ -321,7 +321,7 @@ const DeleteItemPrompt = ({
           </button>
           <button
             onClick={() => setAreYouSure(false)}
-            className="flex w-1/2 duration-300 items-center justify-center gap-1 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            className="flex w-1/2 items-center justify-center gap-1 rounded-lg border-[1px] border-gray-400 p-2 text-sm duration-300 hover:bg-mainHover2"
           >
             Cancel
           </button>

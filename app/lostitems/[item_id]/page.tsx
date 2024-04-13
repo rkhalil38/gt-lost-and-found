@@ -11,7 +11,7 @@ type Props = {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const itemID = params.item_id;
 
@@ -58,7 +58,7 @@ const page = () => {
   const apiKey = process.env.GOOGLE_MAPS_KEY ? process.env.GOOGLE_MAPS_KEY : "";
 
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen bg-mainTheme">
+    <div className="flex h-screen w-screen flex-col items-center justify-center bg-mainTheme">
       <LostItemDisplay apiKey={apiKey} />
     </div>
   );

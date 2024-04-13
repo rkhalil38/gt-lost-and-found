@@ -64,7 +64,7 @@ const DisplayMap = ({
                   <path d="M24,1.32c-9.92,0-18,7.8-18,17.38A16.83,16.83,0,0,0,9.57,29.09l12.84,16.8a2,2,0,0,0,3.18,0l12.84-16.8A16.84,16.84,0,0,0,42,18.7C42,9.12,33.92,1.32,24,1.32Z" fill="#FFFFFF"/>
                   <path d="M25.37,12.13a7,7,0,1,0,5.5,5.5A7,7,0,0,0,25.37,12.13Z" fill="#FFFFFF"/>
                   </svg>`,
-          "image/svg+xml"
+          "image/svg+xml",
         ).documentElement;
 
         const parentWrapper = document.createElement("div");
@@ -101,7 +101,7 @@ const DisplayMap = ({
     }
   }, []);
 
-  return <div ref={mapRef} className="flex rounded-lg w-full h-full"></div>;
+  return <div ref={mapRef} className="flex h-full w-full rounded-lg"></div>;
 };
 
 export default DisplayMap;

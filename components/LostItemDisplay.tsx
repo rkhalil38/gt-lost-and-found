@@ -107,7 +107,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
 
       const requests: PinRequest[] | PostgrestError = await fetchClaims(
         item_id,
-        userData
+        userData,
       );
 
       if ("message" in requests) {
@@ -141,7 +141,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
         },
         (payload) => {
           setItem(payload.new as Database["public"]["Tables"]["pins"]["Row"]);
-        }
+        },
       )
       .subscribe();
 
@@ -153,7 +153,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   const buttonComponentMap: componentMap = {
     notClaimed: <p>Claim Item</p>,
     claimed: (
-      <p className="flex flex-row gap-2 items-center">
+      <p className="flex flex-row items-center gap-2">
         <FaCheck /> Request Submitted
       </p>
     ),
@@ -179,9 +179,9 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
   };
 
   return (
-    <div className="flex flex-col py-24 tb:pt-0 tb:flex-row w-full h-full justify-center items-center gap-4 text-white">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-4 py-24 text-white tb:flex-row tb:pt-0">
       {claim ? (
-        <div className="flex z-30 items-center justify-center w-full h-full fixed">
+        <div className="fixed z-30 flex h-full w-full items-center justify-center">
           <ClaimItem
             path={pathname}
             itemID={itemID}
@@ -202,17 +202,17 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
           />
         </div>
       ) : null}
-      <div className="flex flex-col w-[80%] tb:w-[30%] h-[65%] items-center gap-4">
-        <div className="flex flex-row w-full h-[70%] gap-4">
-          <div className="flex flex-col w-1/2 h-full items-center gap-4">
-            <div className="flex items-center justify-center w-full h-[30%] bg-mainHover border-[1px] border-gray-500 rounded-lg">
+      <div className="flex h-[65%] w-[80%] flex-col items-center gap-4 tb:w-[30%]">
+        <div className="flex h-[70%] w-full flex-row gap-4">
+          <div className="flex h-full w-1/2 flex-col items-center gap-4">
+            <div className="flex h-[30%] w-full items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainHover">
               <h1 className="text-lg font-semibold text-gtGold">
                 {item?.item || (
                   <Skeleton height={20} width={80} baseColor="#B3A369" />
                 )}
               </h1>
             </div>
-            <div className="flex flex-col justify-center items-center w-full h-[70%] border-[1px] border-gray-500 bg-mainHover rounded-lg">
+            <div className="flex h-[70%] w-full flex-col items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainHover">
               <p className="px-2 text-xl text-gtGold">
                 {item?.created_at?.slice(0, 10) || (
                   <Skeleton height={20} width={120} baseColor="#B3A369" />
@@ -220,8 +220,8 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
               </p>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center w-1/2 h-full bg-mainHover border-[1px] border-gray-500 rounded-lg">
-            <h1 className="text-8xl tb:text-9xl text-gtGold">
+          <div className="flex h-full w-1/2 flex-col items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainHover">
+            <h1 className="text-8xl text-gtGold tb:text-9xl">
               {item?.claim_requests != null ? (
                 item?.claim_requests
               ) : (
@@ -232,17 +232,17 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
                 />
               )}
             </h1>
-            <p className="text-sm text-gray-400 pb-2">Claim Requests</p>
+            <p className="pb-2 text-sm text-gray-400">Claim Requests</p>
           </div>
         </div>
-        <div className="flex flex-col justify-between w-full h-[60%] p-4 bg-mainHover border-[1px] border-gray-500 rounded-lg">
-          <h1 className="text-xl tb:text-2xl text-gtGold font-semibold">
+        <div className="flex h-[60%] w-full flex-col justify-between rounded-lg border-[1px] border-gray-500 bg-mainHover p-4">
+          <h1 className="text-xl font-semibold text-gtGold tb:text-2xl">
             Found by{" "}
             {item?.user_name || (
               <Skeleton height={20} width={120} baseColor="#B3A369" />
             )}
           </h1>
-          <p className="text-sm h-40 text-gtGold">
+          <p className="h-40 text-sm text-gtGold">
             {item?.description ? (
               item?.description
             ) : (
@@ -252,14 +252,14 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
 
           <Link
             href={linkMap[claimState]}
-            className={`flex gap-2 p-4 text-white items-center justify-center text-sm 
-            ${stylesMap[claimState]} w-full h-10 border-[1px] rounded-lg duration-300`}
+            className={`flex items-center justify-center gap-2 p-4 text-sm text-white 
+            ${stylesMap[claimState]} h-10 w-full rounded-lg border-[1px] duration-300`}
           >
             {buttonComponentMap[claimState]}
           </Link>
         </div>
       </div>
-      <div className="flex w-[80%] h-[40%] tb:w-[60%] tb:h-[65%] bg-mainHover border-[1px] border-gray-500 rounded-lg">
+      <div className="flex h-[40%] w-[80%] rounded-lg border-[1px] border-gray-500 bg-mainHover tb:h-[65%] tb:w-[60%]">
         {loadMap ? (
           <DisplayMap
             apiKey={apiKey}

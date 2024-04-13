@@ -64,41 +64,41 @@ const MyItems = () => {
 
   return (
     <div
-      className={`flex flex-row items-center w-full h-full gap-2 p-10 pt-28`}
+      className={`flex h-full w-full flex-row items-center gap-2 p-10 pt-28`}
     >
       {loading ? (
-        <div className="flex flex-wrap gap-4 w-full h-full py-24 pb:pt-0">
-          <div className="flex flex-col bg-mainTheme border-[1px] border-gray-500 items-center justify-center w-96 h-48 shadow-lg rounded-lg">
-            <div className="w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse" />
+        <div className="flex h-full w-full flex-wrap gap-4 py-24 pb:pt-0">
+          <div className="flex h-48 w-96 flex-col items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainTheme shadow-lg">
+            <div className="h-full w-full animate-pulse rounded-lg bg-mainHover2 duration-300" />
           </div>
-          <div className="hidden pb:flex flex-col bg-mainTheme border-[1px] border-gray-500 items-center justify-center pb:w-96 pb:h-48 shadow-lg rounded-lg">
-            <div className="w-full h-full duration-300 rounded-lg bg-mainHover2 animate-pulse" />
+          <div className="hidden flex-col items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainTheme shadow-lg pb:flex pb:h-48 pb:w-96">
+            <div className="h-full w-full animate-pulse rounded-lg bg-mainHover2 duration-300" />
           </div>
         </div>
       ) : user ? (
-        <div className={`flex flex-wrap gap-4 w-full h-full py-24 pb:pt-0`}>
+        <div className={`flex h-full w-full flex-wrap gap-4 py-24 pb:pt-0`}>
           {pins.map((pin) => (
             <Link
               href={`${pathname}/${pin.item_id}`}
               key={pin.item_id}
               className={`${
                 filterElement(filter, pin) ? "flex" : "hidden"
-              } flex-col group duration-500 cursor-pointer bg-mainHover hover:bg-mainHover2 border-[1px] border-gray-500 gap-4 p-2 items-center w-96 h-48 shadow-lg rounded-lg`}
+              } group h-48 w-96 cursor-pointer flex-col items-center gap-4 rounded-lg border-[1px] border-gray-500 bg-mainHover p-2 shadow-lg duration-500 hover:bg-mainHover2`}
             >
-              <div className="flex flex-col h-full w-full p-3 overflow-clip justify-between">
-                <div className="flex flex-row w-full">
-                  <div className="flex flex-col w-full gap-1">
+              <div className="flex h-full w-full flex-col justify-between overflow-clip p-3">
+                <div className="flex w-full flex-row">
+                  <div className="flex w-full flex-col gap-1">
                     <h1 className="text-sm">{pin.item}</h1>
                     <p className="text-xs text-gray-400">{pin.description}</p>
                   </div>
                   {pin.resolved ? (
-                    <p className="text-green-400 text-xs">Resolved</p>
+                    <p className="text-xs text-green-400">Resolved</p>
                   ) : (
-                    <IoIosArrowBack className="group-hover:text-white group-hover:translate-x-1 text-gray-500 duration-300 rotate-180" />
+                    <IoIosArrowBack className="rotate-180 text-gray-500 duration-300 group-hover:translate-x-1 group-hover:text-white" />
                   )}
                 </div>
-                <div className="flex flex-row justify-between text-[.65rem] pb:text-xs text-gtGold w-full">
-                  <div className="flex flex-row items-center w-1/3 gap-2">
+                <div className="flex w-full flex-row justify-between text-[.65rem] text-gtGold pb:text-xs">
+                  <div className="flex w-1/3 flex-row items-center gap-2">
                     <p>{pin.claim_requests} Claim Requests</p>
                   </div>
                   <p className="text-gray-500">
@@ -110,10 +110,10 @@ const MyItems = () => {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-self-center self-center gap-4">
+        <div className="flex flex-col items-center gap-4 self-center justify-self-center">
           <h1 className="text-lg text-gtGold">You are not logged in.</h1>
           <Link
-            className="flex w-24 bg-gtGold hover:bg-gtGoldHover text-sm duration-500 rounded-lg items-center justify-center p-2"
+            className="flex w-24 items-center justify-center rounded-lg bg-gtGold p-2 text-sm duration-500 hover:bg-gtGoldHover"
             href="/login"
           >
             Login
@@ -143,14 +143,14 @@ const FilterComponent = ({ filter }: { filter: string }) => {
   };
 
   return (
-    <div className="flex flex-col duration-300 right-10 absolute text-white self-start p-4 gap-4 w-52 rounded-lg bg-mainHover border-[1px] border-gray-500">
-      <div className="flex flex-row w-full items-center justify-between gap-2 duration-300">
+    <div className="absolute right-10 flex w-52 flex-col gap-4 self-start rounded-lg border-[1px] border-gray-500 bg-mainHover p-4 text-white duration-300">
+      <div className="flex w-full flex-row items-center justify-between gap-2 duration-300">
         <h1 className="text-sm">Filtered by: {filter}</h1>
         <button
           onClick={() => setHideOptions(!hideOptions)}
-          className="flex p-2 rounded-lg border-gray-400 border-[1px] hover:bg-mainHover2 duration-300"
+          className="flex rounded-lg border-[1px] border-gray-400 p-2 duration-300 hover:bg-mainHover2"
         >
-          <FaFilter className="text-gtGold text-base" />
+          <FaFilter className="text-base text-gtGold" />
         </button>
       </div>
       <div className={`${hideOptions ? "hidden" : "flex"} flex-col gap-2`}>
@@ -161,7 +161,7 @@ const FilterComponent = ({ filter }: { filter: string }) => {
                 onClick={() => handleChange(option)}
                 className={`${
                   selectedFilter === option ? "text-gtGold" : "text-white"
-                } hover:text-gtGold duration-300`}
+                } duration-300 hover:text-gtGold`}
               >
                 {option}
               </button>
@@ -175,8 +175,8 @@ const FilterComponent = ({ filter }: { filter: string }) => {
           }}
           className={`${
             hideOptions ? "hidden" : "flex"
-          } bg-gtGold hover:bg-gtGoldHover 
-          text-sm duration-500 rounded-lg items-center justify-center p-2`}
+          } items-center justify-center 
+          rounded-lg bg-gtGold p-2 text-sm duration-500 hover:bg-gtGoldHover`}
         >
           Apply
         </Link>

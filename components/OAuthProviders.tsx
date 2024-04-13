@@ -63,10 +63,10 @@ const OAuthProviders = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2 w-[80%] h-[50%] tb:h-fit pb:w-[50%] tb:w-1/6">
+    <div className="flex h-[50%] w-[80%] flex-col gap-2 pb:w-[50%] tb:h-fit tb:w-1/6">
       <button
         onClick={signInWithGoogle}
-        className="flex flex-row duration-300 tb:hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-500"
+        className="flex flex-row items-center justify-center gap-2 rounded-lg border-[1px] border-gray-500 duration-300 tb:hover:bg-mainHover"
       >
         <svg
           className="my-2"
@@ -97,14 +97,14 @@ const OAuthProviders = () => {
       </button>
       <button
         onClick={signInWithGithub}
-        className="flex flex-row duration-300 tb:hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-500"
+        className="flex flex-row items-center justify-center gap-2 rounded-lg border-[1px] border-gray-500 duration-300 tb:hover:bg-mainHover"
       >
-        <BsGithub className="text-white hover:cursor-pointer h-[30px] w-[30px] my-2" />
+        <BsGithub className="my-2 h-[30px] w-[30px] text-white hover:cursor-pointer" />
         <p className="text-white">Sign in with Github</p>
       </button>
       <button
         onClick={signInWithFacebook}
-        className="flex flex-row duration-300 tb:hover:bg-mainHover items-center justify-center gap-2 rounded-lg border-[1px] border-gray-500"
+        className="flex flex-row items-center justify-center gap-2 rounded-lg border-[1px] border-gray-500 duration-300 tb:hover:bg-mainHover"
       >
         <svg
           className="my-2"

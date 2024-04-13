@@ -100,8 +100,8 @@ const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
         { event: "*", schema: "public", table: "requests" },
         (payload) =>
           replaceOldRequest(
-            payload.new as Database["public"]["Tables"]["requests"]["Row"]
-          )
+            payload.new as Database["public"]["Tables"]["requests"]["Row"],
+          ),
       )
       .subscribe();
 
@@ -130,31 +130,31 @@ const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
   };
 
   return (
-    <div className="flex flex-col tb:flex-row py-28 tb:pt-0 gap-4 text-gtGold w-screen h-screen items-center justify-center">
-      <div className="flex flex-col gap-4 rounded-lg items-center w-[80%] tb:w-[40%] h-3/4">
+    <div className="flex h-screen w-screen flex-col items-center justify-center gap-4 py-28 text-gtGold tb:flex-row tb:pt-0">
+      <div className="flex h-3/4 w-[80%] flex-col items-center gap-4 rounded-lg tb:w-[40%]">
         <ItemDisplay
           apiKey={apiKey}
           itemID={itemID}
           username={username ? username : ""}
         />
-        <div className="flex flex-row overflow-x-scroll tb:flex-col tb:overflow-y-scroll gap-4 rounded-lg tb:items-center w-full h-1/2">
+        <div className="flex h-1/2 w-full flex-row gap-4 overflow-x-scroll rounded-lg tb:flex-col tb:items-center tb:overflow-y-scroll">
           {requests ? (
             requests?.map((request) => (
               <button
                 onClick={() => setCurrentRequest(request)}
                 key={request.request_id}
-                className={`flex flex-row hover:bg-mainHover2 cursor-pointer bg-mainHover group w-full h-28 justify-between border-[1px] ${
+                className={`group flex h-28 w-full cursor-pointer flex-row justify-between border-[1px] bg-mainHover hover:bg-mainHover2 ${
                   requestStatus[request.status]
-                } p-4 gap-4 duration-300 rounded-lg`}
+                } gap-4 rounded-lg p-4 duration-300`}
               >
-                <div className="flex flex-col items-start gap-1 w-[60%]">
+                <div className="flex w-[60%] flex-col items-start gap-1">
                   <p className="text-sm">{request.creator_name}</p>
-                  <p className="text-xs text-start h-12 overflow-clip text-gray-400">
+                  <p className="h-12 overflow-clip text-start text-xs text-gray-400">
                     {request.description}
                   </p>
                 </div>
-                <div className="flex flex-col justify-between items-end">
-                  <IoIosArrowBack className="rotate-180 text-gray-500 group-hover:text-white group-hover:translate-x-1 duration-300" />
+                <div className="flex flex-col items-end justify-between">
+                  <IoIosArrowBack className="rotate-180 text-gray-500 duration-300 group-hover:translate-x-1 group-hover:text-white" />
                   <p className="text-xs text-gray-400">
                     {request.created_at.substring(0, 10)}
                   </p>
@@ -162,8 +162,8 @@ const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
               </button>
             ))
           ) : (
-            <div className="flex flex-row group w-full h-28 justify-between border-[1px] bg-mainTheme border-gray-500 rounded-lg">
-              <div className="w-full h-full rounded-lg animate-pulse bg-mainHover" />
+            <div className="group flex h-28 w-full flex-row justify-between rounded-lg border-[1px] border-gray-500 bg-mainTheme">
+              <div className="h-full w-full animate-pulse rounded-lg bg-mainHover" />
             </div>
           )}
         </div>
@@ -220,14 +220,14 @@ const CurrentRequestDock = ({
   };
 
   const requestStatus: requestStatus = {
-    accepted: <h1 className="text-green-400 text-xs">Claim Accepted</h1>,
-    rejected: <h1 className="text-red-400 text-xs">Claim Rejected</h1>,
+    accepted: <h1 className="text-xs text-green-400">Claim Accepted</h1>,
+    rejected: <h1 className="text-xs text-red-400">Claim Rejected</h1>,
   };
 
   return (
-    <div className="flex flex-col justify-between w-[80%] tb:w-1/4 h-3/4 rounded-lg bg-mainHover border-[1px] border-gray-500">
+    <div className="flex h-3/4 w-[80%] flex-col justify-between rounded-lg border-[1px] border-gray-500 bg-mainHover tb:w-1/4">
       {areYouSure ? (
-        <div className="flex fixed items-center justify-center z-30 top-0 left-0 w-screen h-screen">
+        <div className="fixed left-0 top-0 z-30 flex h-screen w-screen items-center justify-center">
           <AreYouSure
             setAreYouSure={setAreYouSure}
             action={action}
@@ -245,7 +245,7 @@ const CurrentRequestDock = ({
       ) : null}
 
       {creator ? (
-        <div className="flex flex-col gap-4 m-4">
+        <div className="m-4 flex flex-col gap-4">
           <div className="flex flex-row justify-between">
             <div className="flex flex-col">
               <h1 className="text-2xl font-semibold">{creator}</h1>
@@ -258,7 +258,7 @@ const CurrentRequestDock = ({
       ) : null}
 
       {creator ? (
-        <div className="flex flex-row w-full">
+        <div className="flex w-full flex-row">
           <button
             disabled={status !== "undecided"}
             onClick={handleAcceptButton}
@@ -266,7 +266,7 @@ const CurrentRequestDock = ({
               status !== "undecided"
                 ? "bg-gray-700 text-gray-500"
                 : "hover:bg-green-400 hover:text-white"
-            } gap-2 rounded-bl-lg duration-300 text-sm p-4 border-t-[1px] border-r-[1px] border-gray-400`}
+            } gap-2 rounded-bl-lg border-r-[1px] border-t-[1px] border-gray-400 p-4 text-sm duration-300`}
           >
             <FaCheck />
             Accept Claim
@@ -278,14 +278,14 @@ const CurrentRequestDock = ({
               status !== "undecided"
                 ? "bg-gray-700 text-gray-500"
                 : "hover:bg-red-400 hover:text-white"
-            } gap-1 rounded-br-lg duration-300 text-sm p-4 border-t-[1px] border-gray-400`}
+            } gap-1 rounded-br-lg border-t-[1px] border-gray-400 p-4 text-sm duration-300`}
           >
             <IoClose className="text-lg" />
             Reject Claim
           </button>
         </div>
       ) : (
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="flex h-full w-full items-center justify-center">
           <h1>Select a request to get started.</h1>
         </div>
       )}
@@ -329,7 +329,7 @@ const ItemDisplay = ({
         "postgres_changes",
         { event: "*", schema: "public", table: "pins" },
         (payload) =>
-          setItem(payload.new as Database["public"]["Tables"]["pins"]["Row"])
+          setItem(payload.new as Database["public"]["Tables"]["pins"]["Row"]),
       )
       .subscribe();
 
@@ -339,7 +339,7 @@ const ItemDisplay = ({
   }, [supabase, setItem, item]);
 
   return (
-    <div className="flex flex-col justify-between p-4 bg-mainHover rounded-lg border-[1px] border-gray-500 gap-2 w-full h-1/2">
+    <div className="flex h-1/2 w-full flex-col justify-between gap-2 rounded-lg border-[1px] border-gray-500 bg-mainHover p-4">
       <div className="flex flex-row justify-between">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold">
@@ -354,14 +354,14 @@ const ItemDisplay = ({
           </p>
         </div>
         {item?.resolved && (
-          <div className="flex flex-row justify-end self-start w-44 gap-2 text-xl text-green-400 font-semibold items-center">
+          <div className="flex w-44 flex-row items-center justify-end gap-2 self-start text-xl font-semibold text-green-400">
             <FaCheck />
             Owner Found
           </div>
         )}
       </div>
-      <div className="flex flex-row justify-between w-full">
-        <h1 className="text-xs flex flex-row items-center gap-2">
+      <div className="flex w-full flex-row justify-between">
+        <h1 className="flex flex-row items-center gap-2 text-xs">
           {item?.claim_requests != null ? (
             item?.claim_requests
           ) : (
@@ -372,20 +372,20 @@ const ItemDisplay = ({
         <div className="flex flex-row gap-2">
           <button
             onClick={() => setEditItem(true)}
-            className="flex items-center justify-center text-gtGold duration-300 rounded-lg px-2 pb:px-4 py-2 text-xs border-[1px] border-gray-500 bg-mainHover2 hover:bg-opacity-60"
+            className="flex items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainHover2 px-2 py-2 text-xs text-gtGold duration-300 hover:bg-opacity-60 pb:px-4"
           >
             Edit Item
           </button>
           <button
             onClick={() => setAreYouSure(true)}
-            className="flex items-center justify-center duration-300 rounded-lg px-2 pb:px-4 py-2 text-xs text-white border-[1px] border-red-400 bg-red-500 hover:bg-opacity-80"
+            className="flex items-center justify-center rounded-lg border-[1px] border-red-400 bg-red-500 px-2 py-2 text-xs text-white duration-300 hover:bg-opacity-80 pb:px-4"
           >
             Delete Item
           </button>
         </div>
       </div>
       {areYouSure ? (
-        <div className="flex fixed items-center justify-center z-30 top-0 left-0 w-screen h-screen">
+        <div className="fixed left-0 top-0 z-30 flex h-screen w-screen items-center justify-center">
           <DeleteItemPrompt
             setAreYouSure={setAreYouSure}
             itemID={itemID}
@@ -400,7 +400,7 @@ const ItemDisplay = ({
         </div>
       ) : null}
       {editItem ? (
-        <div className="flex fixed items-center justify-center z-30 top-0 left-0 w-screen h-screen">
+        <div className="fixed left-0 top-0 z-30 flex h-screen w-screen items-center justify-center">
           <EditItem
             apiKey={apiKey}
             itemID={itemID}
@@ -451,7 +451,7 @@ const AreYouSure = ({
     setDecisionState("loading");
     const data = await acceptClaim(
       creatorID ? creatorID : "",
-      itemID ? itemID : ""
+      itemID ? itemID : "",
     );
     console.log(data);
     setDecisionState("true");
@@ -461,7 +461,7 @@ const AreYouSure = ({
     setDecisionState("loading");
     const data = await rejectClaim(
       creatorID ? creatorID : "",
-      itemID ? itemID : ""
+      itemID ? itemID : "",
     );
     console.log(data);
     setDecisionState("true");
@@ -470,7 +470,7 @@ const AreYouSure = ({
   const closeButton = (
     <button
       onClick={() => setAreYouSure(false)}
-      className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+      className="absolute right-2 top-[9px] flex h-8 w-8 items-center justify-center rounded-lg bg-mainHover text-xl text-gray-600 duration-300 hover:text-gtGold"
     >
       <IoMdClose />
     </button>
@@ -478,46 +478,46 @@ const AreYouSure = ({
 
   const activeComponent: ComponentMap = {
     true: (
-      <div className="flex items-center justify-center flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[450px] h-64 bg-mainTheme">
+      <div className="fixed z-40 flex h-64 w-[450px] flex-col items-center justify-center self-center justify-self-center rounded-lg border-[1px] border-gray-500 bg-mainTheme">
         {closeButton}
-        <FaCheck className="text-green-400 text-6xl" />
-        <h1 className="text-base text-green-400 font-semibold text-center">
+        <FaCheck className="text-6xl text-green-400" />
+        <h1 className="text-center text-base font-semibold text-green-400">
           Claim {action}ed successfully!
         </h1>
       </div>
     ),
 
     loading: (
-      <div className="flex items-center justify-center flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[450px] h-64 bg-mainTheme">
+      <div className="fixed z-40 flex h-64 w-[450px] flex-col items-center justify-center self-center justify-self-center rounded-lg border-[1px] border-gray-500 bg-mainTheme">
         {closeButton}
         <ClipLoader color="#B3A369" size={50} />
       </div>
     ),
 
     false: (
-      <div className="flex items-center justify-between p-4 flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[90%] tb:w-[450px] h-64 bg-mainTheme">
+      <div className="fixed z-40 flex h-64 w-[90%] flex-col items-center justify-between self-center justify-self-center rounded-lg border-[1px] border-gray-500 bg-mainTheme p-4 tb:w-[450px]">
         {closeButton}
-        <div className="w-full h-6" />
+        <div className="h-6 w-full" />
         {action === "accept" ? (
-          <h1 className="text-base text-center">
+          <h1 className="text-center text-base">
             Are you sure you would like to {action} this claim? All other claims
             will be rejected.
           </h1>
         ) : (
-          <h1 className="text-base text-center">
+          <h1 className="text-center text-base">
             Are you sure you would like to {action} this claim?
           </h1>
         )}
-        <div className="flex flex-row gap-4 w-full">
+        <div className="flex w-full flex-row gap-4">
           <button
-            className="flex w-1/2 duration-300 items-center justify-center gap-2 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            className="flex w-1/2 items-center justify-center gap-2 rounded-lg border-[1px] border-gray-400 p-2 text-sm duration-300 hover:bg-mainHover2"
             onClick={action === "accept" ? acceptThisClaim : rejectThisClaim}
           >
             {action.toUpperCase().slice(0, 1) + action.slice(1)} Claim
           </button>
           <button
             onClick={() => setAreYouSure(false)}
-            className="flex w-1/2 duration-300 items-center justify-center gap-1 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            className="flex w-1/2 items-center justify-center gap-1 rounded-lg border-[1px] border-gray-400 p-2 text-sm duration-300 hover:bg-mainHover2"
           >
             Cancel
           </button>
@@ -549,23 +549,23 @@ const DeleteItemPrompt = ({
   const closeButton = (
     <button
       onClick={() => setAreYouSure(false)}
-      className="flex absolute rounded-lg duration-300 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+      className="absolute right-2 top-[9px] flex h-8 w-8 items-center justify-center rounded-lg bg-mainHover text-xl text-gray-600 duration-300 hover:text-gtGold"
     >
       <IoMdClose />
     </button>
   );
 
   return (
-    <div className="flex items-center justify-end p-4 flex-col fixed self-center z-40 justify-self-center rounded-lg border-[1px] border-gray-500 w-[90%] tb:w-[450px] h-64 bg-mainTheme">
+    <div className="fixed z-40 flex h-64 w-[90%] flex-col items-center justify-end self-center justify-self-center rounded-lg border-[1px] border-gray-500 bg-mainTheme p-4 tb:w-[450px]">
       {closeButton}
-      <div className="flex flex-col justify-between w-full h-[65%]">
-        <h1 className="text-base text-center">
+      <div className="flex h-[65%] w-full flex-col justify-between">
+        <h1 className="text-center text-base">
           Are you sure you would like to delete this item? All claims associated
           with the item will be deleted as well.
         </h1>
-        <div className="flex flex-row gap-4 w-full">
+        <div className="flex w-full flex-row gap-4">
           <Link
-            className="flex w-1/2 duration-300 items-center justify-center gap-2 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            className="flex w-1/2 items-center justify-center gap-2 rounded-lg border-[1px] border-gray-400 p-2 text-sm duration-300 hover:bg-mainHover2"
             onClick={() => deletePin(itemID)}
             href={`/${username.toLowerCase().replace(" ", "")}/myitems`}
           >
@@ -573,7 +573,7 @@ const DeleteItemPrompt = ({
           </Link>
           <button
             onClick={() => setAreYouSure(false)}
-            className="flex w-1/2 duration-300 items-center justify-center gap-1 rounded-lg hover:bg-mainHover2 text-sm p-2 border-[1px] border-gray-400"
+            className="flex w-1/2 items-center justify-center gap-1 rounded-lg border-[1px] border-gray-400 p-2 text-sm duration-300 hover:bg-mainHover2"
           >
             Cancel
           </button>

@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const page = () => {
   return (
-    <div className="flex flex-col pt-28 px-8 bg-mainTheme w-screen min-h-screen">
+    <div className="flex min-h-screen w-screen flex-col bg-mainTheme px-8 pt-28">
       <MyRequests />
     </div>
   );

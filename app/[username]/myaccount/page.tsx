@@ -3,7 +3,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="flex flex-col bg-mainTheme items-center justify-center w-screen min-h-screen">
+    <div className="flex min-h-screen w-screen flex-col items-center justify-center bg-mainTheme">
       <AccountDisplay />
     </div>
   );

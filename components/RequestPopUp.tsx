@@ -37,17 +37,17 @@ const RequestPopUp = ({
   }, [itemOwnerID]);
 
   return (
-    <div className="flex flex-col justify-between z-30 p-4 animate-in fixed top-16 left-0 tb:top-1/4 tb:left-1/4 bg-mainTheme w-full h-[65%] tb:w-1/2 tb:h-1/2 rounded-lg border-[1px]">
+    <div className="animate-in fixed left-0 top-16 z-30 flex h-[65%] w-full flex-col justify-between rounded-lg border-[1px] bg-mainTheme p-4 tb:left-1/4 tb:top-1/4 tb:h-1/2 tb:w-1/2">
       <button
         onClick={() => toggle(false)}
-        className="flex absolute rounded-lg duration-200 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+        className="absolute right-2 top-[9px] flex h-8 w-8 items-center justify-center rounded-lg bg-mainHover text-xl text-gray-600 duration-200 hover:text-gtGold"
       >
         <IoMdClose />
       </button>
       <div className="flex flex-col">
         <div>
-          <h1 className="text-xl text-gtGold font-bold">{`Congratulations! Your item has been confirmed as yours!`}</h1>
-          <p className="text-gray-400 text-xs">
+          <h1 className="text-xl font-bold text-gtGold">{`Congratulations! Your item has been confirmed as yours!`}</h1>
+          <p className="text-xs text-gray-400">
             The user who found your item is{" "}
             {priorityData?.username || (
               <Skeleton height={10} width={80} baseColor="#B3A369" />
@@ -57,20 +57,20 @@ const RequestPopUp = ({
         </div>
       </div>
       <div>
-        <p className="text-white text-base">
+        <p className="text-base text-white">
           <a className="text-gtGold">{`Finder Username: `}</a>
           {priorityData?.username || (
             <Skeleton height={20} width={100} baseColor="#B3A369" />
           )}
         </p>
-        <p className="text-white text-base">
+        <p className="text-base text-white">
           <a className="text-gtGold">{`Past Items Found: `}</a>
           {priorityData?.items_found || (
             <Skeleton height={20} width={20} baseColor="#B3A369" />
           )}
         </p>
       </div>
-      <p className="text-gtGold text-sm">{`Thank you for using GT Lost and Found!`}</p>
+      <p className="text-sm text-gtGold">{`Thank you for using GT Lost and Found!`}</p>
     </div>
   );
 };

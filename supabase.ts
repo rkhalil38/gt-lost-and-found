@@ -4,182 +4,182 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[]
+  | Json[];
 
 export type Database = {
   public: {
     Tables: {
       pins: {
         Row: {
-          claim_requests: number | null
-          created_at: string
-          creator_id: string
-          days_resolved: number
-          description: string | null
-          fts: unknown | null
-          item: string | null
-          item_id: string
-          resolved: boolean
-          user_name: string | null
-          x_coordinate: number
-          y_coordinate: number
-          item_description_username: string | null
-        }
+          claim_requests: number | null;
+          created_at: string;
+          creator_id: string;
+          days_resolved: number;
+          description: string | null;
+          fts: unknown | null;
+          item: string | null;
+          item_id: string;
+          resolved: boolean;
+          user_name: string | null;
+          x_coordinate: number;
+          y_coordinate: number;
+          item_description_username: string | null;
+        };
         Insert: {
-          claim_requests?: number | null
-          created_at?: string
-          creator_id: string
-          days_resolved?: number
-          description?: string | null
-          fts?: unknown | null
-          item?: string | null
-          item_id?: string
-          resolved?: boolean
-          user_name?: string | null
-          x_coordinate?: number
-          y_coordinate?: number
-        }
+          claim_requests?: number | null;
+          created_at?: string;
+          creator_id: string;
+          days_resolved?: number;
+          description?: string | null;
+          fts?: unknown | null;
+          item?: string | null;
+          item_id?: string;
+          resolved?: boolean;
+          user_name?: string | null;
+          x_coordinate?: number;
+          y_coordinate?: number;
+        };
         Update: {
-          claim_requests?: number | null
-          created_at?: string
-          creator_id?: string
-          days_resolved?: number
-          description?: string | null
-          fts?: unknown | null
-          item?: string | null
-          item_id?: string
-          resolved?: boolean
-          user_name?: string | null
-          x_coordinate?: number
-          y_coordinate?: number
-        }
+          claim_requests?: number | null;
+          created_at?: string;
+          creator_id?: string;
+          days_resolved?: number;
+          description?: string | null;
+          fts?: unknown | null;
+          item?: string | null;
+          item_id?: string;
+          resolved?: boolean;
+          user_name?: string | null;
+          x_coordinate?: number;
+          y_coordinate?: number;
+        };
         Relationships: [
           {
-            foreignKeyName: "fk_user_id"
-            columns: ["creator_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: "fk_user_id";
+            columns: ["creator_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       profiles: {
         Row: {
-          daily_pin_count: number
-          id: string
-          items_found: number | null
-          username: string | null
-        }
+          daily_pin_count: number;
+          id: string;
+          items_found: number | null;
+          username: string | null;
+        };
         Insert: {
-          daily_pin_count?: number
-          id: string
-          items_found?: number | null
-          username?: string | null
-        }
+          daily_pin_count?: number;
+          id: string;
+          items_found?: number | null;
+          username?: string | null;
+        };
         Update: {
-          daily_pin_count?: number
-          id?: string
-          items_found?: number | null
-          username?: string | null
-        }
+          daily_pin_count?: number;
+          id?: string;
+          items_found?: number | null;
+          username?: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: "profiles_id_fkey";
+            columns: ["id"];
+            isOneToOne: true;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       requests: {
         Row: {
-          contact: string | null
-          created_at: string
-          creator_id: string
-          creator_name: string | null
-          description: string | null
-          item_id: string
-          pin_creator_id: string
-          request_id: string
-          status: string
-        }
+          contact: string | null;
+          created_at: string;
+          creator_id: string;
+          creator_name: string | null;
+          description: string | null;
+          item_id: string;
+          pin_creator_id: string;
+          request_id: string;
+          status: string;
+        };
         Insert: {
-          contact?: string | null
-          created_at?: string
-          creator_id: string
-          creator_name?: string | null
-          description?: string | null
-          item_id: string
-          pin_creator_id: string
-          request_id: string
-          status?: string
-        }
+          contact?: string | null;
+          created_at?: string;
+          creator_id: string;
+          creator_name?: string | null;
+          description?: string | null;
+          item_id: string;
+          pin_creator_id: string;
+          request_id: string;
+          status?: string;
+        };
         Update: {
-          contact?: string | null
-          created_at?: string
-          creator_id?: string
-          creator_name?: string | null
-          description?: string | null
-          item_id?: string
-          pin_creator_id?: string
-          request_id?: string
-          status?: string
-        }
+          contact?: string | null;
+          created_at?: string;
+          creator_id?: string;
+          creator_name?: string | null;
+          description?: string | null;
+          item_id?: string;
+          pin_creator_id?: string;
+          request_id?: string;
+          status?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "public_requests_creator_id_fkey"
-            columns: ["creator_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: "public_requests_creator_id_fkey";
+            columns: ["creator_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "public_requests_item_id_fkey"
-            columns: ["item_id"]
-            isOneToOne: false
-            referencedRelation: "pins"
-            referencedColumns: ["item_id"]
+            foreignKeyName: "public_requests_item_id_fkey";
+            columns: ["item_id"];
+            isOneToOne: false;
+            referencedRelation: "pins";
+            referencedColumns: ["item_id"];
           },
           {
-            foreignKeyName: "public_requests_pin_creator_id_fkey"
-            columns: ["pin_creator_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: "public_requests_pin_creator_id_fkey";
+            columns: ["pin_creator_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
           },
-        ]
-      }
-    }
+        ];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
       item_description_username: {
         Args: {
-          "": unknown
-        }
-        Returns: string
-      }
+          "": unknown;
+        };
+        Returns: string;
+      };
       reset_daily_pin_count: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+        Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
       update_days_resolved: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-    }
+        Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
+    };
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type PublicSchema = Database[Extract<keyof Database, "public">];
 
 export type Tables<
   PublicTableNameOrOptions extends
@@ -192,7 +192,7 @@ export type Tables<
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+      Row: infer R;
     }
     ? R
     : never
@@ -200,11 +200,11 @@ export type Tables<
         PublicSchema["Views"])
     ? (PublicSchema["Tables"] &
         PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -215,17 +215,17 @@ export type TablesInsert<
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+      Insert: infer I;
     }
     ? I
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Insert: infer I
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -236,17 +236,17 @@ export type TablesUpdate<
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+      Update: infer U;
     }
     ? U
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -259,4 +259,4 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never
+    : never;

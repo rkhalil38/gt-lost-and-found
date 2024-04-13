@@ -144,8 +144,8 @@ const ClaimItem = ({
 
   const componentMap: componentMap = {
     notClaimed: (
-      <div className="flex flex-col gap-4 w-full h-full">
-        <h1 className="font-bold text-xl pb:text-2xl text-gtGold">
+      <div className="flex h-full w-full flex-col gap-4">
+        <h1 className="text-xl font-bold text-gtGold pb:text-2xl">
           You are claiming this item as
           <a className="text-white"> {username}</a>
         </h1>
@@ -154,7 +154,7 @@ const ClaimItem = ({
         </label>
         <div className="flex flex-row gap-4">
           <select
-            className="w-44 h-10 p-2 border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg"
+            className="h-10 w-44 rounded-lg border-[1px] bg-mainTheme p-2 text-white focus:border-gtGold focus:outline-none"
             name="contact"
             onChange={(e) => setContactMethod(e.target.value)}
           >
@@ -164,18 +164,18 @@ const ClaimItem = ({
           {contactMethod === "email" ? (
             <input
               type="email"
-              className={`w-full text-sm pb:text-base pb:w-96 h-10 p-2 border-[1px] ${
+              className={`h-10 w-full border-[1px] p-2 text-sm pb:w-96 pb:text-base ${
                 fieldError ? "border-red-400" : "focus:border-gtGold"
-              } focus:outline-none bg-mainTheme text-white rounded-lg`}
+              } rounded-lg bg-mainTheme text-white focus:outline-none`}
               placeholder="Enter your preferred email"
               onChange={handleContactInfo}
             />
           ) : (
             <input
               type="tel"
-              className={`w-full text-sm pb:text-base pb:w-96 h-10 p-2 border-[1px] ${
+              className={`h-10 w-full border-[1px] p-2 text-sm pb:w-96 pb:text-base ${
                 fieldError ? "border-red-400" : "focus:border-gtGold"
-              } focus:outline-none bg-mainTheme text-white rounded-lg`}
+              } rounded-lg bg-mainTheme text-white focus:outline-none`}
               placeholder="Enter your phone number"
               onChange={handleContactInfo}
             />
@@ -188,13 +188,13 @@ const ClaimItem = ({
           maxLength={250}
           onChange={handleChange}
           name="reasoning"
-          className="w-full h-64 resize-none border-[1px] focus:border-gtGold focus:outline-none bg-mainTheme text-white rounded-lg p-4"
+          className="h-64 w-full resize-none rounded-lg border-[1px] bg-mainTheme p-4 text-white focus:border-gtGold focus:outline-none"
         ></textarea>
-        <p className="text-white text-xs self-end">{characterCount}/250</p>
+        <p className="self-end text-xs text-white">{characterCount}/250</p>
         <button
           disabled={!completedForm()}
           onClick={claimDisplayedItem}
-          className={`flex disabled:bg-gray-700 disabled:text-gray-400 w-36 h-10 absolute bottom-4 right-4 text-xs rounded-lg border-[1px] items-center justify-center bg-gtGold text-white hover:bg-gtGoldHover`}
+          className={`absolute bottom-4 right-4 flex h-10 w-36 items-center justify-center rounded-lg border-[1px] bg-gtGold text-xs text-white hover:bg-gtGoldHover disabled:bg-gray-700 disabled:text-gray-400`}
         >
           Submit Request
         </button>
@@ -202,11 +202,11 @@ const ClaimItem = ({
     ),
 
     notSignedIn: (
-      <div className="flex flex-col gap-2 w-full h-full items-center justify-center">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-2">
         <h1>Sign in to claim this item.</h1>
         <Link
           href="/login"
-          className="flex h-10 text-sm duration-300 p-4 items-center justify-center bg-gtGold text-white rounded-lg hover:bg-gtGoldHover"
+          className="flex h-10 items-center justify-center rounded-lg bg-gtGold p-4 text-sm text-white duration-300 hover:bg-gtGoldHover"
         >
           Sign in
         </Link>
@@ -214,25 +214,25 @@ const ClaimItem = ({
     ),
 
     claimed: (
-      <div className="flex flex-col gap-2 h-full w-full items-center justify-center">
-        <FaCheck className="text-gtGold text-6xl" />
-        <h1 className="text-lg text-gtGold self-center justify-center">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-2">
+        <FaCheck className="text-6xl text-gtGold" />
+        <h1 className="justify-center self-center text-lg text-gtGold">
           Request Submitted!
         </h1>
       </div>
     ),
 
     loading: (
-      <div className="flex w-full h-full items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center">
         <ClipLoader color="#C29B0C" size={65} />
       </div>
     ),
 
     pinOwner: (
-      <div className="flex flex-col gap-4 w-full h-full items-center justify-center">
-        <h1 className="text-gtGold text-xl">{`You cannot claim an item you found.`}</h1>
+      <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+        <h1 className="text-xl text-gtGold">{`You cannot claim an item you found.`}</h1>
         <Link
-          className="flex items-center justify-center w-48 text-sm p-2 bg-gtGold hover:bg-gtGoldHover rounded-lg duration-300 border-[1px] border-gtGoldHover"
+          className="flex w-48 items-center justify-center rounded-lg border-[1px] border-gtGoldHover bg-gtGold p-2 text-sm duration-300 hover:bg-gtGoldHover"
           href={`/${username}/myitems/${itemID}`}
         >
           Manage this item
@@ -242,19 +242,19 @@ const ClaimItem = ({
   };
 
   return (
-    <div className="flex flex-col self-start pb:self-center p-4 animate-in fixed gap-4 border-[1px] border-gray-500 w-full h-3/4 tb:w-1/2 tb:h-[70%] rounded-lg bg-mainTheme shaodw-lg z-40">
+    <div className="animate-in shaodw-lg fixed z-40 flex h-3/4 w-full flex-col gap-4 self-start rounded-lg border-[1px] border-gray-500 bg-mainTheme p-4 pb:self-center tb:h-[70%] tb:w-1/2">
       {claimStatus !== "loading" ? (
-        <div className="flex w-full h-full">
+        <div className="flex h-full w-full">
           <Link
             href={path + "?claim=false"}
-            className="flex absolute rounded-lg duration-200 justify-center items-center w-8 h-8 top-[9px] right-2 text-gray-600 bg-mainHover hover:text-gtGold text-xl"
+            className="absolute right-2 top-[9px] flex h-8 w-8 items-center justify-center rounded-lg bg-mainHover text-xl text-gray-600 duration-200 hover:text-gtGold"
           >
             <IoMdClose />
           </Link>
           {user ? componentMap[claimStatus] : componentMap["Sign In to Claim"]}
         </div>
       ) : (
-        <div className="flex w-full h-full items-center justify-center">
+        <div className="flex h-full w-full items-center justify-center">
           <ClipLoader color="#C29B0C" size={65} />
         </div>
       )}
