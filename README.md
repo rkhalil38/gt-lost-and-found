@@ -48,7 +48,7 @@ With that, any changes in the frontend code should be hot-reloaded to localhost.
 
 ‼️ **WARNING**
 
-When running the program, Next may throw errors in the bottom right relating to the Google Maps API. These can be safely ignored. In strict mode, React renders components twice upon the initial page load. This can cause some weird behaviors with the useEffect hook, throwing the errors. For more information, [click here.](https://react.dev/reference/react/StrictMode)
+When running the program, Next may throw errors in the bottom left relating to the Google Maps API. These can be safely ignored. In strict mode, React renders components twice upon the initial page load. This can cause some weird behaviors with the useEffect hook, throwing the errors. For more information, [click here.](https://react.dev/reference/react/StrictMode)
 
 ### Linting and Formatting
 
