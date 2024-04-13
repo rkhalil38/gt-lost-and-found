@@ -39,6 +39,10 @@ The app will then become viewable at http://localhost:3000, which can then be vi
 
 With that, any changes in the frontend code should be hot-reloaded to localhost.
 
+‼️ **WARNING**
+
+When running the program, Next may throw errors in the bottom right relating to the Google Maps API. These can be safely ignored. In strict mode, React renders components twice upon the initial page load. This can cause some weird behaviors with the useEffect hook, throwing the errors. For more information, [click here.](https://react.dev/reference/react/StrictMode)
+
 ## 😀 Contributing
 
 GT Lost and Found welcomes contributions from anyone! Regular development is performed by the project owner ([Romulus Khalil](https://www.linkedin.com/in/romulus-khalil/)) but contributions are still encouraged. There is no set guide on how to contribute just yet but expect one in the future!
