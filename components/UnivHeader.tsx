@@ -26,7 +26,7 @@ const UnivHeader = ({ apiKey }: { apiKey: string }) => {
           <IoIosMenu />
         </button>
         <h1 className="hidden pl-4 text-xl font-semibold text-gtGold tb:block">
-          GT Lost and Found
+          GT Lost and Gay
         </h1>
       </div>
       <div className="flex w-[80%] items-center justify-center tb:w-[40%]">
