@@ -21,6 +21,9 @@ export const metadata = {
     "items lost at georgia tech",
     "georgia tech lost and found",
     "lost and found at georgia tech",
+    "lost items in atlanta midtown",
+    "lost and found atlanta ga",
+    "lost items in atlanta ga",
   ],
   openGraph: {
     title: "GT Lost and Found",
