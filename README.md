@@ -19,7 +19,7 @@ The app is a NextJS 13 application (built using create-next-app). GT Lost and Fo
 ### Required Software
 
 - Node.js (any recent version will suffice)
-- Node Package Manager (NPM) version 10.5.1 or later
+- Node Package Manager (NPM) version 10.4 or later
 
 ### Important API Key Notice
 
