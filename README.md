@@ -26,12 +26,18 @@ The app is a NextJS 13 application (built using create-next-app). GT Lost and Fo
 - For the maps to properly display, a [Google Maps API Key](https://developers.google.com/maps/documentation/embed/get-api-key) is required
 - All other required API keys are supplied in `.env.example`
 
-### Managing Dependencies
+### Managing Dependencies and Environment Variables
 
 After the repository is cloned to your local machine, run the following command in the repo folder:
 
 ```
 npm install
+```
+
+Then run this command to copy the contents of .env.example to .env:
+
+```
+cp .env.example .env
 ```
 
 ### Running the App
