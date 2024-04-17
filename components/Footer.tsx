@@ -18,7 +18,7 @@ const Footer = () => {
         <p className="hidden text-xs pb:block">Github</p>
       </Link>
       <div className="flex flex-grow items-center justify-center">
-        <p>Copyright © by Romulus Khalil ''''''</p>
+        <p>Copyright © by Romulus Khalil</p>
       </div>
       <div className="w-12 pb:w-28" />
     </footer>
