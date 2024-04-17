@@ -50,7 +50,9 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
     notSignedIn: "notSignedIn",
     claimed: "claimed",
     notClaimed: "notClaimed",
+    spotting: "spotting",
     pinOwner: "pinOwner",
+    pinOwnerSpotter: "pinOwnerSpotter",
   };
 
   const search = useSearchParams();
@@ -100,8 +102,18 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
 
       setUsername(profile.username);
 
-      if (userData.id === data.creator_id) {
+      if (userData.id === data.creator_id && data.in_posession) {
         setClaimState(claimStates.pinOwner);
+        return;
+      }
+
+      if (userData.id === data.creator_id && !data.in_posession) {
+        setClaimState(claimStates.pinOwnerSpotter);
+        return;
+      }
+
+      if (!data.in_posession) {
+        setClaimState(claimStates.spotting);
         return;
       }
 
@@ -122,7 +134,14 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
     };
 
     fetchAllInfo();
-  }, []);
+  }, [
+    claimStates.claimed,
+    claimStates.notClaimed,
+    claimStates.pinOwner,
+    claimStates.notSignedIn,
+    claimStates.spotting,
+    claimStates.pinOwnerSpotter,
+  ]);
 
   useEffect(() => {
     console.log(claimState);
@@ -148,7 +167,22 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, item, setItem]);
+  }, [supabase, item, setItem, itemID]);
+
+  const convertMilitaryToEst = (time: string): string => {
+    const hour = parseInt(time.slice(11, 13));
+    const minute = time.slice(14, 16);
+    let period = "AM";
+
+    if (hour > 12) {
+      period = "PM";
+      return `${hour - 12}:${minute} ${period}`;
+    } else if (hour === 12) {
+      period = "PM";
+    }
+
+    return `${hour}:${minute} ${period}`;
+  };
 
   const buttonComponentMap: componentMap = {
     notClaimed: <p>Claim Item</p>,
@@ -158,15 +192,19 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
       </p>
     ),
     pinOwner: <p>You are the finder of this item.</p>,
+    pinOwnerSpotter: <p>You spotted this item.</p>,
     notSignedIn: <p>Sign In to Claim</p>,
+    spotting: <p>Sightings cannot be claimed.</p>,
     loading: <ClipLoader color="#B3A369" />,
   };
 
   const stylesMap: stringMap = {
     notClaimed: "border-gtGold bg-gtGoldHover hover:opacity-80",
     claimed: "cursor-default bg-green-500 border-green-600",
-    pinOwner: "cursor-default bg-gtGold border-gtGoldHover",
+    pinOwner: "cursor-default bg-gtGoldHover border-gtGold",
+    pinOwnerSpotter: "cursor-default bg-gtGoldHover border-gtGold",
     notSignedIn: "border-gtGold bg-gtGoldHover hover:opacity-80",
+    spotting: "cursor-default bg-gtGoldHover border-gtGold",
     loading: "cursor-default bg-gtGoldHover border-gtGold",
   };
 
@@ -174,7 +212,9 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
     notClaimed: pathname + "?claim=true",
     claimed: "",
     pinOwner: "",
+    pinOwnerSpotter: "",
     notSignedIn: "/login",
+    spotting: "",
     loading: "",
   };
 
@@ -221,23 +261,33 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
             </div>
           </div>
           <div className="flex h-full w-1/2 flex-col items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainHover">
-            <h1 className="text-8xl text-gtGold tb:text-9xl">
-              {item?.claim_requests != null ? (
-                item?.claim_requests
-              ) : (
-                <Skeleton
-                  height={screenWidth < 450 ? 80 : 100}
-                  width={screenWidth < 450 ? 80 : 100}
-                  baseColor="#B3A369"
-                />
-              )}
+            <h1
+              className={`${item?.in_posession ? "text-8xl" : "text-3xl"} text-gtGold ${item?.in_posession ? "tb:text-9xl" : "tb:text-4xl"}`}
+            >
+              {item? 
+
+                item.in_posession ? (item.claim_requests) : (convertMilitaryToEst(item.created_at))
+
+                : 
+                (
+                  <Skeleton
+                    height={screenWidth < 450 ? 80 : 100}
+                    width={screenWidth < 450 ? 80 : 100}
+                    baseColor="#B3A369"
+                  />
+                )
+              }
             </h1>
-            <p className="pb-2 text-sm text-gray-400">Claim Requests</p>
+            <p
+              className={`${item?.in_posession ? "block" : "hidden"} pb-2 text-sm text-gray-400`}
+            >
+              Claim Requests
+            </p>
           </div>
         </div>
         <div className="flex h-[60%] w-full flex-col justify-between rounded-lg border-[1px] border-gray-500 bg-mainHover p-4">
           <h1 className="text-xl font-semibold text-gtGold tb:text-2xl">
-            Found by{" "}
+            {item?.in_posession ? "Found by " : "Spotted by "}
             {item?.user_name || (
               <Skeleton height={20} width={120} baseColor="#B3A369" />
             )}
@@ -266,6 +316,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
             lat={item?.x_coordinate ? item.x_coordinate : 0}
             lng={item?.y_coordinate ? item.y_coordinate : 0}
             item={item?.item ? item.item : ""}
+            inPossession={item?.in_posession ? true : false}
           />
         ) : null}
       </div>

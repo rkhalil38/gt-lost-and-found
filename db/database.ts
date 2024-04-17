@@ -267,6 +267,7 @@ export async function createPin(
         y_coordinate: pin.y_coordinate,
         item: pin.item,
         description: pin.description,
+        in_posession: pin.in_posession,
       },
     ])
     .select();

@@ -69,7 +69,7 @@ const ClaimItem = ({
     };
 
     getUser();
-  }, []);
+  }, [setClaimStatus]);
 
   useEffect(() => {
     setCharacterCount(reasoning.length);

@@ -18,14 +18,12 @@ type Pin = Database["public"]["Tables"]["pins"]["Row"];
  */
 const LostItems = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  let parser;
 
   const [pins, setPins] = useState<Pin[]>([]);
   const params = useSearchParams();
   const filter = params.get("filter") || "all";
 
   useEffect(() => {
-    parser = new DOMParser();
 
     const fetchAllPins = async () => {
       const data = await fetchPins();

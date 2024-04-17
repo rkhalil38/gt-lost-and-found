@@ -90,9 +90,23 @@ const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
     };
 
     fetchPinRequests();
-  }, [getRequests]);
+  }, [getRequests, itemID]);
 
   useEffect(() => {
+
+    const replaceOldRequest = (request: PinRequest) => {
+      const newRequests = requests?.map((req) => {
+        if (req.request_id === request.request_id) {
+          return request;
+        }
+  
+        return req;
+      });
+  
+      setRequests(newRequests);
+      setCurrentRequest(request);
+    };
+    
     const channel = supabase
       .channel("realtime-requests")
       .on(
@@ -109,19 +123,6 @@ const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
       supabase.removeChannel(channel);
     };
   }, [supabase, setRequests, requests]);
-
-  const replaceOldRequest = (request: PinRequest) => {
-    const newRequests = requests?.map((req) => {
-      if (req.request_id === request.request_id) {
-        return request;
-      }
-
-      return req;
-    });
-
-    setRequests(newRequests);
-    setCurrentRequest(request);
-  };
 
   const requestStatus: requestStatus = {
     undecided: "border-gray-500",

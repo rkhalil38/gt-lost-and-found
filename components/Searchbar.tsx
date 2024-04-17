@@ -18,28 +18,30 @@ const Searchbar = () => {
   const [pinItemsVisible, setPinItemsVisible] = useState<boolean>(false);
   const [pins, setPins] = useState<Pin[]>([]);
 
-  const search = async (queryingPins: string) => {
-    let searchString = queryingPins.trim();
-    let searchArray = searchString.split(" ");
-    searchString = searchArray.join(" & ");
-
-    const { data, error } = await supabase
-      .from("pins")
-      .select()
-      .textSearch("fts", searchString, {
-        type: "websearch",
-      });
-
-    if (error) {
-      return;
-    }
-
-    setPins(data.slice(0, 15));
-  };
-
   useEffect(() => {
+
+    const search = async (queryingPins: string) => {
+      let searchString = queryingPins.trim();
+      let searchArray = searchString.split(" ");
+      searchString = searchArray.join(" & ");
+  
+      const { data, error } = await supabase
+        .from("pins")
+        .select()
+        .textSearch("fts", searchString, {
+          type: "websearch",
+        });
+  
+      if (error) {
+        return;
+      }
+  
+      setPins(data.slice(0, 15));
+    };
+
     search(pinsToSearch);
-  }, [pinsToSearch]);
+    
+  }, [pinsToSearch, supabase]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPinsToSearch(`'${e.target.value}'`);
