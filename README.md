@@ -58,17 +58,7 @@ When running the program, Next may throw errors in the bottom left relating to t
 
 ### Linting and Formatting
 
-GT Lost and Found uses [ESLint](https://eslint.org/) for linting and formatting through [Prettier](https://prettier.io/). The following commands should be run before committing.
-
-**Run Prettier and Format Code**
-```
-npx prettier . --write
-```
-
-**Run ESLint (Raises Warnings and Errors)**
-```
-npm run lint
-```
+GT Lost and Found uses [ESLint](https://eslint.org/) for linting and formatting through [Prettier](https://prettier.io/). Husky is used to create hooks that automatically lint and format code pre-commit.
 
 ## 😀 Contributing
 
