@@ -24,7 +24,6 @@ const LostItems = () => {
   const filter = params.get("filter") || "all";
 
   useEffect(() => {
-
     const fetchAllPins = async () => {
       const data = await fetchPins();
 
@@ -113,7 +112,7 @@ const LostItems = () => {
                 <p className="text-gtGold duration-300">{pin.description}</p>
               </div>
               <p className="text-xs text-gray-500 duration-300 tb:group-hover:text-white">
-                Found by {pin.user_name} on {pin.created_at.slice(0, 10)}
+                {`${pin.in_possession? 'Found by' : 'Spotted by'} ${pin.user_name} on ${pin.created_at.slice(0, 10)}`}
               </p>
             </Link>
           ))

@@ -20,6 +20,7 @@ import {
   fetchPin,
   fetchUser,
   fetchProfile,
+  convertMilitaryToEst,
 } from "@/db/database";
 import { PinRequest } from "@/db/database";
 
@@ -102,17 +103,17 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
 
       setUsername(profile.username);
 
-      if (userData.id === data.creator_id && data.in_posession) {
+      if (userData.id === data.creator_id && data.in_possession) {
         setClaimState(claimStates.pinOwner);
         return;
       }
 
-      if (userData.id === data.creator_id && !data.in_posession) {
+      if (userData.id === data.creator_id && !data.in_possession) {
         setClaimState(claimStates.pinOwnerSpotter);
         return;
       }
 
-      if (!data.in_posession) {
+      if (!data.in_possession) {
         setClaimState(claimStates.spotting);
         return;
       }
@@ -168,21 +169,6 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
       supabase.removeChannel(channel);
     };
   }, [supabase, item, setItem, itemID]);
-
-  const convertMilitaryToEst = (time: string): string => {
-    const hour = parseInt(time.slice(11, 13));
-    const minute = time.slice(14, 16);
-    let period = "AM";
-
-    if (hour > 12) {
-      period = "PM";
-      return `${hour - 12}:${minute} ${period}`;
-    } else if (hour === 12) {
-      period = "PM";
-    }
-
-    return `${hour}:${minute} ${period}`;
-  };
 
   const buttonComponentMap: componentMap = {
     notClaimed: <p>Claim Item</p>,
@@ -262,24 +248,24 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
           </div>
           <div className="flex h-full w-1/2 flex-col items-center justify-center rounded-lg border-[1px] border-gray-500 bg-mainHover">
             <h1
-              className={`${item?.in_posession ? "text-8xl" : "text-3xl"} text-gtGold ${item?.in_posession ? "tb:text-9xl" : "tb:text-4xl"}`}
+              className={`${item?.in_possession ? "text-8xl" : "text-3xl"} text-gtGold ${item?.in_possession ? "tb:text-9xl" : "tb:text-4xl"}`}
             >
-              {item? 
-
-                item.in_posession ? (item.claim_requests) : (convertMilitaryToEst(item.created_at))
-
-                : 
-                (
-                  <Skeleton
-                    height={screenWidth < 450 ? 80 : 100}
-                    width={screenWidth < 450 ? 80 : 100}
-                    baseColor="#B3A369"
-                  />
+              {item ? (
+                item.in_possession ? (
+                  item.claim_requests
+                ) : (
+                  convertMilitaryToEst(item.created_at)
                 )
-              }
+              ) : (
+                <Skeleton
+                  height={screenWidth < 450 ? 80 : 100}
+                  width={screenWidth < 450 ? 80 : 100}
+                  baseColor="#B3A369"
+                />
+              )}
             </h1>
             <p
-              className={`${item?.in_posession ? "block" : "hidden"} pb-2 text-sm text-gray-400`}
+              className={`${item?.in_possession ? "block" : "hidden"} pb-2 text-sm text-gray-400`}
             >
               Claim Requests
             </p>
@@ -287,7 +273,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
         </div>
         <div className="flex h-[60%] w-full flex-col justify-between rounded-lg border-[1px] border-gray-500 bg-mainHover p-4">
           <h1 className="text-xl font-semibold text-gtGold tb:text-2xl">
-            {item?.in_posession ? "Found by " : "Spotted by "}
+            {item?.in_possession ? "Found by " : "Spotted by "}
             {item?.user_name || (
               <Skeleton height={20} width={120} baseColor="#B3A369" />
             )}
@@ -316,7 +302,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
             lat={item?.x_coordinate ? item.x_coordinate : 0}
             lng={item?.y_coordinate ? item.y_coordinate : 0}
             item={item?.item ? item.item : ""}
-            inPossession={item?.in_posession ? true : false}
+            inPossession={item?.in_possession ? true : false}
           />
         ) : null}
       </div>

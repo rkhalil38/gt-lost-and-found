@@ -35,6 +35,7 @@ const EditItem = ({
   oldDescription,
   x_coordinate,
   y_coordinate,
+  inPossession,
   setEditItem,
 }: {
   apiKey: string;
@@ -43,6 +44,7 @@ const EditItem = ({
   oldDescription: string;
   x_coordinate: number;
   y_coordinate: number;
+  inPossession: boolean;
   setEditItem: Function;
 }) => {
   const [pickLocation, setPickLocation] = useState<boolean>(false);
@@ -55,6 +57,7 @@ const EditItem = ({
     lat: x_coordinate,
     lng: y_coordinate,
   });
+  const [inPossesion, setInPossesion] = useState<boolean>(inPossession);
   const [editCreationStatus, setEditCreationStatus] =
     useState<string>("editEligible");
 
@@ -86,6 +89,7 @@ const EditItem = ({
       description,
       location.lat,
       location.lng,
+      inPossesion,
     );
 
     if ("message" in data) {
@@ -101,7 +105,8 @@ const EditItem = ({
       (foundItem !== "" && foundItem !== item) ||
       (description !== "" && oldDescription !== description) ||
       (location.lat !== 0 && location.lat !== x_coordinate) ||
-      (location.lng !== 0 && location.lng !== y_coordinate)
+      (location.lng !== 0 && location.lng !== y_coordinate) ||
+      inPossesion !== inPossession
     ) {
       return true;
     }
@@ -115,64 +120,104 @@ const EditItem = ({
         <div
           className={`${
             pickLocation ? "hidden" : "flex"
-          } h-full w-full flex-col`}
+          } h-full w-full flex-col justify-between px-4 py-4`}
         >
-          <h1 className="px-4 pb-2 pt-4 text-lg text-white">Found Item</h1>
-          <div className="flex flex-row gap-2 overflow-scroll px-4 tb:flex-wrap">
-            {itemOptions.map((item, index) => (
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col">
+              <h1 className="pb-2 text-lg text-white">Found Item</h1>
+              <div className="flex flex-row gap-2 overflow-scroll tb:flex-wrap">
+                {itemOptions.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setFoundItem(item)}
+                    className={`flex items-center justify-center rounded-lg border-[1px] border-gray-500 p-2 text-xs duration-300 hover:border-gtGold hover:text-gtGold ${
+                      foundItem === item
+                        ? "border-gtGold text-gtGold"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="description" className="pb-2 text-lg text-white">
+                Description
+              </label>
+              <textarea
+                onChange={handleChange}
+                maxLength={100}
+                rows={3}
+                cols={50}
+                id="description"
+                className="resize-none rounded-lg border-[1px] border-gray-500 bg-mainTheme px-4 py-2 text-sm text-white duration-300 focus:border-gtGold focus:outline-none"
+                placeholder={oldDescription}
+              />
+              <div className="flex flex-row justify-end pt-2">
+                <p className="justify-self-end text-xs text-gray-400">
+                  {characterCount}/{100}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="inPossession" className="pb-2 text-lg text-white">
+                Are you currently in possession of this item?
+              </label>
+              <div className="flex flex-row gap-2">
+                <button
+                  onClick={() => setInPossesion(true)}
+                  className={`flex h-8 w-24 items-center justify-center rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 ${
+                    inPossesion
+                      ? "bg-gtGold text-white"
+                      : "hover:bg-mainHover hover:text-gtGold"
+                  }`}
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => setInPossesion(false)}
+                  className={`flex h-8 w-24 items-center justify-center rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 ${
+                    !inPossesion
+                      ? "bg-gtGold text-white"
+                      : "hover:bg-mainHover hover:text-gtGold"
+                  }`}
+                >
+                  No
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-col pt-4">
+              <label htmlFor="location" className="pb-2 text-lg text-white">
+                Location
+              </label>
+              {location.lat !== 0 && location.lng !== 0 ? (
+                <p className="pb-2 text-xs text-gtGold pb:text-sm">
+                  Location: {location.lat}, {location.lng}
+                </p>
+              ) : null}
               <button
-                key={index}
-                onClick={() => setFoundItem(item)}
-                className={`flex items-center justify-center rounded-lg border-[1px] border-gray-500 p-2 text-xs duration-300 hover:border-gtGold hover:text-gtGold ${
-                  foundItem === item
-                    ? "border-gtGold text-gtGold"
-                    : "text-gray-400"
-                }`}
+                onClick={() => setPickLocation(true)}
+                className="flex h-10 w-36 items-center justify-center gap-1 rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 hover:bg-mainHover hover:text-gtGold"
               >
-                {item}
+                <FaMapMarkerAlt />
+                {location.lat !== 0 && location.lng !== 0
+                  ? "Change Location"
+                  : "Pick Location"}
               </button>
-            ))}
+            </div>
           </div>
-          <label
-            htmlFor="description"
-            className="px-4 pb-2 pt-4 text-lg text-white"
-          >
-            Description
-          </label>
-          <textarea
-            onChange={handleChange}
-            maxLength={100}
-            rows={3}
-            cols={50}
-            id="description"
-            className="mx-4 resize-none rounded-lg border-[1px] border-gray-500 bg-mainTheme px-4 py-2 text-sm text-white duration-300 focus:border-gtGold focus:outline-none"
-            placeholder={oldDescription}
-          />
-          <div className="flex flex-row justify-end px-4">
-            <p className="justify-self-end text-xs text-gray-400">
-              {characterCount}/{100}
-            </p>
+          <div className="flex w-full flex-row items-center justify-end">
+            <button
+              disabled={!completedForm()}
+              onClick={handleUpdate}
+              className={`${
+                pickLocation ? "hidden" : "flex"
+              } h-10 w-36 items-center justify-center rounded-lg border-[1px] bg-gtGold text-xs text-white hover:bg-gtGoldHover disabled:bg-gray-700 disabled:text-gray-400`}
+            >
+              Update Item
+            </button>
           </div>
-          <label
-            htmlFor="location"
-            className="px-4 pb-2 pt-4 text-lg text-white"
-          >
-            Location
-          </label>
-          {location.lat !== 0 && location.lng !== 0 ? (
-            <p className="mx-4 mb-2 text-sm text-gtGold">
-              Location: {location.lat}, {location.lng}
-            </p>
-          ) : null}
-          <button
-            onClick={() => setPickLocation(true)}
-            className="mx-4 flex h-10 w-36 items-center justify-center rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 hover:bg-mainHover hover:text-gtGold"
-          >
-            <FaMapMarkerAlt className="mr-1" />
-            {location.lat !== 0 && location.lng !== 0
-              ? "Change Location"
-              : "Pick Location"}
-          </button>
         </div>
         {pickLocation ? (
           <ChooseLocation
@@ -181,15 +226,6 @@ const EditItem = ({
             setLocation={setLocation}
           />
         ) : null}
-        <button
-          disabled={!completedForm()}
-          onClick={handleUpdate}
-          className={`${
-            pickLocation ? "hidden" : "flex"
-          } absolute bottom-4 right-4 h-10 w-36 items-center justify-center rounded-lg border-[1px] bg-gtGold text-xs text-white hover:bg-gtGoldHover disabled:bg-gray-700 disabled:text-gray-400`}
-        >
-          Update Item
-        </button>
       </div>
     ),
     editCreationSuccessful: (
@@ -212,7 +248,7 @@ const EditItem = ({
   };
 
   return (
-    <div className="animate-in fixed left-0 top-16 z-30 flex h-[70%] w-full flex-col rounded-lg border-[1px] bg-mainTheme pb:left-[10%] pb:top-[20%] pb:h-1/2 pb:w-[80%] tb:left-1/4 tb:top-1/4 tb:h-1/2 tb:w-1/2">
+    <div className="animate-in fixed left-0 top-16 z-30 flex h-[80%] w-full flex-col rounded-lg border-[1px] bg-mainTheme pb:left-[10%] pb:top-[20%] pb:h-1/2 pb:w-[80%] tb:left-1/4 tb:top-[15%] tb:h-[70%] tb:w-1/2">
       <button
         onClick={() => setEditItem(false)}
         className="absolute right-2 top-[9px] flex h-8 w-8 items-center justify-center rounded-lg bg-mainHover text-xl text-gray-600 duration-300 hover:text-gtGold"

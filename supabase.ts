@@ -17,7 +17,7 @@ export type Database = {
           days_resolved: number
           description: string | null
           fts: unknown | null
-          in_posession: boolean
+          in_possession: boolean
           item: string | null
           item_id: string
           resolved: boolean
@@ -33,7 +33,7 @@ export type Database = {
           days_resolved?: number
           description?: string | null
           fts?: unknown | null
-          in_posession?: boolean
+          in_possession?: boolean
           item?: string | null
           item_id?: string
           resolved?: boolean
@@ -48,7 +48,7 @@ export type Database = {
           days_resolved?: number
           description?: string | null
           fts?: unknown | null
-          in_posession?: boolean
+          in_possession?: boolean
           item?: string | null
           item_id?: string
           resolved?: boolean

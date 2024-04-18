@@ -19,28 +19,26 @@ const Searchbar = () => {
   const [pins, setPins] = useState<Pin[]>([]);
 
   useEffect(() => {
-
     const search = async (queryingPins: string) => {
       let searchString = queryingPins.trim();
       let searchArray = searchString.split(" ");
       searchString = searchArray.join(" & ");
-  
+
       const { data, error } = await supabase
         .from("pins")
         .select()
         .textSearch("fts", searchString, {
           type: "websearch",
         });
-  
+
       if (error) {
         return;
       }
-  
+
       setPins(data.slice(0, 15));
     };
 
     search(pinsToSearch);
-    
   }, [pinsToSearch, supabase]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

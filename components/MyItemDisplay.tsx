@@ -15,6 +15,7 @@ import {
   fetchProfile,
   rejectClaim,
   deletePin,
+  convertMilitaryToEst,
 } from "@/db/database";
 import { ClipLoader } from "react-spinners";
 import Skeleton from "react-loading-skeleton";
@@ -93,20 +94,19 @@ const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
   }, [getRequests, itemID]);
 
   useEffect(() => {
-
     const replaceOldRequest = (request: PinRequest) => {
       const newRequests = requests?.map((req) => {
         if (req.request_id === request.request_id) {
           return request;
         }
-  
+
         return req;
       });
-  
+
       setRequests(newRequests);
       setCurrentRequest(request);
     };
-    
+
     const channel = supabase
       .channel("realtime-requests")
       .on(
@@ -176,6 +176,7 @@ const MyItemDisplay = ({ apiKey }: { apiKey: string }) => {
         creatorID={currentRequest ? currentRequest.creator_id : ""}
         status={currentRequest ? currentRequest.status : ""}
         contact={currentRequest ? currentRequest.contact : ""}
+        inPossession={myItem ? myItem.in_possession : true}
       />
     </div>
   );
@@ -198,6 +199,7 @@ const CurrentRequestDock = ({
   itemID,
   creatorID,
   status,
+  inPossession,
   contact,
 }: {
   creator: string | null;
@@ -205,6 +207,7 @@ const CurrentRequestDock = ({
   itemID: string | null;
   creatorID: string | null;
   status: string;
+  inPossession: boolean;
   contact: string | null;
 }) => {
   const [areYouSure, setAreYouSure] = useState<boolean>(false);
@@ -245,51 +248,60 @@ const CurrentRequestDock = ({
         </div>
       ) : null}
 
-      {creator ? (
-        <div className="m-4 flex flex-col gap-4">
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-col">
-              <h1 className="text-2xl font-semibold">{creator}</h1>
-              <p className="text-xs text-gray-400">{contact}</p>
+        {creator ? (
+          <div className="m-4 flex flex-col gap-4">
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-col">
+                <h1 className="text-2xl font-semibold">{creator}</h1>
+                <p className="text-xs text-gray-400">{contact}</p>
+              </div>
+              {status !== "undecided" && requestStatus[status]}
             </div>
-            {status !== "undecided" && requestStatus[status]}
+            <p className="text-base text-white">{description}</p>
           </div>
-          <p className="text-base text-white">{description}</p>
-        </div>
-      ) : null}
+        ) : null}
 
-      {creator ? (
-        <div className="flex w-full flex-row">
-          <button
-            disabled={status !== "undecided"}
-            onClick={handleAcceptButton}
-            className={`flex w-1/2 items-center justify-center ${
-              status !== "undecided"
-                ? "bg-gray-700 text-gray-500"
-                : "hover:bg-green-400 hover:text-white"
-            } gap-2 rounded-bl-lg border-r-[1px] border-t-[1px] border-gray-400 p-4 text-sm duration-300`}
-          >
-            <FaCheck />
-            Accept Claim
-          </button>
-          <button
-            disabled={status !== "undecided"}
-            onClick={handleRejectButton}
-            className={`flex w-1/2 items-center justify-center ${
-              status !== "undecided"
-                ? "bg-gray-700 text-gray-500"
-                : "hover:bg-red-400 hover:text-white"
-            } gap-1 rounded-br-lg border-t-[1px] border-gray-400 p-4 text-sm duration-300`}
-          >
-            <IoClose className="text-lg" />
-            Reject Claim
-          </button>
-        </div>
-      ) : (
-        <div className="flex h-full w-full items-center justify-center">
-          <h1>Select a request to get started.</h1>
-        </div>
-      )}
+        {inPossession?
+
+          creator ? (
+            <div className="flex w-full flex-row">
+              <button
+                disabled={status !== "undecided"}
+                onClick={handleAcceptButton}
+                className={`flex w-1/2 items-center justify-center ${
+                  status !== "undecided"
+                    ? "bg-gray-700 text-gray-500"
+                    : "hover:bg-green-400 hover:text-white"
+                } gap-2 rounded-bl-lg border-r-[1px] border-t-[1px] border-gray-400 p-4 text-sm duration-300`}
+              >
+                <FaCheck />
+                Accept Claim
+              </button>
+              <button
+                disabled={status !== "undecided"}
+                onClick={handleRejectButton}
+                className={`flex w-1/2 items-center justify-center ${
+                  status !== "undecided"
+                    ? "bg-gray-700 text-gray-500"
+                    : "hover:bg-red-400 hover:text-white"
+                } gap-1 rounded-br-lg border-t-[1px] border-gray-400 p-4 text-sm duration-300`}
+              >
+                <IoClose className="text-lg" />
+                Reject Claim
+              </button>
+            </div>
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <h1>Select a request to get started.</h1>
+            </div>
+          )
+
+          :
+
+          <div className="flex w-full h-full items-center justify-center">
+            <h1>Sightings cannot have claim requests.</h1>
+          </div>
+        }
     </div>
   );
 };
@@ -364,11 +376,10 @@ const ItemDisplay = ({
       <div className="flex w-full flex-row justify-between">
         <h1 className="flex flex-row items-center gap-2 text-xs">
           {item?.claim_requests != null ? (
-            item?.claim_requests
+            item?.in_possession? <p>{`${item.claim_requests} claim requests`}</p> : <p>{`Spotted at ${convertMilitaryToEst(item.created_at)}`}</p>
           ) : (
-            <Skeleton height={20} width={20} baseColor="#B3A369" />
-          )}{" "}
-          claim requests
+            <Skeleton height={20} width={100} baseColor="#B3A369" />
+          )}
         </h1>
         <div className="flex flex-row gap-2">
           <button
@@ -409,6 +420,7 @@ const ItemDisplay = ({
             oldDescription={item?.description ? item?.description : ""}
             x_coordinate={item?.x_coordinate ? item?.x_coordinate : 0}
             y_coordinate={item?.y_coordinate ? item?.y_coordinate : 0}
+            inPossession={item?.in_possession ? true : false}
             setEditItem={setEditItem}
           />
           <Overlay

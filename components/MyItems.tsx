@@ -6,7 +6,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import "react-loading-skeleton/dist/skeleton.css";
-import { fetchUser, fetchUserItems } from "@/db/database";
+import { convertMilitaryToEst, fetchUser, fetchUserItems } from "@/db/database";
 import { FaFilter } from "react-icons/fa";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
@@ -99,7 +99,12 @@ const MyItems = () => {
                 </div>
                 <div className="flex w-full flex-row justify-between text-[.65rem] text-gtGold pb:text-xs">
                   <div className="flex w-1/3 flex-row items-center gap-2">
-                    <p>{pin.claim_requests} Claim Requests</p>
+                    {pin.in_possession ? (
+                      <p>{pin.claim_requests} Claim Requests</p>
+                    ) : (
+                      <p>Spotted at {convertMilitaryToEst(pin.created_at)}</p>
+                    )
+                    }
                   </div>
                   <p className="text-gray-500">
                     {pin.created_at.substring(0, 10)}

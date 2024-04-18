@@ -131,7 +131,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
       item_description_username: null,
       resolved: false,
       days_resolved: 0,
-      in_posession: inPossesion,
+      in_possession: inPossesion,
     };
 
     const data = await createPin(pin, user);
@@ -251,7 +251,9 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
                 <button
                   onClick={() => setInPossesion(true)}
                   className={`flex h-8 w-24 items-center justify-center rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 ${
-                    inPossesion ? "bg-gtGold text-white" : "hover:bg-mainHover hover:text-gtGold"
+                    inPossesion
+                      ? "bg-gtGold text-white"
+                      : "hover:bg-mainHover hover:text-gtGold"
                   }`}
                 >
                   Yes
@@ -259,7 +261,9 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
                 <button
                   onClick={() => setInPossesion(false)}
                   className={`flex h-8 w-24 items-center justify-center rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 ${
-                    !inPossesion ? "bg-gtGold text-white" : "hover:bg-mainHover hover:text-gtGold"
+                    !inPossesion
+                      ? "bg-gtGold text-white"
+                      : "hover:bg-mainHover hover:text-gtGold"
                   }`}
                 >
                   No
@@ -271,7 +275,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
                 Location
               </label>
               {location.lat !== 0 && location.lng !== 0 ? (
-                <p className="pb-2 text-xs pb:text-sm text-gtGold">
+                <p className="pb-2 text-xs text-gtGold pb:text-sm">
                   Location: {location.lat}, {location.lng}
                 </p>
               ) : null}
@@ -286,7 +290,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
               </button>
             </div>
           </div>
-          <div className="flex flex-row w-full items-center justify-between">
+          <div className="flex w-full flex-row items-center justify-between">
             <p className="flex text-sm text-gtGold">
               {5 - dailyCount + " pins left today"}
             </p>
