@@ -56,7 +56,6 @@ const ClaimItem = ({
   const [fieldError, setFieldError] = useState<boolean>(false);
 
   useEffect(() => {
-    setClaimStatus("loading");
     const getUser = async () => {
       const data = await fetchUser();
 
@@ -65,7 +64,6 @@ const ClaimItem = ({
       }
 
       setActiveUser(data);
-      setClaimStatus("notClaimed");
     };
 
     getUser();
@@ -239,6 +237,18 @@ const ClaimItem = ({
         </Link>
       </div>
     ),
+
+    pinOwnerSpotter: (
+      <div className="flex h-full w-full justify-center items-center">
+        <h1 className="text-xl text-gtGold">{`You spotted this item.`}</h1>
+      </div>
+    ),
+
+    spotting: (
+      <div className="flex h-full w-full flex-col items-center justify-center">
+        <h1 className="text-xl text-gtGold">{`You cannot claim a sighting.`}</h1>
+      </div>
+    )
   };
 
   return (

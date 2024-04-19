@@ -473,8 +473,8 @@ export async function deleteRequest(
 
 /**
  * Function that converts supabase military time format to EST.
- * 
- * @param time 
+ *
+ * @param time
  * @returns The time in EST.
  */
 export const convertMilitaryToEst = (time: string): string => {

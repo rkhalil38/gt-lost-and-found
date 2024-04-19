@@ -63,6 +63,10 @@ const LostItems = () => {
         return pin.item === "jacket";
       case "airpods":
         return pin.item === "airpods";
+      case "spotted items":
+        return pin.in_possession === false;
+      case "held items":
+        return pin.in_possession === true;
       default:
         return true;
     }
@@ -112,7 +116,7 @@ const LostItems = () => {
                 <p className="text-gtGold duration-300">{pin.description}</p>
               </div>
               <p className="text-xs text-gray-500 duration-300 tb:group-hover:text-white">
-                {`${pin.in_possession? 'Found by' : 'Spotted by'} ${pin.user_name} on ${pin.created_at.slice(0, 10)}`}
+                {`${pin.in_possession ? "Found by" : "Spotted by"} ${pin.user_name} on ${pin.created_at.slice(0, 10)}`}
               </p>
             </Link>
           ))
@@ -144,6 +148,8 @@ const FilterComponent = ({ filter }: { filter: string }) => {
     "backpack",
     "jacket",
     "airpods",
+    "spotted items",
+    "held items"
   ];
 
   const handleChange = (value: string) => {

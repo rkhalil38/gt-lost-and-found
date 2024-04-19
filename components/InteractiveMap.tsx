@@ -7,6 +7,7 @@ import { Database } from "@/supabase";
 import CreateAPin from "./CreateAPin";
 import Overlay from "./Overlay";
 import { fetchPins } from "@/db/database";
+import Legend from "./Legend";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
 
@@ -108,12 +109,11 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
 
         for (const pin of pins) {
           if (!pin.resolved) {
-
             const pinSvg = parser.parseFromString(
               `
                   <svg width="50px" height="50px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M24,1.32c-9.92,0-18,7.8-18,17.38A16.83,16.83,0,0,0,9.57,29.09l12.84,16.8a2,2,0,0,0,3.18,0l12.84-16.8A16.84,16.84,0,0,0,42,18.7C42,9.12,33.92,1.32,24,1.32Z" ${pin.in_possession? 'fill="#FFFFFF"' : 'fill="#003057"'}/>
-                      <path d="M25.37,12.13a7,7,0,1,0,5.5,5.5A7,7,0,0,0,25.37,12.13Z" ${pin.in_possession? 'fill="#FFFFFF"' : 'fill="#003057"'}/>
+                      <path d="M24,1.32c-9.92,0-18,7.8-18,17.38A16.83,16.83,0,0,0,9.57,29.09l12.84,16.8a2,2,0,0,0,3.18,0l12.84-16.8A16.84,16.84,0,0,0,42,18.7C42,9.12,33.92,1.32,24,1.32Z" ${pin.in_possession ? 'fill="#FFFFFF"' : 'fill="#003057"'}/>
+                      <path d="M25.37,12.13a7,7,0,1,0,5.5,5.5A7,7,0,0,0,25.37,12.13Z" ${pin.in_possession ? 'fill="#FFFFFF"' : 'fill="#003057"'}/>
                   </svg>`,
               "image/svg+xml",
             ).documentElement;
@@ -159,7 +159,9 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
             item.className = "text-lg text-gtGold font-semibold";
 
             const creator = document.createElement("h2");
-            creator.textContent = pin.in_possession? `Found by: ${pin.user_name}` : `Spotted by: ${pin.user_name}`;
+            creator.textContent = pin.in_possession
+              ? `Found by: ${pin.user_name}`
+              : `Spotted by: ${pin.user_name}`;
             creator.className = "text-sm font-semibold text-gtBlue";
 
             const description = document.createElement("p");
@@ -172,14 +174,12 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
               "flex flex-row gap-2 items-center justify-center";
 
             const claimButton = document.createElement("a");
-            claimButton.className =
-              `${pin.in_possession? "flex" : "hidden"} bg-white border-gtGold hover:bg-gtGold hover:text-white duration-300 items-center text-gtGold justify-center w-20 h-10 border-[1px] rounded-lg`;
+            claimButton.className = `${pin.in_possession ? "flex" : "hidden"} bg-white border-gtGold hover:bg-gtGold hover:text-white duration-300 items-center text-gtGold justify-center w-20 h-10 border-[1px] rounded-lg`;
             claimButton.textContent = "Claim";
             claimButton.href = `/lostitems/${pin.item_id}?claim=true`;
 
             const viewButton = document.createElement("a");
-            viewButton.className =
-              `flex bg-white border-gtBlue hover:bg-gtBlue hover:text-white duration-300 items-center text-gtBlue justify-center ${pin.in_possession? "w-20" : "w-full"} h-10 border-[1px] rounded-lg`;
+            viewButton.className = `flex bg-white border-gtBlue hover:bg-gtBlue hover:text-white duration-300 items-center text-gtBlue justify-center ${pin.in_possession ? "w-20" : "w-full"} h-10 border-[1px] rounded-lg`;
             viewButton.textContent = "View";
             viewButton.href = `/lostitems/${pin.item_id}?claim=false`;
 
@@ -224,6 +224,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
           <Overlay on={toggle} setOn={setToggle} zIndex="z-20" clear={false} />
         </div>
       ) : null}
+      <Legend />
     </div>
   );
 };

@@ -32,6 +32,10 @@ const MyItems = () => {
         return !pin.resolved;
       case "no claims":
         return pin.claim_requests === 0;
+      case "held items":
+        return pin.in_possession;
+      case "spotted items":
+        return !pin.in_possession;
       default:
         return true;
     }
@@ -103,8 +107,7 @@ const MyItems = () => {
                       <p>{pin.claim_requests} Claim Requests</p>
                     ) : (
                       <p>Spotted at {convertMilitaryToEst(pin.created_at)}</p>
-                    )
-                    }
+                    )}
                   </div>
                   <p className="text-gray-500">
                     {pin.created_at.substring(0, 10)}
@@ -141,7 +144,7 @@ const FilterComponent = ({ filter }: { filter: string }) => {
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const path = usePathname();
 
-  const optipns = ["All", "Resolved", "Unresolved", "No Claims"];
+  const optipns = ["All", "Resolved", "Unresolved", "No Claims", "Held Items", "Spotted Items"];
 
   const handleChange = (value: string) => {
     setSelectedFilter(value);
