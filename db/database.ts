@@ -479,11 +479,12 @@ export async function deleteRequest(
  */
 export const convertUTCtoEST = (time: string) => {
   const date = new Date(time);
-  
-  let convertedTime = date.toLocaleTimeString('en-US', {timeZone: 'America/New_York'});
-  let splitTime = convertedTime.split(':');
-  let period = convertedTime.replace(/[\d:]+/g, ''); 
 
+  let convertedTime = date.toLocaleTimeString("en-US", {
+    timeZone: "America/New_York",
+  });
+  let splitTime = convertedTime.split(":");
+  let period = convertedTime.replace(/[\d:]+/g, "");
 
   return `${splitTime[0]}:${splitTime[1]} ${period}`;
-}
+};
