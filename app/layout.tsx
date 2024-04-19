@@ -27,7 +27,8 @@ export const metadata = {
   ],
   openGraph: {
     title: "GT Lost and Found",
-    description: "The best way to find lost items at Georgia Tech. Place a pin on the map to indicate where you found a lost item, or search for lost items to see if someone has found your lost item.",
+    description:
+      "The best way to find lost items at Georgia Tech. Place a pin on the map to indicate where you found a lost item, or search for lost items to see if someone has found your lost item.",
     siteName: "GT Lost and Found",
     images: [
       {

@@ -20,9 +20,10 @@ const ChooseLocation = ({
   setLocation: Function;
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const parser = new DOMParser();
 
   useEffect(() => {
+    const parser = new DOMParser();
+
     try {
       const initMap = async () => {
         const loader = new Loader({
@@ -91,7 +92,7 @@ const ChooseLocation = ({
     } catch (error) {
       console.log("Error loading map: ", error);
     }
-  }, []);
+  }, [apiKey, setLocation]);
 
   return (
     <div className="animate-in flex h-full w-full rounded-lg">

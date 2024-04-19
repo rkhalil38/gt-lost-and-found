@@ -6,7 +6,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import "react-loading-skeleton/dist/skeleton.css";
-import { fetchUser, fetchUserItems } from "@/db/database";
+import { convertMilitaryToEst, fetchUser, fetchUserItems } from "@/db/database";
 import { FaFilter } from "react-icons/fa";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
@@ -32,6 +32,10 @@ const MyItems = () => {
         return !pin.resolved;
       case "no claims":
         return pin.claim_requests === 0;
+      case "held items":
+        return pin.in_possession;
+      case "spotted items":
+        return !pin.in_possession;
       default:
         return true;
     }
@@ -99,7 +103,11 @@ const MyItems = () => {
                 </div>
                 <div className="flex w-full flex-row justify-between text-[.65rem] text-gtGold pb:text-xs">
                   <div className="flex w-1/3 flex-row items-center gap-2">
-                    <p>{pin.claim_requests} Claim Requests</p>
+                    {pin.in_possession ? (
+                      <p>{pin.claim_requests} Claim Requests</p>
+                    ) : (
+                      <p>Spotted at {convertMilitaryToEst(pin.created_at)}</p>
+                    )}
                   </div>
                   <p className="text-gray-500">
                     {pin.created_at.substring(0, 10)}
@@ -136,7 +144,7 @@ const FilterComponent = ({ filter }: { filter: string }) => {
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const path = usePathname();
 
-  const optipns = ["All", "Resolved", "Unresolved", "No Claims"];
+  const optipns = ["All", "Resolved", "Unresolved", "No Claims", "Held Items", "Spotted Items"];
 
   const handleChange = (value: string) => {
     setSelectedFilter(value);

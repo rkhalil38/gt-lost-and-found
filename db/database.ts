@@ -267,6 +267,7 @@ export async function createPin(
         y_coordinate: pin.y_coordinate,
         item: pin.item,
         description: pin.description,
+        in_posession: pin.in_possession,
       },
     ])
     .select();
@@ -294,6 +295,7 @@ export async function updatePin(
   description: string,
   x_coordinate: number,
   y_coordinate: number,
+  inPossession: boolean,
 ): Promise<Pin | PostgrestError> {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -303,6 +305,7 @@ export async function updatePin(
       description: description,
       x_coordinate: x_coordinate,
       y_coordinate: y_coordinate,
+      in_possession: inPossession,
     })
     .eq("item_id", itemID)
     .select();
@@ -467,3 +470,24 @@ export async function deleteRequest(
 
   return data ? data : [];
 }
+
+/**
+ * Function that converts supabase military time format to EST.
+ *
+ * @param time
+ * @returns The time in EST.
+ */
+export const convertMilitaryToEst = (time: string): string => {
+  const hour = parseInt(time.slice(11, 13));
+  const minute = time.slice(14, 16);
+  let period = "AM";
+
+  if (hour > 12) {
+    period = "PM";
+    return `${hour - 12}:${minute} ${period}`;
+  } else if (hour === 12) {
+    period = "PM";
+  }
+
+  return `${hour}:${minute} ${period}`;
+};

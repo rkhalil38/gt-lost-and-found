@@ -95,7 +95,7 @@ const NavigationBar = ({
       onClick: () => toggle(false),
     },
     {
-      name: "My Found Items",
+      name: "My Item Reports",
       icon: <FaBookmark className="ml-2" />,
       link: `/${username.replace(" ", "").toLowerCase()}/myitems`,
       active: activeUser ? true : false,

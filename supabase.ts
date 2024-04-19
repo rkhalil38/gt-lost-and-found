@@ -17,6 +17,7 @@ export type Database = {
           days_resolved: number;
           description: string | null;
           fts: unknown | null;
+          in_possession: boolean;
           item: string | null;
           item_id: string;
           resolved: boolean;
@@ -32,6 +33,7 @@ export type Database = {
           days_resolved?: number;
           description?: string | null;
           fts?: unknown | null;
+          in_possession?: boolean;
           item?: string | null;
           item_id?: string;
           resolved?: boolean;
@@ -46,6 +48,7 @@ export type Database = {
           days_resolved?: number;
           description?: string | null;
           fts?: unknown | null;
+          in_possession?: boolean;
           item?: string | null;
           item_id?: string;
           resolved?: boolean;
@@ -150,6 +153,24 @@ export type Database = {
           },
         ];
       };
+      testing_table: {
+        Row: {
+          created_at: string;
+          id: number;
+          name: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          name?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          name?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -162,6 +183,10 @@ export type Database = {
         Returns: string;
       };
       reset_daily_pin_count: {
+        Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
+      test_insert: {
         Args: Record<PropertyKey, never>;
         Returns: undefined;
       };
