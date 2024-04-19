@@ -223,8 +223,8 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
           />
           <Overlay on={toggle} setOn={setToggle} zIndex="z-20" clear={false} />
         </div>
-      ) : null}
-      <Legend />
+      ) : 
+      <Legend />}
     </div>
   );
 };
