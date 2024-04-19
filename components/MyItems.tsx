@@ -6,7 +6,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import "react-loading-skeleton/dist/skeleton.css";
-import { convertMilitaryToEst, fetchUser, fetchUserItems } from "@/db/database";
+import { convertUTCtoEST, fetchUser, fetchUserItems } from "@/db/database";
 import { FaFilter } from "react-icons/fa";
 
 type Pin = Database["public"]["Tables"]["pins"]["Row"];
@@ -106,7 +106,7 @@ const MyItems = () => {
                     {pin.in_possession ? (
                       <p>{pin.claim_requests} Claim Requests</p>
                     ) : (
-                      <p>Spotted at {convertMilitaryToEst(pin.created_at)}</p>
+                      <p>Spotted at {convertUTCtoEST(pin.created_at)}</p>
                     )}
                   </div>
                   <p className="text-gray-500">

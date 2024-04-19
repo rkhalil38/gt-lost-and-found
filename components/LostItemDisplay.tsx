@@ -20,7 +20,7 @@ import {
   fetchPin,
   fetchUser,
   fetchProfile,
-  convertMilitaryToEst,
+  convertUTCtoEST,
 } from "@/db/database";
 import { PinRequest } from "@/db/database";
 
@@ -254,7 +254,7 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
                 item.in_possession ? (
                   item.claim_requests
                 ) : (
-                  convertMilitaryToEst(item.created_at)
+                  convertUTCtoEST(item.created_at)
                 )
               ) : (
                 <Skeleton
