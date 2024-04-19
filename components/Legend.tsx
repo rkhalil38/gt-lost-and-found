@@ -7,7 +7,7 @@ const Legend = () => {
   const [option2, setOption2] = useState(false);
 
   return (
-    <div className="fixed z-10 right-4 top-20 flex w-32 flex-col rounded-lg border-[1px] border-gray-500 bg-mainHover text-gtGold shadow-lg duration-300 pb:w-52">
+    <div className="fixed right-4 top-20 z-10 flex w-32 flex-col rounded-lg border-[1px] border-gray-500 bg-mainHover text-gtGold shadow-lg duration-300 pb:w-52">
       <div
         onClick={() => setOption1(!option1)}
         className="flex flex-row items-center justify-between rounded-t-lg p-2 duration-300 hover:cursor-pointer hover:bg-mainHover2"

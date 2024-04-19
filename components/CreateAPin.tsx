@@ -207,13 +207,15 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
         >
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">
-              <h1 className="pb-2 text-base pb:text-lg text-white">Found Item</h1>
+              <h1 className="pb-2 text-base text-white pb:text-lg">
+                Found Item
+              </h1>
               <div className="flex flex-row gap-2 overflow-scroll tb:flex-wrap">
                 {itemOptions.map((item, index) => (
                   <button
                     key={index}
                     onClick={() => setFoundItem(item)}
-                    className={`flex items-center justify-center rounded-lg border-[1px] border-gray-500 p-1 pb:p-2 text-xs duration-300 hover:border-gtGold hover:text-gtGold ${
+                    className={`flex items-center justify-center rounded-lg border-[1px] border-gray-500 p-1 text-xs duration-300 hover:border-gtGold hover:text-gtGold pb:p-2 ${
                       foundItem === item
                         ? "border-gtGold text-gtGold"
                         : "text-gray-400"
@@ -225,7 +227,10 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
               </div>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="description" className="pb-2 text-base pb:text-lg text-white">
+              <label
+                htmlFor="description"
+                className="pb-2 text-base text-white pb:text-lg"
+              >
                 Description
               </label>
               <textarea
@@ -244,7 +249,10 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
               </div>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="inPossession" className="pb-2 text-base pb:text-lg text-white">
+              <label
+                htmlFor="inPossession"
+                className="pb-2 text-base text-white pb:text-lg"
+              >
                 Are you currently in possession of this item?
               </label>
               <div className="flex flex-row gap-2">
@@ -271,7 +279,10 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
               </div>
             </div>
             <div className="flex flex-col pt-4">
-              <label htmlFor="location" className="pb-2 text-base pb:text-lg text-white">
+              <label
+                htmlFor="location"
+                className="pb-2 text-base text-white pb:text-lg"
+              >
                 Location
               </label>
               {location.lat !== 0 && location.lng !== 0 ? (
