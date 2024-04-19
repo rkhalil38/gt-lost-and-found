@@ -88,6 +88,11 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
 
       const userData = await fetchUser();
 
+      if (!data.in_possession) {
+        setClaimState(claimStates.spotting);
+        return;
+      }
+
       if (userData instanceof AuthError || !userData) {
         setClaimState(claimStates.notSignedIn);
         return;
@@ -110,11 +115,6 @@ const LostItemDisplay = ({ apiKey }: { apiKey: string }) => {
 
       if (userData.id === data.creator_id && !data.in_possession) {
         setClaimState(claimStates.pinOwnerSpotter);
-        return;
-      }
-
-      if (!data.in_possession) {
-        setClaimState(claimStates.spotting);
         return;
       }
 

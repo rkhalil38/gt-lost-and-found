@@ -58,6 +58,7 @@ const ClaimItem = ({
   useEffect(() => {
     const getUser = async () => {
       const data = await fetchUser();
+      console.log(claimStatus)
 
       if (data instanceof AuthError) {
         return;
@@ -67,7 +68,7 @@ const ClaimItem = ({
     };
 
     getUser();
-  }, [setClaimStatus]);
+  }, []);
 
   useEffect(() => {
     setCharacterCount(reasoning.length);
@@ -261,7 +262,7 @@ const ClaimItem = ({
           >
             <IoMdClose />
           </Link>
-          {user ? componentMap[claimStatus] : componentMap["Sign In to Claim"]}
+          {componentMap[claimStatus]}
         </div>
       ) : (
         <div className="flex h-full w-full items-center justify-center">
