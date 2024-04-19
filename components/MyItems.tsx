@@ -144,7 +144,14 @@ const FilterComponent = ({ filter }: { filter: string }) => {
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const path = usePathname();
 
-  const optipns = ["All", "Resolved", "Unresolved", "No Claims", "Held Items", "Spotted Items"];
+  const optipns = [
+    "All",
+    "Resolved",
+    "Unresolved",
+    "No Claims",
+    "Held Items",
+    "Spotted Items",
+  ];
 
   const handleChange = (value: string) => {
     setSelectedFilter(value);

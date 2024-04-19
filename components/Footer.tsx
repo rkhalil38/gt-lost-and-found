@@ -20,7 +20,7 @@ const Footer = () => {
       <div className="flex flex-grow items-center justify-center">
         <p>Copyright © by Romulus Khalil</p>
       </div>
-      <div className="flex flex-row text-xs items-start gap-1 w-12 pb:w-28"/>
+      <div className="flex w-12 flex-row items-start gap-1 text-xs pb:w-28" />
     </footer>
   );
 };

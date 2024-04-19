@@ -149,7 +149,7 @@ const FilterComponent = ({ filter }: { filter: string }) => {
     "jacket",
     "airpods",
     "spotted items",
-    "held items"
+    "held items",
   ];
 
   const handleChange = (value: string) => {
