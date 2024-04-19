@@ -239,7 +239,7 @@ const ClaimItem = ({
     ),
 
     pinOwnerSpotter: (
-      <div className="flex h-full w-full justify-center items-center">
+      <div className="flex h-full w-full items-center justify-center">
         <h1 className="text-xl text-gtGold">{`You spotted this item.`}</h1>
       </div>
     ),
@@ -248,7 +248,7 @@ const ClaimItem = ({
       <div className="flex h-full w-full flex-col items-center justify-center">
         <h1 className="text-xl text-gtGold">{`You cannot claim a sighting.`}</h1>
       </div>
-    )
+    ),
   };
 
   return (

@@ -15,7 +15,7 @@ import {
   fetchProfile,
   rejectClaim,
   deletePin,
-  convertMilitaryToEst,
+  convertUTCtoEST,
 } from "@/db/database";
 import { ClipLoader } from "react-spinners";
 import Skeleton from "react-loading-skeleton";
@@ -376,7 +376,7 @@ const ItemDisplay = ({
             item?.in_possession ? (
               <p>{`${item.claim_requests} claim requests`}</p>
             ) : (
-              <p>{`Spotted at ${convertMilitaryToEst(item.created_at)}`}</p>
+              <p>{`Spotted at ${convertUTCtoEST(item.created_at)}`}</p>
             )
           ) : (
             <Skeleton height={20} width={100} baseColor="#B3A369" />

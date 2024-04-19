@@ -472,22 +472,18 @@ export async function deleteRequest(
 }
 
 /**
- * Function that converts supabase military time format to EST.
+ * Function that converts supabase UTC format to EST.
  *
  * @param time
  * @returns The time in EST.
  */
-export const convertMilitaryToEst = (time: string): string => {
-  const hour = parseInt(time.slice(11, 13));
-  const minute = time.slice(14, 16);
-  let period = "AM";
+export const convertUTCtoEST = (time: string) => {
+  const date = new Date(time);
+  
+  let convertedTime = date.toLocaleTimeString('en-US', {timeZone: 'America/New_York'});
+  let splitTime = convertedTime.split(':');
+  let period = convertedTime.replace(/[\d:]+/g, ''); 
 
-  if (hour > 12) {
-    period = "PM";
-    return `${hour - 12}:${minute} ${period}`;
-  } else if (hour === 12) {
-    period = "PM";
-  }
 
-  return `${hour}:${minute} ${period}`;
-};
+  return `${splitTime[0]}:${splitTime[1]} ${period}`;
+}
