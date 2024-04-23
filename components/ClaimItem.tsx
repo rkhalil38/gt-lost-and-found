@@ -58,7 +58,7 @@ const ClaimItem = ({
   useEffect(() => {
     const getUser = async () => {
       const data = await fetchUser();
-      console.log(claimStatus)
+      console.log(claimStatus);
 
       if (data instanceof AuthError) {
         return;
@@ -68,7 +68,7 @@ const ClaimItem = ({
     };
 
     getUser();
-  }, []);
+  });
 
   useEffect(() => {
     setCharacterCount(reasoning.length);
