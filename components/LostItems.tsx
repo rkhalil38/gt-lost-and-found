@@ -63,6 +63,10 @@ const LostItems = () => {
         return pin.item === "jacket";
       case "airpods":
         return pin.item === "airpods";
+      case "bottle":
+        return pin.item === "bottle";
+      case "wallet":
+        return pin.item === "wallet";
       case "spotted items":
         return pin.in_possession === false;
       case "held items":
@@ -148,6 +152,8 @@ const FilterComponent = ({ filter }: { filter: string }) => {
     "backpack",
     "jacket",
     "airpods",
+    "bottle",
+    "wallet",
     "spotted items",
     "held items",
   ];
