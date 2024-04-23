@@ -191,7 +191,7 @@ const ClaimItem = ({
               maxLength={250}
               onChange={handleChange}
               name="reasoning"
-              className="h-44 pb:h-64 w-full resize-none rounded-lg border-[1px] bg-mainTheme p-4 text-white focus:border-gtGold focus:outline-none"
+              className="h-44 w-full resize-none rounded-lg border-[1px] bg-mainTheme p-4 text-white focus:border-gtGold focus:outline-none pb:h-64"
             ></textarea>
             <p className="self-end text-xs text-white">{characterCount}/250</p>
           </div>
