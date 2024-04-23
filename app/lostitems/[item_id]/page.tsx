@@ -37,7 +37,7 @@ export async function generateMetadata(
   }
 
   return {
-    title: `Lost Item | ${itemID}`,
+    title: `${item.item} | ${item.description}`,
     description: `${item?.description}`,
     openGraph: {
       title: `Lost ${item.item} at Georgia Tech | GT Lost and Found`,
