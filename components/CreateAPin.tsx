@@ -61,6 +61,8 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
     "backpack",
     "jacket",
     "airpods",
+    "bottle",
+    "wallet",
     "miscellaneous",
   ];
 

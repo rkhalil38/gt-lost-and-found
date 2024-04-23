@@ -70,6 +70,8 @@ const EditItem = ({
     "backpack",
     "jacket",
     "airpods",
+    "bottle",
+    "wallet",
     "miscellaneous",
   ];
 
