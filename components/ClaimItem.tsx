@@ -191,7 +191,7 @@ const ClaimItem = ({
               maxLength={250}
               onChange={handleChange}
               name="reasoning"
-              className="h-64 w-full resize-none rounded-lg border-[1px] bg-mainTheme p-4 text-white focus:border-gtGold focus:outline-none"
+              className="h-44 w-full resize-none rounded-lg border-[1px] bg-mainTheme p-4 text-white focus:border-gtGold focus:outline-none pb:h-64"
             ></textarea>
             <p className="self-end text-xs text-white">{characterCount}/250</p>
           </div>
@@ -261,7 +261,7 @@ const ClaimItem = ({
   };
 
   return (
-    <div className="animate-in shaodw-lg fixed z-40 flex h-3/4 w-full flex-col gap-4 self-start rounded-lg border-[1px] border-gray-500 bg-mainTheme p-4 pb:self-center tb:h-[70%] tb:w-1/2">
+    <div className="animate-in shaodw-lg fixed z-40 flex h-[85%] w-full flex-col gap-4 self-start rounded-lg border-[1px] border-gray-500 bg-mainTheme p-4 pb:self-center tb:h-[70%] tb:w-1/2">
       {claimStatus !== "loading" ? (
         <div className="flex h-full w-full">
           <Link
