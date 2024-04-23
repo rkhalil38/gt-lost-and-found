@@ -425,8 +425,8 @@ export const reactIconMatcher: reactIconMatcher = {
   bottle: (
     <svg
       fill="#B3A369"
-      width="20px"
-      height="20px"
+      width="100px"
+      height="100px"
       viewBox="0 0 50 50"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -445,8 +445,8 @@ export const reactIconMatcher: reactIconMatcher = {
 
   wallet: (
     <svg
-      width="20px"
-      height="20px"
+      width="100px"
+      height="100px"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
