@@ -143,60 +143,68 @@ const ClaimItem = ({
 
   const componentMap: componentMap = {
     notClaimed: (
-      <div className="flex h-full w-full flex-col gap-4">
-        <h1 className="text-xl font-bold text-gtGold pb:text-2xl">
-          You are claiming this item as
-          <a className="text-white"> {username}</a>
-        </h1>
-        <label htmlFor="contact" className="text-white">
-          Select your preferred contact method.
-        </label>
-        <div className="flex flex-row gap-4">
-          <select
-            className="h-10 w-44 rounded-lg border-[1px] bg-mainTheme p-2 text-white focus:border-gtGold focus:outline-none"
-            name="contact"
-            onChange={(e) => setContactMethod(e.target.value)}
-          >
-            <option value="email">Email</option>
-            <option value="phone">Phone</option>
-          </select>
-          {contactMethod === "email" ? (
-            <input
-              type="email"
-              className={`h-10 w-full border-[1px] p-2 text-sm pb:w-96 pb:text-base ${
-                fieldError ? "border-red-400" : "focus:border-gtGold"
-              } rounded-lg bg-mainTheme text-white focus:outline-none`}
-              placeholder="Enter your preferred email"
-              onChange={handleContactInfo}
-            />
-          ) : (
-            <input
-              type="tel"
-              className={`h-10 w-full border-[1px] p-2 text-sm pb:w-96 pb:text-base ${
-                fieldError ? "border-red-400" : "focus:border-gtGold"
-              } rounded-lg bg-mainTheme text-white focus:outline-none`}
-              placeholder="Enter your phone number"
-              onChange={handleContactInfo}
-            />
-          )}
+      <div className="flex h-full w-full flex-col justify-between gap-4">
+        <div className="flex flex-col gap-8">
+          <h1 className="text-xl font-bold text-gtGold pb:text-2xl">
+            You are claiming this item as
+            <a className="text-white"> {username}</a>
+          </h1>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="contact" className="text-white">
+              Select your preferred contact method.
+            </label>
+            <div className="flex flex-row gap-4">
+              <select
+                className="h-10 w-44 rounded-lg border-[1px] bg-mainTheme p-2 text-white focus:border-gtGold focus:outline-none"
+                name="contact"
+                onChange={(e) => setContactMethod(e.target.value)}
+              >
+                <option value="email">Email</option>
+                <option value="phone">Phone</option>
+              </select>
+              {contactMethod === "email" ? (
+                <input
+                  type="email"
+                  className={`h-10 w-full border-[1px] p-2 text-sm pb:w-96 pb:text-base ${
+                    fieldError ? "border-red-400" : "focus:border-gtGold"
+                  } rounded-lg bg-mainTheme text-white focus:outline-none`}
+                  placeholder="Enter your preferred email"
+                  onChange={handleContactInfo}
+                />
+              ) : (
+                <input
+                  type="tel"
+                  className={`h-10 w-full border-[1px] p-2 text-sm pb:w-96 pb:text-base ${
+                    fieldError ? "border-red-400" : "focus:border-gtGold"
+                  } rounded-lg bg-mainTheme text-white focus:outline-none`}
+                  placeholder="Enter your phone number"
+                  onChange={handleContactInfo}
+                />
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="reasoning" className="text-white">
+              Please provide valid reasoning that this is your item.
+            </label>
+            <textarea
+              maxLength={250}
+              onChange={handleChange}
+              name="reasoning"
+              className="h-64 w-full resize-none rounded-lg border-[1px] bg-mainTheme p-4 text-white focus:border-gtGold focus:outline-none"
+            ></textarea>
+            <p className="self-end text-xs text-white">{characterCount}/250</p>
+          </div>
         </div>
-        <label htmlFor="reasoning" className="text-white">
-          Please provide valid reasoning that this is your item.
-        </label>
-        <textarea
-          maxLength={250}
-          onChange={handleChange}
-          name="reasoning"
-          className="h-64 w-full resize-none rounded-lg border-[1px] bg-mainTheme p-4 text-white focus:border-gtGold focus:outline-none"
-        ></textarea>
-        <p className="self-end text-xs text-white">{characterCount}/250</p>
-        <button
-          disabled={!completedForm()}
-          onClick={claimDisplayedItem}
-          className={`absolute bottom-4 right-4 flex h-10 w-36 items-center justify-center rounded-lg border-[1px] bg-gtGold text-xs text-white hover:bg-gtGoldHover disabled:bg-gray-700 disabled:text-gray-400`}
-        >
-          Submit Request
-        </button>
+        <div className="flex flex-row items-end justify-end">
+          <button
+            disabled={!completedForm()}
+            onClick={claimDisplayedItem}
+            className={`flex h-10 w-36 items-center justify-center rounded-lg border-[1px] bg-gtGold text-xs text-white hover:bg-gtGoldHover disabled:bg-gray-700 disabled:text-gray-400`}
+          >
+            Submit Request
+          </button>
+        </div>
       </div>
     ),
 
