@@ -44,3 +44,17 @@
 .gm-style iframe + div {
   border: none !important;
 }
+
+.gm-style-iw {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.gm-style-iw-chr {
+  height: 30px;
+}
+
+.gm-style-iw-d {
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+}
