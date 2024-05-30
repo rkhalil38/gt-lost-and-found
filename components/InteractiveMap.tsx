@@ -231,4 +231,3 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
 };
 
 export default InteractiveMap;
-
