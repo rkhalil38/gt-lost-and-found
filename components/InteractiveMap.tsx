@@ -152,7 +152,7 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
 
             const infoElement = document.createElement("div");
             infoElement.className =
-              "flex flex-col gap-2 animate-in self-center text-black w-44 rounded-lg";
+              "flex flex-col gap-2 self-center text-black w-44 rounded-lg";
 
             const item = document.createElement("h1");
             item.textContent = pin.item;
@@ -231,3 +231,4 @@ const InteractiveMap = ({ apiKey }: { apiKey: string }) => {
 };
 
 export default InteractiveMap;
+
