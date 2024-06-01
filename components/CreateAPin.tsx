@@ -41,7 +41,8 @@ interface CreateAPinProps {
 const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   const [user, setUser] = useState<User>();
   const [pickLocation, setPickLocation] = useState<boolean>(false);
-  const [pickFromCommonLocations, setPickFromCommonLocations] = useState<boolean>(false);
+  const [pickFromCommonLocations, setPickFromCommonLocations] =
+    useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [foundItem, setFoundItem] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -299,7 +300,15 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
                     ? "Change Location"
                     : "Pick Location"}
                 </button>
-                <p className="text-sm pb:text-base">or <a onClick={() => setPickFromCommonLocations(true)} className="text-gtGold cursor-pointer underline">Pick from Common Locations</a></p>
+                <p className="text-sm pb:text-base">
+                  or{" "}
+                  <a
+                    onClick={() => setPickFromCommonLocations(true)}
+                    className="cursor-pointer text-gtGold underline"
+                  >
+                    Pick from Common Locations
+                  </a>
+                </p>
               </div>
             </div>
           </div>
@@ -332,7 +341,8 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
             apiKey={apiKey}
             setToggled={setPickFromCommonLocations}
             setLocation={setLocation}
-          />) : null}
+          />
+        ) : null}
       </div>
     ),
   };

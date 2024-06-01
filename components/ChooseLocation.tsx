@@ -39,7 +39,7 @@ const ChooseLocation = ({
         const { AdvancedMarkerElement } = await loader.importLibrary("marker");
 
         const mapOptions: google.maps.MapOptions = {
-          center: {lat: currentLat, lng: currentLng},
+          center: { lat: currentLat, lng: currentLng },
           zoom: 16,
           disableDefaultUI: true,
           mapId: "33ef6ba1cc80f774",
@@ -58,10 +58,7 @@ const ChooseLocation = ({
         ).documentElement;
 
         const marker = new AdvancedMarkerElement({
-          position: new google.maps.LatLng(
-            currentLat,
-            currentLng,
-          ),
+          position: new google.maps.LatLng(currentLat, currentLng),
           map: map,
           content: pinSvg,
           gmpDraggable: true,

@@ -472,18 +472,18 @@ export async function deleteRequest(
   return data ? data : [];
 }
 
-export async function getCommonLocations(): Promise<CommonLocation[] | PostgrestError> {
+export async function getCommonLocations(): Promise<
+  CommonLocation[] | PostgrestError
+> {
   const supabase = createClient();
-  const { data, error } = await supabase
-    .from("locations")
-    .select("*");
+  const { data, error } = await supabase.from("locations").select("*");
 
   if (error) {
     return error;
   }
 
   return data ? data : [];
-};
+}
 
 /**
  * Function that converts supabase UTC format to EST.
