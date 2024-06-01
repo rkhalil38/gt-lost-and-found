@@ -224,6 +224,8 @@ const EditItem = ({
         {pickLocation ? (
           <ChooseLocation
             apiKey={apiKey}
+            currentLat={location.lat}
+            currentLng={location.lng}
             setToggled={setPickLocation}
             setLocation={setLocation}
           />

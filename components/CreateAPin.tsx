@@ -11,6 +11,7 @@ import { AuthApiError, AuthError, User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { createPin, fetchProfile, fetchUser } from "@/db/database";
 import { Pin } from "@/db/database";
+import CommonLocations from "./CommonLocations";
 
 type Location = {
   lat: number;
@@ -40,12 +41,13 @@ interface CreateAPinProps {
 const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   const [user, setUser] = useState<User>();
   const [pickLocation, setPickLocation] = useState<boolean>(false);
+  const [pickFromCommonLocations, setPickFromCommonLocations] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [foundItem, setFoundItem] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [location, setLocation] = useState<Location>({
-    lat: lat ? lat : 0,
-    lng: lng ? lng : 0,
+    lat: lat ? lat : 33.77608,
+    lng: lng ? lng : -84.398295,
   });
   const [inPossesion, setInPossesion] = useState<boolean>(false);
   const [characterCount, setCharacterCount] = useState<number>(0);
@@ -287,20 +289,18 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
               >
                 Location
               </label>
-              {location.lat !== 0 && location.lng !== 0 ? (
-                <p className="pb-2 text-xs text-gtGold pb:text-sm">
-                  Location: {location.lat}, {location.lng}
-                </p>
-              ) : null}
-              <button
-                onClick={() => setPickLocation(true)}
-                className="flex h-10 w-36 items-center justify-center gap-1 rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 hover:bg-mainHover hover:text-gtGold"
-              >
-                <FaMapMarkerAlt />
-                {location.lat !== 0 && location.lng !== 0
-                  ? "Change Location"
-                  : "Pick Location"}
-              </button>
+              <div className="flex flex-row items-center gap-2">
+                <button
+                  onClick={() => setPickLocation(true)}
+                  className="flex h-10 w-36 items-center justify-center gap-1 rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 hover:bg-mainHover hover:text-gtGold"
+                >
+                  <FaMapMarkerAlt />
+                  {location.lat !== 0 && location.lng !== 0
+                    ? "Change Location"
+                    : "Pick Location"}
+                </button>
+                <p className="text-sm pb:text-base">or <a onClick={() => setPickFromCommonLocations(true)} className="text-gtGold cursor-pointer underline">Pick from Common Locations</a></p>
+              </div>
             </div>
           </div>
           <div className="flex w-full flex-row items-center justify-between">
@@ -321,10 +321,18 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
         {pickLocation ? (
           <ChooseLocation
             apiKey={apiKey}
+            currentLat={location.lat}
+            currentLng={location.lng}
             setToggled={setPickLocation}
             setLocation={setLocation}
           />
         ) : null}
+        {pickFromCommonLocations ? (
+          <CommonLocations
+            apiKey={apiKey}
+            setToggled={setPickFromCommonLocations}
+            setLocation={setLocation}
+          />) : null}
       </div>
     ),
   };

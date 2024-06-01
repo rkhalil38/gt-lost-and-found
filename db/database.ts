@@ -6,6 +6,7 @@ import { AuthError, PostgrestError, User } from "@supabase/supabase-js";
 export type PinRequest = Database["public"]["Tables"]["requests"]["Row"];
 export type Pin = Database["public"]["Tables"]["pins"]["Row"];
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+export type CommonLocation = Database["public"]["Tables"]["locations"]["Row"];
 /**
  * Function that returns the URL of the site.
  *
@@ -470,6 +471,19 @@ export async function deleteRequest(
 
   return data ? data : [];
 }
+
+export async function getCommonLocations(): Promise<CommonLocation[] | PostgrestError> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("locations")
+    .select("*");
+
+  if (error) {
+    return error;
+  }
+
+  return data ? data : [];
+};
 
 /**
  * Function that converts supabase UTC format to EST.
