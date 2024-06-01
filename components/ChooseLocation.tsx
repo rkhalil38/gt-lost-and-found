@@ -12,10 +12,14 @@ import { Loader } from "@googlemaps/js-api-loader";
  */
 const ChooseLocation = ({
   apiKey,
+  currentLat,
+  currentLng,
   setToggled,
   setLocation,
 }: {
   apiKey: string;
+  currentLat: number;
+  currentLng: number;
   setToggled: Function;
   setLocation: Function;
 }) => {
@@ -34,17 +38,9 @@ const ChooseLocation = ({
         const { Map } = await loader.importLibrary("maps");
         const { AdvancedMarkerElement } = await loader.importLibrary("marker");
 
-        const defaultProps = {
-          center: {
-            lat: 33.77608,
-            lng: -84.398295,
-          },
-          zoom: 16,
-        };
-
         const mapOptions: google.maps.MapOptions = {
-          center: defaultProps.center,
-          zoom: defaultProps.zoom,
+          center: { lat: currentLat, lng: currentLng },
+          zoom: 16,
           disableDefaultUI: true,
           mapId: "33ef6ba1cc80f774",
           draggableCursor: "default",
@@ -62,10 +58,7 @@ const ChooseLocation = ({
         ).documentElement;
 
         const marker = new AdvancedMarkerElement({
-          position: new google.maps.LatLng(
-            defaultProps.center.lat,
-            defaultProps.center.lng,
-          ),
+          position: new google.maps.LatLng(currentLat, currentLng),
           map: map,
           content: pinSvg,
           gmpDraggable: true,

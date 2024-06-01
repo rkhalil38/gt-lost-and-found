@@ -9,6 +9,33 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      locations: {
+        Row: {
+          address: string;
+          items_found: number;
+          location_id: string;
+          name: string;
+          x_coordinate: number;
+          y_coordinate: number;
+        };
+        Insert: {
+          address: string;
+          items_found?: number;
+          location_id?: string;
+          name: string;
+          x_coordinate: number;
+          y_coordinate: number;
+        };
+        Update: {
+          address?: string;
+          items_found?: number;
+          location_id?: string;
+          name?: string;
+          x_coordinate?: number;
+          y_coordinate?: number;
+        };
+        Relationships: [];
+      };
       pins: {
         Row: {
           claim_requests: number | null;
