@@ -39,7 +39,16 @@
     "eslint-config-next": "^14.2.3",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.13"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint"
+    ],
+    "*.{js,jsx,ts,tsx,json}": [
+      "prettier --write"
+    ]
   }
 }
