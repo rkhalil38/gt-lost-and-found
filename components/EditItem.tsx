@@ -49,7 +49,8 @@ const EditItem = ({
   setEditItem: Function;
 }) => {
   const [pickLocation, setPickLocation] = useState<boolean>(false);
-  const [pickFromCommonLocations, setPickFromCommonLocations] = useState<boolean>(false);
+  const [pickFromCommonLocations, setPickFromCommonLocations] =
+    useState<boolean>(false);
   const [foundItem, setFoundItem] = useState<string>(item);
   const [description, setDescription] = useState<string>(oldDescription);
   const [characterCount, setCharacterCount] = useState<number>(
