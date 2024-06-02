@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { FaCheck, FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import ChooseLocation from "./ChooseLocation";
 import { ClipLoader } from "react-spinners";
 import { updatePin } from "@/db/database";
 import { MdCancel } from "react-icons/md";
+import CommonLocations from "./CommonLocations";
 
 type componentMap = {
   [key: string]: JSX.Element;
@@ -48,6 +49,7 @@ const EditItem = ({
   setEditItem: Function;
 }) => {
   const [pickLocation, setPickLocation] = useState<boolean>(false);
+  const [pickFromCommonLocations, setPickFromCommonLocations] = useState<boolean>(false);
   const [foundItem, setFoundItem] = useState<string>(item);
   const [description, setDescription] = useState<string>(oldDescription);
   const [characterCount, setCharacterCount] = useState<number>(
@@ -193,20 +195,26 @@ const EditItem = ({
               <label htmlFor="location" className="pb-2 text-lg text-white">
                 Location
               </label>
-              {location.lat !== 0 && location.lng !== 0 ? (
-                <p className="pb-2 text-xs text-gtGold pb:text-sm">
-                  Location: {location.lat}, {location.lng}
+              <div className="flex flex-row items-center gap-2">
+                <button
+                  onClick={() => setPickLocation(true)}
+                  className="flex h-10 w-36 items-center justify-center gap-1 rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 hover:bg-mainHover hover:text-gtGold"
+                >
+                  <FaMapMarkerAlt />
+                  {location.lat !== 0 && location.lng !== 0
+                    ? "Change Location"
+                    : "Pick Location"}
+                </button>
+                <p className="text-sm text-white pb:text-base">
+                  or{" "}
+                  <a
+                    onClick={() => setPickFromCommonLocations(true)}
+                    className="cursor-pointer text-gtGold underline"
+                  >
+                    Pick from Common Locations
+                  </a>
                 </p>
-              ) : null}
-              <button
-                onClick={() => setPickLocation(true)}
-                className="flex h-10 w-36 items-center justify-center gap-1 rounded-lg border-[1px] border-gray-500 text-xs text-gray-400 duration-300 hover:bg-mainHover hover:text-gtGold"
-              >
-                <FaMapMarkerAlt />
-                {location.lat !== 0 && location.lng !== 0
-                  ? "Change Location"
-                  : "Pick Location"}
-              </button>
+              </div>
             </div>
           </div>
           <div className="flex w-full flex-row items-center justify-end">
@@ -227,6 +235,13 @@ const EditItem = ({
             currentLat={location.lat}
             currentLng={location.lng}
             setToggled={setPickLocation}
+            setLocation={setLocation}
+          />
+        ) : null}
+        {pickFromCommonLocations ? (
+          <CommonLocations
+            apiKey={apiKey}
+            setToggled={setPickFromCommonLocations}
             setLocation={setLocation}
           />
         ) : null}
