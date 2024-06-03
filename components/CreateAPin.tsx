@@ -348,7 +348,7 @@ const CreateAPin = ({ apiKey, toggle, lat, lng }: CreateAPinProps) => {
   };
 
   return (
-    <div className="animate-in fixed left-0 top-16 z-30 flex h-[80%] w-full flex-col rounded-lg border-[1px] bg-mainTheme pb:left-[10%] pb:top-[20%] pb:h-1/2 pb:w-[80%] tb:left-1/4 tb:top-[15%] tb:h-[70%] tb:w-1/2">
+    <div className="animate-in fixed left-0 top-16 z-30 flex h-[80%] w-full flex-col rounded-lg border-[1px] border-gray-500 bg-mainTheme pb:left-[10%] pb:top-[20%] pb:h-1/2 pb:w-[80%] tb:left-1/4 tb:top-[15%] tb:h-[70%] tb:w-1/2">
       <button
         onClick={() => toggle(false)}
         className="absolute right-2 top-[9px] flex h-8 w-8 items-center justify-center rounded-lg bg-mainHover text-xl text-gray-600 duration-300 hover:text-gtGold"
